@@ -1602,6 +1602,11 @@ code {
   border: 0;
 
   background: #000;
+
+  /* Center video vertically */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-box h2 {
@@ -1610,10 +1615,9 @@ code {
 
 .embed-area {
   width: 100%;
-  height: 70vh;
-  height: 70dvh;
+  height: auto;
 
-  aspect-ratio: 4:3;
+  aspect-ratio: 4 / 3;
 
   margin: 0;
   padding: 0;
@@ -1621,6 +1625,18 @@ code {
   border-radius: 0;
 
   background: #000;
+}
+
+.embed-area iframe {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
 }
 
 .embed-area iframe {
