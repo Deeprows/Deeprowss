@@ -1,0 +1,15 @@
+[
+  {
+    "id": "1",
+    "title": "Arsenal vs Chelsea",
+    "category": "Premier League",
+    "date": "2026-08-14",
+    "home": "Arsenal",
+    "away": "Chelsea",
+    "thumbnail": "",
+    "description": "Arsenal vs Chelsea football coverage.",
+    "embedUrl": "",
+    "status": "UPCOMING",
+    "type": "live"
+  }
+]
