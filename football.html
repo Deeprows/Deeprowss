@@ -15,9 +15,7 @@
     content="Watch live football matches and upcoming games on Deeprowss."
   >
 
-  <title>
-    Football | Deeprowss
-  </title>
+  <title>Football | Deeprowss</title>
 
   <link
     rel="stylesheet"
@@ -32,7 +30,7 @@
 
   <!-- =========================
        HEADER
-  ========================= -->
+  ========================== -->
 
   <header class="site-header">
 
@@ -69,9 +67,7 @@
         aria-expanded="false"
         aria-controls="mainNav"
       >
-
         ☰
-
       </button>
 
 
@@ -124,6 +120,7 @@
           placeholder="Search..."
           autocomplete="off"
           spellcheck="false"
+          aria-label="Search Deeprowss"
         >
 
         <span aria-hidden="true">
@@ -141,14 +138,14 @@
 
   <!-- =========================
        MAIN
-  ========================= -->
+  ========================== -->
 
   <main>
 
 
     <!-- =========================
          PAGE HERO
-    ========================= -->
+    ========================== -->
 
     <section class="page-hero">
 
@@ -158,11 +155,9 @@
           DEEPROWSS SPORTS
         </p>
 
-
         <h1>
           Football
         </h1>
-
 
         <p>
           Watch live football matches and upcoming games.
@@ -176,7 +171,7 @@
 
     <!-- =========================
          SEARCH STATUS
-    ========================= -->
+    ========================== -->
 
     <section
       class="search-section"
@@ -194,8 +189,8 @@
 
 
     <!-- =========================
-         ALL FOOTBALL POSTS
-    ========================= -->
+         FOOTBALL POSTS
+    ========================== -->
 
     <section class="section">
 
@@ -220,11 +215,6 @@
 
 
 
-        <!--
-          script.js automatically loads
-          type: "live" posts here.
-        -->
-
         <div
           id="livePosts"
           class="all-posts-grid"
@@ -247,74 +237,8 @@
 
 
   <!-- =========================
-       FOOTER
-  ========================= -->
-
-  <footer class="footer">
-
-    <div class="container footer-wrap">
-
-
-      <div>
-
-        <strong>
-          DEE<span>PROWSS</span>
-        </strong>
-
-        <p>
-          Football • Highlights • Entertainment
-        </p>
-
-      </div>
-
-
-
-      <div class="footer-links">
-
-        <a href="index.html">
-          Home
-        </a>
-
-        <a
-          href="football.html"
-          aria-current="page"
-        >
-          Football Live
-        </a>
-
-        <a href="highlights.html">
-          Highlights
-        </a>
-
-        <a href="movies.html">
-          Movies
-        </a>
-
-      </div>
-
-
-
-      <p class="copyright">
-
-        &copy;
-
-        <span id="year"></span>
-
-        Deeprowss.
-        All rights reserved.
-
-      </p>
-
-
-    </div>
-
-  </footer>
-
-
-
-  <!-- =========================
        VIDEO MODAL
-  ========================= -->
+  ========================== -->
 
   <div
     class="modal"
@@ -322,13 +246,16 @@
     aria-hidden="true"
   >
 
+    <!-- BACKDROP -->
 
     <div
       class="modal-backdrop"
-      onclick="closeEmbed()"
+      id="modalBackdrop"
     ></div>
 
 
+
+    <!-- MODAL BOX -->
 
     <div
       class="modal-box"
@@ -338,15 +265,16 @@
     >
 
 
+      <!-- CLOSE BUTTON -->
+
       <button
         type="button"
         class="modal-close"
-        onclick="closeEmbed()"
+        id="modalClose"
         aria-label="Close video"
+        title="Close video"
       >
-
         ×
-
       </button>
 
 
@@ -356,6 +284,8 @@
       </h2>
 
 
+
+      <!-- VIDEO -->
 
       <div
         class="embed-area"
@@ -385,7 +315,7 @@
 
   <!-- =========================
        NO RESULTS
-  ========================= -->
+  ========================== -->
 
   <div
     class="no-results"
@@ -393,18 +323,83 @@
     role="status"
     aria-live="polite"
   >
-
     No matching content found.
-
   </div>
 
 
 
   <!-- =========================
        JAVASCRIPT
-  ========================= -->
+  ========================== -->
 
   <script src="script.js"></script>
+
+
+  <!-- =========================
+       EXTRA MODAL SAFETY
+  ========================== -->
+
+  <script>
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+
+        var closeButton =
+          document.getElementById("modalClose");
+
+        var backdrop =
+          document.getElementById("modalBackdrop");
+
+
+        /*
+         * Make the X button independently
+         * close the iframe modal.
+         */
+
+        if (closeButton) {
+
+          closeButton.addEventListener(
+            "click",
+            function (event) {
+
+              event.preventDefault();
+              event.stopPropagation();
+
+              if (typeof window.closeEmbed === "function") {
+                window.closeEmbed();
+              }
+
+            }
+          );
+
+        }
+
+
+        /*
+         * Make the dark backdrop close
+         * the modal as well.
+         */
+
+        if (backdrop) {
+
+          backdrop.addEventListener(
+            "click",
+            function () {
+
+              if (typeof window.closeEmbed === "function") {
+                window.closeEmbed();
+              }
+
+            }
+          );
+
+        }
+
+      }
+    );
+
+  </script>
 
 
 </body>
