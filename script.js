@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   console.log("Deeprowss script loaded");
 
-
   /* =====================================
      CONTAINERS
   ===================================== */
@@ -19,19 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var allPostsContainer =
     document.getElementById("allPosts");
 
-  var searchInput =
-    document.getElementById("siteSearch");
-
-  var searchStatus =
-    document.getElementById("searchStatus");
-
-  var noResults =
-    document.getElementById("noResults");
-
-
-  var allPosts = [];
-
-
 
   /* =====================================
      LOAD POSTS
@@ -45,13 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
     true
   );
 
-
   xhr.onreadystatechange = function () {
 
     if (xhr.readyState !== 4) {
       return;
     }
-
 
     if (xhr.status >= 200 && xhr.status < 300) {
 
@@ -60,43 +44,35 @@ document.addEventListener("DOMContentLoaded", function () {
         var posts =
           JSON.parse(xhr.responseText);
 
-
         if (!Array.isArray(posts)) {
           throw new Error("posts.json must contain an array.");
         }
 
-
-        allPosts = posts;
-
-
-        /* Newest first */
-
-        allPosts.sort(function (a, b) {
+        posts.sort(function (a, b) {
 
           return (
-            getPostTime(b) -
-            getPostTime(a)
+            new Date(b.publishedAt || 0).getTime() -
+            new Date(a.publishedAt || 0).getTime()
           );
 
         });
 
-
         console.log(
           "Deeprowss posts loaded:",
-          allPosts
+          posts
         );
 
+        displayLivePosts(posts);
+        displayHighlightPosts(posts);
+        displayMoviePosts(posts);
 
-        displayLivePosts(allPosts);
-
-        displayHighlightPosts(allPosts);
-
-        displayMoviePosts(allPosts);
-
-        displayAllPosts(allPosts);
-
-        setupSearch();
-
+        /*
+         * Used by football/highlights pages
+         * when they load all-posts.js separately.
+         */
+        if (allPostsContainer) {
+          displayAllPosts(posts);
+        }
 
       } catch (error) {
 
@@ -122,7 +98,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   };
 
-
   xhr.onerror = function () {
 
     console.error(
@@ -133,42 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   };
 
-
   xhr.send();
-
-
-
-  /* =====================================
-     POST DATE
-  ===================================== */
-
-  function getPostTime(post) {
-
-    if (!post) {
-      return 0;
-    }
-
-
-    var dateValue =
-      post.publishedAt ||
-      post.date;
-
-
-    if (!dateValue) {
-      return 0;
-    }
-
-
-    var time =
-      new Date(dateValue).getTime();
-
-
-    return isNaN(time)
-      ? 0
-      : time;
-
-  }
-
 
 
   /* =====================================
@@ -186,7 +126,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
     if (highlightContainer) {
 
       highlightContainer.innerHTML =
@@ -196,7 +135,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
     if (movieContainer) {
 
       movieContainer.innerHTML =
@@ -205,7 +143,6 @@ document.addEventListener("DOMContentLoaded", function () {
         '</div>';
 
     }
-
 
     if (allPostsContainer) {
 
@@ -219,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
   /* =====================================
      ESCAPE HTML
   ===================================== */
@@ -230,11 +166,8 @@ document.addEventListener("DOMContentLoaded", function () {
       value === undefined ||
       value === null
     ) {
-
       return "";
-
     }
-
 
     return String(value)
       .replace(/&/g, "&amp;")
@@ -244,7 +177,6 @@ document.addEventListener("DOMContentLoaded", function () {
       .replace(/'/g, "&#039;");
 
   }
-
 
 
   /* =====================================
@@ -257,19 +189,22 @@ document.addEventListener("DOMContentLoaded", function () {
       return "";
     }
 
-
     var date =
       new Date(dateString);
-
 
     if (isNaN(date.getTime())) {
       return "";
     }
 
-
     try {
 
-      return date.toLocaleString();
+      return date.toLocaleString(
+        undefined,
+        {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }
+      );
 
     } catch (error) {
 
@@ -280,132 +215,78 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
   /* =====================================
-     THUMBNAIL URL CHECK
-  ===================================== */
-
-  function isValidThumbnailUrl(url) {
-
-    if (!url) {
-      return false;
-    }
-
-
-    var value =
-      String(url).trim();
-
-
-    if (!value) {
-      return false;
-    }
-
-
-    /*
-     * These are webpage URLs, not image files.
-     */
-
-    if (
-      value.indexOf("deviantart.com/") !== -1 &&
-      !/\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i.test(value)
-    ) {
-
-      return false;
-
-    }
-
-
-    if (
-      value.indexOf("YOUR_") === 0
-    ) {
-
-      return false;
-
-    }
-
-
-    return true;
-
-  }
-
-
-
-  /* =====================================
-     THUMBNAIL HTML
+     CREATE THUMBNAIL
+     
+     IMPORTANT:
+     Direct image element is used instead
+     of relying on background-image.
   ===================================== */
 
   function createThumbnail(
     thumbnail,
-    altText
+    altText,
+    className
   ) {
 
-    var safeAlt =
-      escapeHTML(
-        altText || "Thumbnail"
+    var wrapper =
+      document.createElement("div");
+
+    wrapper.className =
+      className || "media-thumb";
+
+
+    if (thumbnail) {
+
+      var image =
+        document.createElement("img");
+
+      image.className =
+        "post-thumbnail";
+
+      image.src =
+        String(thumbnail).trim();
+
+      image.alt =
+        altText || "Thumbnail";
+
+      image.loading =
+        "lazy";
+
+      image.decoding =
+        "async";
+
+      /*
+       * If the image actually fails,
+       * hide the image and show the
+       * normal fallback background.
+       */
+      image.addEventListener(
+        "error",
+        function () {
+
+          image.remove();
+
+          wrapper.classList.add(
+            "thumbnail-fallback"
+          );
+
+        }
       );
 
+      wrapper.classList.add(
+        "has-thumbnail"
+      );
 
-    if (
-      !isValidThumbnailUrl(thumbnail)
-    ) {
-
-      return "";
+      wrapper.appendChild(
+        image
+      );
 
     }
 
-
-    var safeThumbnail =
-      escapeHTML(
-        String(thumbnail).trim()
-      );
-
-
-    return (
-
-      '<img ' +
-
-        'class="post-thumbnail" ' +
-
-        'src="' +
-          safeThumbnail +
-        '" ' +
-
-        'alt="' +
-          safeAlt +
-        '" ' +
-
-        'loading="lazy" ' +
-
-        'decoding="async" ' +
-
-        'onerror="' +
-
-          'this.style.display=\'none\';' +
-
-          'this.parentElement.classList.add(\'thumbnail-fallback\');' +
-
-        '"' +
-
-      '>'
-
-    );
+    return wrapper;
 
   }
-
-
-
-  /* =====================================
-     THUMBNAIL FALLBACK
-  ===================================== */
-
-  function createThumbnailClass(thumbnail) {
-
-    return isValidThumbnailUrl(thumbnail)
-      ? "has-thumbnail"
-      : "thumbnail-fallback";
-
-  }
-
 
 
   /* =====================================
@@ -418,14 +299,12 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-
     var livePosts =
       posts.filter(function (post) {
 
         return post.type === "live";
 
       });
-
 
     if (livePosts.length === 0) {
 
@@ -438,9 +317,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
     var html = "";
-
 
     livePosts.forEach(function (post) {
 
@@ -449,12 +326,10 @@ document.addEventListener("DOMContentLoaded", function () {
           post.status || "UPCOMING"
         ).toUpperCase();
 
-
       var statusClass =
         status === "LIVE"
           ? "live-badge"
           : "upcoming-badge";
-
 
       html +=
 
@@ -473,39 +348,30 @@ document.addEventListener("DOMContentLoaded", function () {
             '<span>' +
 
               escapeHTML(
-                post.category ||
-                "Football"
+                post.category || "Football"
               ) +
 
             '</span>' +
 
           '</div>' +
 
-
           '<div class="teams">' +
 
             '<strong>' +
-
               escapeHTML(
-                post.home ||
-                "Team 1"
+                post.home || "Team 1"
               ) +
-
             '</strong>' +
 
             '<span>vs</span>' +
 
             '<strong>' +
-
               escapeHTML(
-                post.away ||
-                "Team 2"
+                post.away || "Team 2"
               ) +
-
             '</strong>' +
 
           '</div>' +
-
 
           '<div class="match-meta">' +
 
@@ -515,35 +381,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</div>' +
 
-
           '<div class="post-date">' +
 
             formatPostDate(
-              post.publishedAt ||
-              post.date
+              post.publishedAt
             ) +
 
           '</div>' +
 
-
           '<button ' +
-
             'type="button" ' +
-
-            'class="watch-btn" ' +
-
+            'class="watch-btn post-watch-button" ' +
             'data-url="' +
               escapeHTML(
                 post.embedUrl || ""
               ) +
             '" ' +
-
             'data-title="' +
               escapeHTML(
-                post.title ||
-                "Football"
+                post.title || "Football"
               ) +
-            '">' +
+          '">' +
 
             'Watch' +
 
@@ -553,15 +411,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-
     liveContainer.innerHTML =
       html;
-
 
     attachVideoButtons();
 
   }
-
 
 
   /* =====================================
@@ -574,14 +429,12 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-
     var highlights =
       posts.filter(function (post) {
 
         return post.type === "highlight";
 
       });
-
 
     if (highlights.length === 0) {
 
@@ -594,36 +447,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
     var html = "";
 
-
     highlights.forEach(function (post) {
-
-      var thumbnail =
-        createThumbnail(
-          post.thumbnail,
-          post.title ||
-          "Football Highlight"
-        );
-
 
       html +=
 
         '<article class="media-card">' +
 
           '<div class="media-thumb football-thumb ' +
-            createThumbnailClass(
+            (
               post.thumbnail
+                ? "has-thumbnail"
+                : ""
             ) +
           '">' +
 
-            thumbnail +
+            (
+              post.thumbnail
+                ?
+                  '<img ' +
+                    'class="post-thumbnail" ' +
+                    'src="' +
+                      escapeHTML(
+                        post.thumbnail
+                      ) +
+                    '" ' +
+                    'alt="' +
+                      escapeHTML(
+                        post.title ||
+                        "Football Highlight"
+                      ) +
+                    '" ' +
+                    'loading="lazy" ' +
+                    'decoding="async" ' +
+                  '>'
+                :
+                  ''
+            ) +
 
             '<span class="play">▶</span>' +
 
           '</div>' +
-
 
           '<div class="media-info">' +
 
@@ -631,53 +496,38 @@ document.addEventListener("DOMContentLoaded", function () {
               'HIGHLIGHT' +
             '</span>' +
 
-
             '<h3>' +
-
               escapeHTML(
                 post.title ||
                 "Football Highlight"
               ) +
-
             '</h3>' +
 
-
             '<p>' +
-
               escapeHTML(
                 post.description || ""
               ) +
-
             '</p>' +
 
-
             '<div class="post-date">' +
-
               formatPostDate(
                 post.publishedAt
               ) +
-
             '</div>' +
 
-
             '<button ' +
-
               'type="button" ' +
-
-              'class="watch-highlight" ' +
-
+              'class="post-watch-button" ' +
               'data-url="' +
                 escapeHTML(
                   post.embedUrl || ""
                 ) +
               '" ' +
-
               'data-title="' +
                 escapeHTML(
-                  post.title ||
-                  "Highlight"
+                  post.title || "Highlight"
                 ) +
-              '">' +
+            '">' +
 
               'Watch highlight' +
 
@@ -689,19 +539,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-
     highlightContainer.innerHTML =
       html;
 
+    /*
+     * Important:
+     * Handle broken thumbnails after
+     * the HTML has been inserted.
+     */
+    attachThumbnailFallbacks();
 
     attachVideoButtons();
 
   }
 
 
-
   /* =====================================
      MOVIES
+     
+     MOVIE THUMBNAILS ARE HANDLED
+     SEPARATELY FROM HIGHLIGHTS.
   ===================================== */
 
   function displayMoviePosts(posts) {
@@ -710,14 +567,12 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-
     var movies =
       posts.filter(function (post) {
 
         return post.type === "movie";
 
       });
-
 
     if (movies.length === 0) {
 
@@ -730,128 +585,188 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    /*
+     * Build cards with DOM nodes.
+     * This avoids the previous thumbnail
+     * problem on movies.html.
+     */
 
-    var html = "";
-
+    movieContainer.innerHTML = "";
 
     movies.forEach(function (post) {
 
-      var hasThumbnail =
-        isValidThumbnailUrl(
-          post.thumbnail
+      var article =
+        document.createElement("article");
+
+      article.className =
+        "movie-card";
+
+
+      /* ==============================
+         POSTER
+      ============================== */
+
+      var poster =
+        document.createElement("div");
+
+      poster.className =
+        "poster poster-one";
+
+
+      if (post.thumbnail) {
+
+        poster.classList.add(
+          "has-thumbnail"
+        );
+
+        var img =
+          document.createElement("img");
+
+        img.className =
+          "post-thumbnail";
+
+        img.src =
+          String(
+            post.thumbnail
+          ).trim();
+
+        img.alt =
+          post.title || "Movie";
+
+        img.loading =
+          "lazy";
+
+        img.decoding =
+          "async";
+
+        /*
+         * Do NOT replace the movie card
+         * if an image fails.
+         */
+        img.addEventListener(
+          "error",
+          function () {
+
+            console.warn(
+              "Movie thumbnail failed:",
+              post.thumbnail
+            );
+
+            img.remove();
+
+            poster.classList.remove(
+              "has-thumbnail"
+            );
+
+            poster.classList.add(
+              "thumbnail-fallback"
+            );
+
+          }
+        );
+
+        poster.appendChild(
+          img
+        );
+
+      }
+
+
+      /* ==============================
+         CATEGORY
+      ============================== */
+
+      var category =
+        document.createElement("span");
+
+      category.className =
+        "poster-category";
+
+      category.textContent =
+        post.category || "MOVIE";
+
+      poster.appendChild(
+        category
+      );
+
+
+      /* ==============================
+         MOVIE INFO
+      ============================== */
+
+      var info =
+        document.createElement("div");
+
+      info.className =
+        "movie-info";
+
+
+      var title =
+        document.createElement("h3");
+
+      title.textContent =
+        post.title || "Movie";
+
+
+      var date =
+        document.createElement("p");
+
+      date.textContent =
+        formatPostDate(
+          post.publishedAt
         );
 
 
-      var thumbnailHTML =
-        createThumbnail(
-          post.thumbnail,
-          post.title ||
-          "Movie"
-        );
+      var button =
+        document.createElement("button");
+
+      button.type =
+        "button";
+
+      button.className =
+        "post-watch-button";
+
+      button.textContent =
+        "View";
+
+      button.setAttribute(
+        "data-url",
+        post.embedUrl || ""
+      );
+
+      button.setAttribute(
+        "data-title",
+        post.title || "Movie"
+      );
 
 
-      html +=
+      info.appendChild(
+        title
+      );
 
-        '<article class="movie-card">' +
+      info.appendChild(
+        date
+      );
 
-          /*
-           * IMPORTANT:
-           * Keep the poster area intact even
-           * when there is no thumbnail.
-           */
-
-          '<div class="poster poster-one ' +
-
-            (
-              hasThumbnail
-                ? "has-thumbnail"
-                : "thumbnail-fallback"
-            ) +
-
-          '">' +
-
-            thumbnailHTML +
+      info.appendChild(
+        button
+      );
 
 
-            '<div class="poster-placeholder">' +
+      article.appendChild(
+        poster
+      );
 
-              '<span>' +
-
-                escapeHTML(
-                  post.category ||
-                  "MOVIE"
-                ) +
-
-              '</span>' +
-
-            '</div>' +
+      article.appendChild(
+        info
+      );
 
 
-            '<span class="poster-category">' +
-
-              escapeHTML(
-                post.category ||
-                "MOVIE"
-              ) +
-
-            '</span>' +
-
-          '</div>' +
-
-
-          '<div class="movie-info">' +
-
-            '<h3>' +
-
-              escapeHTML(
-                post.title ||
-                "Movie"
-              ) +
-
-            '</h3>' +
-
-
-            '<p>' +
-
-              formatPostDate(
-                post.publishedAt
-              ) +
-
-            '</p>' +
-
-
-            '<button ' +
-
-              'type="button" ' +
-
-              'class="watch-movie" ' +
-
-              'data-url="' +
-                escapeHTML(
-                  post.embedUrl || ""
-                ) +
-              '" ' +
-
-              'data-title="' +
-                escapeHTML(
-                  post.title ||
-                  "Movie"
-                ) +
-              '">' +
-
-              'View' +
-
-            '</button>' +
-
-          '</div>' +
-
-        '</article>';
+      movieContainer.appendChild(
+        article
+      );
 
     });
-
-
-    movieContainer.innerHTML =
-      html;
 
 
     attachVideoButtons();
@@ -859,9 +774,54 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
+  /* =====================================
+     THUMBNAIL FALLBACKS
+  ===================================== */
+
+  function attachThumbnailFallbacks() {
+
+    var images =
+      document.querySelectorAll(
+        ".post-thumbnail"
+      );
+
+    for (
+      var i = 0;
+      i < images.length;
+      i++
+    ) {
+
+      images[i].addEventListener(
+        "error",
+        function () {
+
+          this.style.display =
+            "none";
+
+          var parent =
+            this.parentElement;
+
+          if (parent) {
+
+            parent.classList.add(
+              "thumbnail-fallback"
+            );
+
+          }
+
+        },
+        {
+          once: true
+        }
+      );
+
+    }
+
+  }
+
 
   /* =====================================
-     ALL POSTS PAGE
+     ALL POSTS
   ===================================== */
 
   function displayAllPosts(posts) {
@@ -870,59 +830,49 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    /*
+     * Determine which page we're on.
+     */
 
     var page =
       window.location.pathname
-        .split("/")
-        .pop()
         .toLowerCase();
 
+    var wantedType = null;
+
+    if (
+      page.indexOf("football.html") !== -1
+    ) {
+
+      wantedType = "live";
+
+    } else if (
+      page.indexOf("highlights.html") !== -1
+    ) {
+
+      wantedType = "highlight";
+
+    } else if (
+      page.indexOf("movies.html") !== -1
+    ) {
+
+      wantedType = "movie";
+
+    }
 
     var filtered =
-      posts;
-
-
-    if (page === "football.html") {
-
-      filtered =
-        posts.filter(function (post) {
-
-          return post.type === "live";
-
-        });
-
-    }
-
-
-    if (page === "highlights.html") {
-
-      filtered =
-        posts.filter(function (post) {
-
-          return post.type === "highlight";
-
-        });
-
-    }
-
-
-    if (page === "movies.html") {
-
-      filtered =
-        posts.filter(function (post) {
-
-          return post.type === "movie";
-
-        });
-
-    }
+      wantedType
+        ? posts.filter(function (post) {
+            return post.type === wantedType;
+          })
+        : posts;
 
 
     if (filtered.length === 0) {
 
       allPostsContainer.innerHTML =
         '<div class="empty-posts">' +
-        'No posts available.' +
+        'No content available.' +
         '</div>';
 
       return;
@@ -930,362 +880,307 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    /*
+     * MOVIES
+     */
+
+    if (wantedType === "movie") {
+
+      movieContainer &&
+        displayMoviePosts(filtered);
+
+      return;
+
+    }
+
+
+    /*
+     * HIGHLIGHTS
+     */
+
+    if (wantedType === "highlight") {
+
+      highlightContainer
+        ? displayHighlightPosts(filtered)
+        : renderHighlightGrid(
+            filtered,
+            allPostsContainer
+          );
+
+      return;
+
+    }
+
+
+    /*
+     * FOOTBALL
+     */
+
+    if (wantedType === "live") {
+
+      liveContainer
+        ? displayLivePosts(filtered)
+        : renderFootballGrid(
+            filtered,
+            allPostsContainer
+          );
+
+      return;
+
+    }
+
+  }
+
+
+  /* =====================================
+     FALLBACK FOOTBALL GRID
+  ===================================== */
+
+  function renderFootballGrid(
+    posts,
+    container
+  ) {
+
     var html = "";
 
+    posts.forEach(function (post) {
 
-    filtered.forEach(function (post) {
+      html +=
 
-      if (post.type === "live") {
+        '<article class="live-card">' +
 
-        html += createLiveCard(post);
+          '<div class="match-top">' +
 
-      }
+            '<span class="' +
+              (
+                post.status === "LIVE"
+                  ? "live-badge"
+                  : "upcoming-badge"
+              ) +
+            '">' +
 
-      else if (post.type === "highlight") {
+              escapeHTML(
+                post.status || "UPCOMING"
+              ) +
 
-        html += createHighlightCard(post);
+            '</span>' +
 
-      }
+            '<span>' +
+              escapeHTML(
+                post.category || "Football"
+              ) +
+            '</span>' +
 
-      else if (post.type === "movie") {
+          '</div>' +
 
-        html += createMovieCard(post);
+          '<div class="teams">' +
 
-      }
+            '<strong>' +
+              escapeHTML(
+                post.home || "Team 1"
+              ) +
+            '</strong>' +
+
+            '<span>vs</span>' +
+
+            '<strong>' +
+              escapeHTML(
+                post.away || "Team 2"
+              ) +
+            '</strong>' +
+
+          '</div>' +
+
+          '<div class="match-meta">' +
+            escapeHTML(
+              post.description || ""
+            ) +
+          '</div>' +
+
+          '<div class="post-date">' +
+            formatPostDate(
+              post.publishedAt
+            ) +
+          '</div>' +
+
+          '<button ' +
+            'type="button" ' +
+            'class="watch-btn post-watch-button" ' +
+            'data-url="' +
+              escapeHTML(
+                post.embedUrl || ""
+              ) +
+            '" ' +
+            'data-title="' +
+              escapeHTML(
+                post.title || "Football"
+              ) +
+          '">' +
+
+            'Watch' +
+
+          '</button>' +
+
+        '</article>';
 
     });
 
-
-    allPostsContainer.innerHTML =
+    container.innerHTML =
       html;
-
 
     attachVideoButtons();
 
   }
 
 
-
   /* =====================================
-     LIVE CARD FOR ALL POSTS
+     FALLBACK HIGHLIGHT GRID
   ===================================== */
 
-  function createLiveCard(post) {
+  function renderHighlightGrid(
+    posts,
+    container
+  ) {
 
-    var status =
-      String(
-        post.status ||
-        "UPCOMING"
-      ).toUpperCase();
+    container.innerHTML = "";
 
+    posts.forEach(function (post) {
 
-    var statusClass =
-      status === "LIVE"
-        ? "live-badge"
-        : "upcoming-badge";
+      var article =
+        document.createElement("article");
 
+      article.className =
+        "media-card";
 
-    return (
 
-      '<article class="live-card">' +
+      var thumb =
+        document.createElement("div");
 
-        '<div class="match-top">' +
+      thumb.className =
+        "media-thumb football-thumb";
 
-          '<span class="' +
-            statusClass +
-          '">' +
 
-            escapeHTML(status) +
+      if (post.thumbnail) {
 
-          '</span>' +
+        thumb.classList.add(
+          "has-thumbnail"
+        );
 
-          '<span>' +
+        var image =
+          document.createElement("img");
 
-            escapeHTML(
-              post.category ||
-              "Football"
-            ) +
+        image.className =
+          "post-thumbnail";
 
-          '</span>' +
+        image.src =
+          post.thumbnail;
 
-        '</div>' +
+        image.alt =
+          post.title || "Highlight";
 
+        image.loading =
+          "lazy";
 
-        '<div class="teams">' +
+        image.decoding =
+          "async";
 
-          '<strong>' +
+        thumb.appendChild(
+          image
+        );
 
-            escapeHTML(
-              post.home ||
-              "Team 1"
-            ) +
+      }
 
-          '</strong>' +
 
-          '<span>vs</span>' +
+      var play =
+        document.createElement("span");
 
-          '<strong>' +
+      play.className =
+        "play";
 
-            escapeHTML(
-              post.away ||
-              "Team 2"
-            ) +
+      play.textContent =
+        "▶";
 
-          '</strong>' +
 
-        '</div>' +
-
-
-        '<div class="match-meta">' +
-
-          escapeHTML(
-            post.description || ""
-          ) +
-
-        '</div>' +
-
-
-        '<div class="post-date">' +
-
-          formatPostDate(
-            post.publishedAt ||
-            post.date
-          ) +
-
-        '</div>' +
-
-
-        '<button ' +
-
-          'type="button" ' +
-
-          'class="watch-btn" ' +
-
-          'data-url="' +
-            escapeHTML(
-              post.embedUrl || ""
-            ) +
-          '" ' +
-
-          'data-title="' +
-            escapeHTML(
-              post.title ||
-              "Football"
-            ) +
-          '">' +
-
-          'Watch' +
-
-        '</button>' +
-
-      '</article>'
-
-    );
-
-  }
-
-
-
-  /* =====================================
-     HIGHLIGHT CARD
-  ===================================== */
-
-  function createHighlightCard(post) {
-
-    return (
-
-      '<article class="media-card">' +
-
-        '<div class="media-thumb football-thumb ' +
-
-          createThumbnailClass(
-            post.thumbnail
-          ) +
-
-        '">' +
-
-          createThumbnail(
-            post.thumbnail,
-            post.title ||
-            "Football Highlight"
-          ) +
-
-          '<span class="play">▶</span>' +
-
-        '</div>' +
-
-
-        '<div class="media-info">' +
-
-          '<span class="tag">' +
-            'HIGHLIGHT' +
-          '</span>' +
-
-          '<h3>' +
-
-            escapeHTML(
-              post.title ||
-              "Football Highlight"
-            ) +
-
-          '</h3>' +
-
-          '<p>' +
-
-            escapeHTML(
-              post.description || ""
-            ) +
-
-          '</p>' +
-
-          '<div class="post-date">' +
-
-            formatPostDate(
-              post.publishedAt
-            ) +
-
-          '</div>' +
-
-          '<button ' +
-
-            'type="button" ' +
-
-            'class="watch-highlight" ' +
-
-            'data-url="' +
-              escapeHTML(
-                post.embedUrl || ""
-              ) +
-            '" ' +
-
-            'data-title="' +
-              escapeHTML(
-                post.title ||
-                "Highlight"
-              ) +
-            '">' +
-
-            'Watch highlight' +
-
-          '</button>' +
-
-        '</div>' +
-
-      '</article>'
-
-    );
-
-  }
-
-
-
-  /* =====================================
-     MOVIE CARD
-  ===================================== */
-
-  function createMovieCard(post) {
-
-    var hasThumbnail =
-      isValidThumbnailUrl(
-        post.thumbnail
+      thumb.appendChild(
+        play
       );
 
 
-    return (
+      var info =
+        document.createElement("div");
 
-      '<article class="movie-card">' +
+      info.className =
+        "media-info";
 
-        '<div class="poster poster-one ' +
 
-          (
-            hasThumbnail
-              ? "has-thumbnail"
-              : "thumbnail-fallback"
+      info.innerHTML =
+
+        '<span class="tag">HIGHLIGHT</span>' +
+
+        '<h3>' +
+          escapeHTML(
+            post.title || "Highlight"
           ) +
+        '</h3>' +
 
-        '">' +
-
-          createThumbnail(
-            post.thumbnail,
-            post.title ||
-            "Movie"
+        '<p>' +
+          escapeHTML(
+            post.description || ""
           ) +
+        '</p>' +
 
-          '<div class="poster-placeholder">' +
-
-            '<span>' +
-
-              escapeHTML(
-                post.category ||
-                "MOVIE"
-              ) +
-
-            '</span>' +
-
-          '</div>' +
-
-          '<span class="poster-category">' +
-
-            escapeHTML(
-              post.category ||
-              "MOVIE"
-            ) +
-
-          '</span>' +
-
-        '</div>' +
+        '<div class="post-date">' +
+          formatPostDate(
+            post.publishedAt
+          ) +
+        '</div>';
 
 
-        '<div class="movie-info">' +
+      var button =
+        document.createElement("button");
 
-          '<h3>' +
+      button.type =
+        "button";
 
-            escapeHTML(
-              post.title ||
-              "Movie"
-            ) +
+      button.className =
+        "post-watch-button";
 
-          '</h3>' +
+      button.textContent =
+        "Watch highlight";
 
-          '<p>' +
+      button.setAttribute(
+        "data-url",
+        post.embedUrl || ""
+      );
 
-            formatPostDate(
-              post.publishedAt
-            ) +
+      button.setAttribute(
+        "data-title",
+        post.title || "Highlight"
+      );
 
-          '</p>' +
 
-          '<button ' +
+      info.appendChild(
+        button
+      );
 
-            'type="button" ' +
+      article.appendChild(
+        thumb
+      );
 
-            'class="watch-movie" ' +
+      article.appendChild(
+        info
+      );
 
-            'data-url="' +
-              escapeHTML(
-                post.embedUrl || ""
-              ) +
-            '" ' +
+      container.appendChild(
+        article
+      );
 
-            'data-title="' +
-              escapeHTML(
-                post.title ||
-                "Movie"
-              ) +
-            '">' +
+    });
 
-            'View' +
 
-          '</button>' +
-
-        '</div>' +
-
-      '</article>'
-
-    );
+    attachVideoButtons();
 
   }
-
 
 
   /* =====================================
@@ -1296,9 +1191,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var buttons =
       document.querySelectorAll(
-        "[data-url]"
+        ".post-watch-button, .watch-btn"
       );
-
 
     for (
       var i = 0;
@@ -1306,39 +1200,50 @@ document.addEventListener("DOMContentLoaded", function () {
       i++
     ) {
 
-      buttons[i].onclick =
-        function (event) {
+      /*
+       * Avoid attaching the same handler
+       * more than once.
+       */
 
-          event.preventDefault();
+      if (
+        buttons[i].dataset.bound === "true"
+      ) {
+        continue;
+      }
 
+      buttons[i].dataset.bound =
+        "true";
+
+
+      buttons[i].addEventListener(
+        "click",
+        function () {
 
           var url =
             this.getAttribute(
               "data-url"
             );
 
-
           var title =
             this.getAttribute(
               "data-title"
             );
-
 
           openEmbed(
             title,
             url
           );
 
-        };
+        }
+      );
 
     }
 
   }
 
 
-
   /* =====================================
-     OPEN EMBED
+     VIDEO MODAL
   ===================================== */
 
   window.openEmbed =
@@ -1349,12 +1254,10 @@ document.addEventListener("DOMContentLoaded", function () {
           "embedModal"
         );
 
-
       var modalTitle =
         document.getElementById(
           "modalTitle"
         );
-
 
       var embedArea =
         document.getElementById(
@@ -1362,45 +1265,53 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
-      if (!modal || !embedArea) {
+      if (
+        !modal ||
+        !embedArea
+      ) {
+
+        console.warn(
+          "Video modal elements not found."
+        );
+
         return;
+
       }
 
 
       if (modalTitle) {
 
         modalTitle.textContent =
-          title ||
-          "Video";
+          title || "Video";
 
       }
 
 
       /*
-       * Always completely remove the
-       * previous iframe before opening
-       * another one.
+       * Completely clear previous iframe.
        */
 
       embedArea.innerHTML =
         "";
 
 
+      /*
+       * Remove previous controls.
+       */
+
       var oldControls =
         modal.querySelector(
           ".video-controls"
         );
-
 
       if (oldControls) {
         oldControls.remove();
       }
 
 
-
-      /* =================================
-         CREATE IFRAME
-      ================================= */
+      /*
+       * CREATE IFRAME
+       */
 
       if (url) {
 
@@ -1409,61 +1320,47 @@ document.addEventListener("DOMContentLoaded", function () {
             "iframe"
           );
 
-
         iframe.src =
-          url;
+          String(url).trim();
 
+        iframe.className =
+          "video-iframe";
 
         iframe.setAttribute(
           "allowfullscreen",
           ""
         );
 
-
         iframe.setAttribute(
           "allow",
           "autoplay; fullscreen; encrypted-media; picture-in-picture"
         );
-
 
         iframe.setAttribute(
           "frameborder",
           "0"
         );
 
-
         iframe.setAttribute(
           "scrolling",
           "no"
         );
 
-
         iframe.setAttribute(
           "title",
-          title ||
-          "Video"
+          title || "Video"
         );
 
-
-        iframe.style.width =
-          "100%";
-
-
-        iframe.style.height =
-          "100%";
-
-
-        iframe.style.border =
-          "0";
-
+        iframe.setAttribute(
+          "referrerpolicy",
+          "no-referrer-when-downgrade"
+        );
 
         embedArea.appendChild(
           iframe
         );
 
-      }
-
-      else {
+      } else {
 
         embedArea.innerHTML =
 
@@ -1482,16 +1379,14 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-
-      /* =================================
-         FULLSCREEN BUTTON
-      ================================= */
+      /*
+       * FULLSCREEN BUTTON
+       */
 
       var controls =
         document.createElement(
           "div"
         );
-
 
       controls.className =
         "video-controls";
@@ -1502,27 +1397,17 @@ document.addEventListener("DOMContentLoaded", function () {
           "button"
         );
 
-
       fullscreenButton.type =
         "button";
-
 
       fullscreenButton.className =
         "fullscreen-btn";
 
-
       fullscreenButton.textContent =
         "Tap to watch in Fullscreen";
 
-
       fullscreenButton.setAttribute(
         "aria-label",
-        "Tap to watch in Fullscreen"
-      );
-
-
-      fullscreenButton.setAttribute(
-        "title",
         "Tap to watch in Fullscreen"
       );
 
@@ -1531,28 +1416,28 @@ document.addEventListener("DOMContentLoaded", function () {
         fullscreenButton
       );
 
-
       embedArea.insertAdjacentElement(
         "afterend",
         controls
       );
 
 
-
-      /* =================================
-         OPEN MODAL
-      ================================= */
+      /*
+       * OPEN MODAL
+       */
 
       modal.classList.add(
         "open"
       );
-
 
       modal.setAttribute(
         "aria-hidden",
         "false"
       );
 
+      document.body.classList.add(
+        "modal-open"
+      );
 
       document.body.style.overflow =
         "hidden";
@@ -1560,9 +1445,12 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
 
-
   /* =====================================
-     CLOSE EMBED
+     CLOSE VIDEO
+     
+     FIXED:
+     Works from the X button,
+     backdrop, ESC and fullscreen.
   ===================================== */
 
   window.closeEmbed =
@@ -1573,7 +1461,6 @@ document.addEventListener("DOMContentLoaded", function () {
           "embedModal"
         );
 
-
       var embedArea =
         document.getElementById(
           "embedArea"
@@ -1583,7 +1470,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!modal) {
         return;
       }
-
 
 
       /*
@@ -1600,7 +1486,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } catch (error) {
 
-          console.log(
+          console.warn(
             "Could not exit fullscreen:",
             error
           );
@@ -1610,14 +1496,14 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-
       /*
-       * Unlock orientation.
+       * Unlock orientation if supported.
        */
 
       if (
         screen.orientation &&
-        screen.orientation.unlock
+        typeof screen.orientation.unlock ===
+          "function"
       ) {
 
         try {
@@ -1626,8 +1512,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } catch (error) {
 
-          console.log(
-            "Orientation unlock unavailable."
+          console.warn(
+            "Could not unlock orientation:",
+            error
           );
 
         }
@@ -1635,19 +1522,33 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-
       /*
-       * MOST IMPORTANT:
-       * Destroy the iframe completely.
+       * Destroy iframe completely.
+       *
+       * This stops the embedded page/video
+       * rather than merely hiding it.
        */
 
       if (embedArea) {
+
+        var iframe =
+          embedArea.querySelector(
+            "iframe"
+          );
+
+        if (iframe) {
+
+          iframe.src =
+            "about:blank";
+
+          iframe.remove();
+
+        }
 
         embedArea.innerHTML =
           "";
 
       }
-
 
 
       /*
@@ -1659,21 +1560,18 @@ document.addEventListener("DOMContentLoaded", function () {
           ".video-controls"
         );
 
-
       if (controls) {
         controls.remove();
       }
 
 
-
       /*
-       * Close modal.
+       * CLOSE MODAL
        */
 
       modal.classList.remove(
         "open"
       );
-
 
       modal.setAttribute(
         "aria-hidden",
@@ -1681,102 +1579,59 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
 
+      document.body.classList.remove(
+        "modal-open"
+      );
+
       document.body.style.overflow =
         "";
 
     };
 
 
-
   /* =====================================
-     CLOSE BUTTON
+     X BUTTON
+     
+     EVENT DELEGATION
+     
+     This guarantees the close button
+     works even if the modal is changed
+     by other code.
   ===================================== */
 
-  var closeButton =
-    document.querySelector(
-      ".modal-close"
-    );
+  document.addEventListener(
+    "click",
+    function (event) {
 
+      var closeButton =
+        event.target.closest(
+          ".modal-close"
+        );
 
-  if (closeButton) {
-
-    closeButton.addEventListener(
-      "click",
-      function (event) {
+      if (closeButton) {
 
         event.preventDefault();
-
         event.stopPropagation();
 
         closeEmbed();
 
-      }
-    );
-
-  }
-
-
-
-  /* =====================================
-     MODAL BACKDROP
-  ===================================== */
-
-  var modal =
-    document.getElementById(
-      "embedModal"
-    );
-
-
-  if (modal) {
-
-    modal.addEventListener(
-      "click",
-      function (event) {
-
-        if (
-          event.target.classList.contains(
-            "modal-backdrop"
-          )
-        ) {
-
-          closeEmbed();
-
-        }
-
-      }
-    );
-
-  }
-
-
-
-  /* =====================================
-     ESC KEY
-  ===================================== */
-
-  document.addEventListener(
-    "keydown",
-    function (event) {
-
-      if (
-        event.key !== "Escape"
-      ) {
         return;
+
       }
 
 
-      var currentModal =
-        document.getElementById(
-          "embedModal"
-        );
-
+      /*
+       * Backdrop close.
+       */
 
       if (
-        currentModal &&
-        currentModal.classList.contains(
-          "open"
+        event.target.classList &&
+        event.target.classList.contains(
+          "modal-backdrop"
         )
       ) {
+
+        event.preventDefault();
 
         closeEmbed();
 
@@ -1784,7 +1639,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
   );
-
 
 
   /* =====================================
@@ -1800,22 +1654,18 @@ document.addEventListener("DOMContentLoaded", function () {
           ".fullscreen-btn"
         );
 
-
       if (!button) {
         return;
       }
-
 
       var modalBox =
         document.querySelector(
           ".modal-box"
         );
 
-
       if (!modalBox) {
         return;
       }
-
 
       try {
 
@@ -1829,10 +1679,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
           }
 
-
           if (
             screen.orientation &&
-            screen.orientation.lock
+            typeof screen.orientation.lock ===
+              "function"
           ) {
 
             try {
@@ -1844,16 +1694,15 @@ document.addEventListener("DOMContentLoaded", function () {
             } catch (orientationError) {
 
               console.log(
-                "Orientation lock unavailable."
+                "Landscape orientation lock unavailable:",
+                orientationError
               );
 
             }
 
           }
 
-        }
-
-        else {
+        } else {
 
           if (
             document.exitFullscreen
@@ -1878,7 +1727,6 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
 
-
   /* =====================================
      FULLSCREEN CHANGE
   ===================================== */
@@ -1892,37 +1740,56 @@ document.addEventListener("DOMContentLoaded", function () {
           ".fullscreen-btn"
         );
 
-
-      if (!button) {
-        return;
-      }
-
-
       if (
         document.fullscreenElement
       ) {
 
-        button.textContent =
-          "Exit Fullscreen";
+        if (button) {
 
+          button.textContent =
+            "Exit Fullscreen";
 
-        button.setAttribute(
-          "aria-label",
-          "Exit Fullscreen"
-        );
+          button.setAttribute(
+            "aria-label",
+            "Exit Fullscreen"
+          );
 
-      }
+        }
 
-      else {
+      } else {
 
-        button.textContent =
-          "Tap to watch in Fullscreen";
+        if (button) {
 
+          button.textContent =
+            "Tap to watch in Fullscreen";
 
-        button.setAttribute(
-          "aria-label",
-          "Tap to watch in Fullscreen"
-        );
+          button.setAttribute(
+            "aria-label",
+            "Tap to watch in Fullscreen"
+          );
+
+        }
+
+        if (
+          screen.orientation &&
+          typeof screen.orientation.unlock ===
+            "function"
+        ) {
+
+          try {
+
+            screen.orientation.unlock();
+
+          } catch (error) {
+
+            console.log(
+              "Orientation unlock unavailable:",
+              error
+            );
+
+          }
+
+        }
 
       }
 
@@ -1930,290 +1797,38 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
 
-
   /* =====================================
-     SEARCH
+     ESC KEY
   ===================================== */
 
-  function setupSearch() {
+  document.addEventListener(
+    "keydown",
+    function (event) {
 
-    if (!searchInput) {
-      return;
-    }
+      if (
+        event.key === "Escape"
+      ) {
 
-
-    searchInput.addEventListener(
-      "input",
-      function () {
-
-        performSearch(
-          this.value
-        );
-
-      }
-    );
-
-
-    /*
-     * Also support Enter.
-     */
-
-    searchInput.addEventListener(
-      "keydown",
-      function (event) {
+        var modal =
+          document.getElementById(
+            "embedModal"
+          );
 
         if (
-          event.key === "Enter"
+          modal &&
+          modal.classList.contains(
+            "open"
+          )
         ) {
 
-          event.preventDefault();
-
-          performSearch(
-            this.value
-          );
+          closeEmbed();
 
         }
 
       }
-    );
-
-  }
-
-
-
-  function performSearch(query) {
-
-    var value =
-      String(query || "")
-        .trim()
-        .toLowerCase();
-
-
-    if (!value) {
-
-      if (searchStatus) {
-        searchStatus.innerHTML = "";
-      }
-
-
-      if (noResults) {
-        noResults.classList.remove(
-          "show"
-        );
-      }
-
-
-      displayLivePosts(allPosts);
-
-      displayHighlightPosts(allPosts);
-
-      displayMoviePosts(allPosts);
-
-
-      if (allPostsContainer) {
-        displayAllPosts(allPosts);
-      }
-
-
-      return;
 
     }
-
-
-    var results =
-      allPosts.filter(function (post) {
-
-        var text = [
-
-          post.title,
-
-          post.home,
-
-          post.away,
-
-          post.category,
-
-          post.description,
-
-          post.status,
-
-          post.type
-
-        ].join(" ").toLowerCase();
-
-
-        return text.indexOf(value) !== -1;
-
-      });
-
-
-    /*
-     * Search results should be shown
-     * according to the current page.
-     */
-
-    var page =
-      window.location.pathname
-        .split("/")
-        .pop()
-        .toLowerCase();
-
-
-    if (page === "football.html") {
-
-      results =
-        results.filter(function (post) {
-
-          return post.type === "live";
-
-        });
-
-    }
-
-
-    if (page === "highlights.html") {
-
-      results =
-        results.filter(function (post) {
-
-          return post.type === "highlight";
-
-        });
-
-    }
-
-
-    if (page === "movies.html") {
-
-      results =
-        results.filter(function (post) {
-
-          return post.type === "movie";
-
-        });
-
-    }
-
-
-    if (searchStatus) {
-
-      searchStatus.innerHTML =
-
-        '<p class="search-result-text">' +
-
-          '<strong>' +
-            results.length +
-          '</strong> ' +
-
-          (
-            results.length === 1
-              ? "result"
-              : "results"
-          ) +
-
-          ' found for "' +
-
-          escapeHTML(query) +
-
-          '"' +
-
-        '</p>';
-
-    }
-
-
-    if (results.length === 0) {
-
-      if (noResults) {
-
-        noResults.classList.add(
-          "show"
-        );
-
-      }
-
-
-      if (liveContainer) {
-        liveContainer.innerHTML = "";
-      }
-
-
-      if (highlightContainer) {
-        highlightContainer.innerHTML = "";
-      }
-
-
-      if (movieContainer) {
-        movieContainer.innerHTML = "";
-      }
-
-
-      if (allPostsContainer) {
-
-        allPostsContainer.innerHTML =
-
-          '<div class="empty-posts">' +
-
-            'No matching content found.' +
-
-          '</div>';
-
-      }
-
-
-      return;
-
-    }
-
-
-    if (noResults) {
-
-      noResults.classList.remove(
-        "show"
-      );
-
-    }
-
-
-    /*
-     * Render only the correct section.
-     */
-
-    if (page === "football.html") {
-
-      displayAllPosts(results);
-
-    }
-
-    else if (page === "highlights.html") {
-
-      displayAllPosts(results);
-
-    }
-
-    else if (page === "movies.html") {
-
-      displayAllPosts(results);
-
-    }
-
-    else {
-
-      /*
-       * Homepage:
-       * update all three horizontal sections.
-       */
-
-      displayLivePosts(results);
-
-      displayHighlightPosts(results);
-
-      displayMoviePosts(results);
-
-    }
-
-  }
-
+  );
 
 
   /* =====================================
@@ -2224,7 +1839,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById(
       "menuToggle"
     );
-
 
   var mainNav =
     document.getElementById(
@@ -2246,7 +1860,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "open"
           );
 
-
         menuToggle.setAttribute(
           "aria-expanded",
           isOpen
@@ -2257,37 +1870,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     );
 
-
-    /*
-     * Close menu after selecting
-     * a navigation link.
-     */
-
-    mainNav.addEventListener(
-      "click",
-      function (event) {
-
-        if (
-          event.target.tagName === "A"
-        ) {
-
-          mainNav.classList.remove(
-            "open"
-          );
-
-
-          menuToggle.setAttribute(
-            "aria-expanded",
-            "false"
-          );
-
-        }
-
-      }
-    );
-
   }
-
 
 
   /* =====================================
@@ -2298,7 +1881,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById(
       "year"
     );
-
 
   if (year) {
 
