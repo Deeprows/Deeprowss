@@ -11,5 +11,19 @@
     "embedUrl": "",
     "status": "UPCOMING",
     "type": "live"
+  },
+
+  {
+    "id": "2",
+    "title": "Barcelona vs Real Madrid",
+    "category": "La Liga",
+    "date": "2026-08-15",
+    "home": "Barcelona",
+    "away": "Real Madrid",
+    "thumbnail": "",
+    "description": "Barcelona vs Real Madrid football coverage.",
+    "embedUrl": "",
+    "status": "UPCOMING",
+    "type": "live"
   }
 ]
