@@ -578,12 +578,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* Remove old player */
+      /* Remove previous player */
 
       embedArea.innerHTML = "";
 
 
-      /* Remove old fullscreen controls */
+      /* Remove previous fullscreen controls */
 
       var oldControls =
         modal.querySelector(
@@ -597,7 +597,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       /* =================================
-         CREATE IFRAME
+         CREATE VIDEO IFRAME
       ================================= */
 
       if (url) {
@@ -642,6 +642,12 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
+        iframe.setAttribute(
+          "title",
+          title || "Video"
+        );
+
+
         embedArea.appendChild(
           iframe
         );
@@ -679,18 +685,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
       fullscreenButton.setAttribute(
         "aria-label",
-        "Fullscreen"
+        "Tap to watch in Fullscreen"
       );
 
 
       fullscreenButton.setAttribute(
         "title",
-        "Fullscreen"
+        "Tap to watch in Fullscreen"
       );
 
 
-      fullscreenButton.innerHTML =
-        "⛶";
+      fullscreenButton.textContent =
+        "Tap to watch in Fullscreen";
 
 
       controls.appendChild(
@@ -699,7 +705,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       /*
-       * Put controls immediately
+       * Place button directly
        * underneath the player.
        */
 
@@ -732,7 +738,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     FULLSCREEN BUTTON
+     FULLSCREEN
   ===================================== */
 
   document.addEventListener(
@@ -775,11 +781,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
             await modalBox.requestFullscreen();
 
+          } else {
+
+            /*
+             * Fullscreen API not supported.
+             */
+
+            console.log(
+              "Fullscreen API is not supported."
+            );
+
+            return;
+
           }
 
 
           /*
-           * Try to rotate device
+           * Try to rotate the device
            * into landscape.
            */
 
@@ -856,17 +874,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (button) {
 
-          button.innerHTML =
-            "⛶";
+          button.textContent =
+            "Exit Fullscreen";
+
 
           button.setAttribute(
             "aria-label",
-            "Exit fullscreen"
+            "Exit Fullscreen"
           );
+
 
           button.setAttribute(
             "title",
-            "Exit fullscreen"
+            "Exit Fullscreen"
           );
 
         }
@@ -875,24 +895,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (button) {
 
-          button.innerHTML =
-            "⛶";
+          button.textContent =
+            "Tap to watch in Fullscreen";
+
 
           button.setAttribute(
             "aria-label",
-            "Fullscreen"
+            "Tap to watch in Fullscreen"
           );
+
 
           button.setAttribute(
             "title",
-            "Fullscreen"
+            "Tap to watch in Fullscreen"
           );
 
         }
 
 
         /*
-         * Unlock orientation.
+         * Unlock device orientation.
          */
 
         if (
@@ -1001,7 +1023,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* Remove controls */
+      /* Remove fullscreen controls */
 
       var controls =
         modal.querySelector(
@@ -1027,7 +1049,7 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
 
-      /* Restore scrolling */
+      /* Restore page scrolling */
 
       document.body.style.overflow =
         "";
@@ -1037,7 +1059,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     CLOSE BACKDROP
+     CLOSE MODAL WITH BACKDROP
   ===================================== */
 
   var modal =
