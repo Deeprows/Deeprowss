@@ -12,7 +12,7 @@
 
   <meta
     name="description"
-    content="Watch live football matches and football content on Deeprowss."
+    content="Watch live football matches and upcoming games on Deeprowss."
   >
 
   <title>
@@ -32,12 +32,14 @@
 
   <!-- =========================
        HEADER
-  ========================== -->
+  ========================= -->
 
   <header class="site-header">
 
     <div class="container nav-wrap">
 
+
+      <!-- LOGO -->
 
       <a
         href="index.html"
@@ -50,11 +52,31 @@
         </span>
 
         <span>
-          Deeprowss<span>.</span>
+          DEE<span>PROWSS</span>
         </span>
 
       </a>
 
+
+
+      <!-- MOBILE MENU -->
+
+      <button
+        type="button"
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        aria-controls="mainNav"
+      >
+
+        ☰
+
+      </button>
+
+
+
+      <!-- NAVIGATION -->
 
       <nav
         class="main-nav"
@@ -66,8 +88,11 @@
           Home
         </a>
 
-        <a href="football.html">
-          Football
+        <a
+          href="football.html"
+          aria-current="page"
+        >
+          Football Live
         </a>
 
         <a href="highlights.html">
@@ -81,13 +106,24 @@
       </nav>
 
 
+
+      <!-- SEARCH -->
+
       <div class="nav-search">
 
+        <label
+          class="sr-only"
+          for="siteSearch"
+        >
+          Search Deeprowss
+        </label>
+
         <input
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
           id="siteSearch"
+          type="search"
+          placeholder="Search..."
+          autocomplete="off"
+          spellcheck="false"
         >
 
         <span aria-hidden="true">
@@ -97,17 +133,6 @@
       </div>
 
 
-      <button
-        type="button"
-        class="menu-toggle"
-        id="menuToggle"
-        aria-label="Open navigation"
-        aria-expanded="false"
-      >
-        ☰
-      </button>
-
-
     </div>
 
   </header>
@@ -115,11 +140,15 @@
 
 
   <!-- =========================
-       PAGE HERO
-  ========================== -->
+       MAIN
+  ========================= -->
 
   <main>
 
+
+    <!-- =========================
+         PAGE HERO
+    ========================= -->
 
     <section class="page-hero">
 
@@ -146,8 +175,27 @@
 
 
     <!-- =========================
+         SEARCH STATUS
+    ========================= -->
+
+    <section
+      class="search-section"
+      aria-live="polite"
+    >
+
+      <div class="container">
+
+        <div id="searchStatus"></div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
          ALL FOOTBALL POSTS
-    ========================== -->
+    ========================= -->
 
     <section class="section">
 
@@ -171,8 +219,14 @@
         </div>
 
 
+
+        <!--
+          script.js automatically loads
+          type: "live" posts here.
+        -->
+
         <div
-          id="allPosts"
+          id="livePosts"
           class="all-posts-grid"
         >
 
@@ -194,7 +248,7 @@
 
   <!-- =========================
        FOOTER
-  ========================== -->
+  ========================= -->
 
   <footer class="footer">
 
@@ -204,14 +258,15 @@
       <div>
 
         <strong>
-          Deeprowss<span>.</span>
+          DEE<span>PROWSS</span>
         </strong>
 
         <p>
-          Football, highlights and movies.
+          Football • Highlights • Entertainment
         </p>
 
       </div>
+
 
 
       <div class="footer-links">
@@ -220,8 +275,11 @@
           Home
         </a>
 
-        <a href="football.html">
-          Football
+        <a
+          href="football.html"
+          aria-current="page"
+        >
+          Football Live
         </a>
 
         <a href="highlights.html">
@@ -235,11 +293,15 @@
       </div>
 
 
+
       <p class="copyright">
 
         &copy;
+
         <span id="year"></span>
-        Deeprowss. All rights reserved.
+
+        Deeprowss.
+        All rights reserved.
 
       </p>
 
@@ -251,37 +313,98 @@
 
 
   <!-- =========================
+       VIDEO MODAL
+  ========================= -->
+
+  <div
+    class="modal"
+    id="embedModal"
+    aria-hidden="true"
+  >
+
+
+    <div
+      class="modal-backdrop"
+      onclick="closeEmbed()"
+    ></div>
+
+
+
+    <div
+      class="modal-box"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+    >
+
+
+      <button
+        type="button"
+        class="modal-close"
+        onclick="closeEmbed()"
+        aria-label="Close video"
+      >
+
+        ×
+
+      </button>
+
+
+
+      <h2 id="modalTitle">
+        Video
+      </h2>
+
+
+
+      <div
+        class="embed-area"
+        id="embedArea"
+      >
+
+        <div class="embed-placeholder">
+
+          <strong>
+            Select a match
+          </strong>
+
+          <span class="embed-note">
+            The football player will appear here.
+          </span>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================
+       NO RESULTS
+  ========================= -->
+
+  <div
+    class="no-results"
+    id="noResults"
+    role="status"
+    aria-live="polite"
+  >
+
+    No matching content found.
+
+  </div>
+
+
+
+  <!-- =========================
        JAVASCRIPT
-  ========================== -->
+  ========================= -->
 
-  <script src="all-posts.js"></script>
-
-
-  <script>
-
-    /*
-     * Copyright year
-     */
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      function () {
-
-        var year =
-          document.getElementById("year");
-
-
-        if (year) {
-
-          year.textContent =
-            new Date().getFullYear();
-
-        }
-
-      }
-    );
-
-  </script>
+  <script src="script.js"></script>
 
 
 </body>
