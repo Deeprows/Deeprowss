@@ -157,8 +157,110 @@
 
 
 
+<!-- =========================================
+     VIDEO MODAL
+========================================= -->
+
+<div
+  id="embedModal"
+  class="embed-modal"
+  aria-hidden="true">
+
+  <div class="modal-backdrop"></div>
+
+  <div
+    class="modal-box"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle">
+
+    <div class="modal-header">
+
+      <h2 id="modalTitle">
+        Video
+      </h2>
+
+      <button
+        type="button"
+        class="modal-close"
+        aria-label="Close video">
+
+        &times;
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="embedArea"
+      class="embed-area">
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================================
+     SCRIPTS
+========================================= -->
+
 <script src="section.js"></script>
+
+<script src="script.js"></script>
+
+
+<script>
+document.addEventListener("click", function (event) {
+
+  var button = event.target.closest(
+    "[data-url]"
+  );
+
+  if (!button) {
+    return;
+  }
+
+  event.preventDefault();
+
+  var url =
+    button.getAttribute("data-url") || "";
+
+  var title =
+    button.getAttribute("data-title") ||
+    button.textContent.trim() ||
+    "Video";
+
+  if (!url) {
+    console.error(
+      "Deeprowss: Watch button has no data-url.",
+      button
+    );
+    return;
+  }
+
+  if (typeof window.openEmbed === "function") {
+
+    window.openEmbed(
+      title,
+      url
+    );
+
+  } else {
+
+    console.error(
+      "Deeprowss: openEmbed() is not available."
+    );
+
+  }
+
+});
+</script>
+
 
 </body>
 
 </html>
+```
