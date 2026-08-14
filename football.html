@@ -1,67 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Deeprowss Football Live">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Deeprowss Football Live">
+
   <title>Football Live — Deeprowss</title>
-  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="stylesheet"
+    href="style.css">
+
 </head>
+
 
 <body>
 
+
 <header class="site-header">
+
   <div class="container nav-wrap">
 
-    <a class="brand" href="index.html">
-      <span class="brand-mark">D</span>
-      <span>DEE<span>PROWSS</span></span>
+    <a
+      class="brand"
+      href="index.html">
+
+      <span class="brand-mark">
+        D
+      </span>
+
+      <span>
+        DEE<span>PROWSS</span>
+      </span>
+
     </a>
 
-    <button class="menu-toggle" id="menuToggle">☰</button>
 
-    <nav class="main-nav" id="mainNav">
-      <a href="index.html">Home</a>
-      <a href="football.html">Football Live</a>
-      <a href="highlights.html">Highlights</a>
-      <a href="movies.html">Movies</a>
+    <button
+      class="menu-toggle"
+      id="menuToggle">
+
+      ☰
+
+    </button>
+
+
+    <nav
+      class="main-nav"
+      id="mainNav">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="football.html">
+        Football Live
+      </a>
+
+      <a href="highlights.html">
+        Highlights
+      </a>
+
+      <a href="movies.html">
+        Movies
+      </a>
+
     </nav>
 
+
     <div class="nav-search">
-      <input id="siteSearch" type="search" placeholder="Search...">
-      <span>⌕</span>
+
+      <input
+        id="siteSearch"
+        type="search"
+        placeholder="Search...">
+
+      <span>
+        ⌕
+      </span>
+
     </div>
 
   </div>
+
 </header>
+
+
 
 <main>
 
+
   <section class="page-hero">
+
     <div class="container">
-      <p class="eyebrow">FOOTBALL</p>
-      <h1>Football Live</h1>
-      <p>All football live posts on Deeprowss.</p>
+
+      <p class="eyebrow">
+        FOOTBALL
+      </p>
+
+      <h1>
+        Football Live
+      </h1>
+
+      <p>
+        All football live posts on Deeprowss.
+      </p>
+
     </div>
+
   </section>
+
+
 
   <div class="container">
 
     <section class="section">
 
       <div class="section-heading">
+
         <div>
-          <p class="eyebrow">ALL POSTS</p>
-          <h2>Football Live</h2>
+
+          <p class="eyebrow">
+            ALL POSTS
+          </p>
+
+          <h2>
+            Football Live
+          </h2>
+
         </div>
 
-        <a class="section-link" href="index.html">
+
+        <a
+          class="section-link"
+          href="index.html">
+
           ← Back home
+
         </a>
+
       </div>
 
-      <div class="all-posts-grid" id="allPosts">
-        <div class="loading">Loading football...</div>
+
+      <div
+        class="all-posts-grid"
+        id="allPosts">
+
+        <div class="loading">
+          Loading football...
+        </div>
+
       </div>
 
     </section>
@@ -70,23 +166,107 @@
 
 </main>
 
+
+
 <footer class="footer">
+
   <div class="container footer-wrap">
+
     <div>
-      <strong>DEE<span>PROWSS</span></strong>
-      <p>Football • Highlights • Entertainment</p>
+
+      <strong>
+        DEE<span>PROWSS</span>
+      </strong>
+
+      <p>
+        Football • Highlights • Entertainment
+      </p>
+
     </div>
 
+
     <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="football.html">Football Live</a>
-      <a href="highlights.html">Highlights</a>
-      <a href="movies.html">Movies</a>
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="football.html">
+        Football Live
+      </a>
+
+      <a href="highlights.html">
+        Highlights
+      </a>
+
+      <a href="movies.html">
+        Movies
+      </a>
+
     </div>
+
   </div>
+
 </footer>
+
+
+
+<!-- VIDEO MODAL -->
+
+<div
+  id="embedModal"
+  class="embed-modal"
+  aria-hidden="true">
+
+  <div class="modal-backdrop"></div>
+
+
+  <div
+    class="modal-box"
+    role="dialog"
+    aria-modal="true">
+
+    <div class="modal-header">
+
+      <h2 id="modalTitle">
+        Video
+      </h2>
+
+
+      <button
+        type="button"
+        class="modal-close"
+        aria-label="Close video">
+
+        &times;
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="embedArea"
+      class="embed-area">
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- LOAD POSTS -->
 
 <script src="all-posts.js"></script>
 
+
+<!-- VIDEO SYSTEM -->
+
+<script src="script.js"></script>
+
+
 </body>
+
 </html>
+```
