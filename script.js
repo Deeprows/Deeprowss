@@ -146,7 +146,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     FORMAT DATE
+     ESCAPE HTML
+  ===================================== */
+
+  function escapeHTML(value) {
+
+    if (value === undefined || value === null) {
+      return "";
+    }
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+
+  /* =====================================
+     FORMAT VISITOR LOCAL TIME
   ===================================== */
 
   function formatPostDate(dateString) {
@@ -180,21 +201,55 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     ESCAPE HTML
+     THUMBNAIL HTML
   ===================================== */
 
-  function escapeHtml(value) {
+  function createThumbnail(
+    thumbnail,
+    type,
+    altText
+  ) {
 
-    if (value === null || value === undefined) {
-      return "";
+    var safeThumbnail =
+      escapeHTML(thumbnail);
+
+    var safeAlt =
+      escapeHTML(
+        altText || "Thumbnail"
+      );
+
+
+    /*
+     * If a thumbnail exists,
+     * display the real image.
+     */
+
+    if (safeThumbnail) {
+
+      return (
+        '<img ' +
+          'class="post-thumbnail" ' +
+          'src="' +
+            safeThumbnail +
+          '" ' +
+          'alt="' +
+            safeAlt +
+          '" ' +
+          'loading="lazy" ' +
+          'onerror="this.style.display=\'none\';' +
+            'this.parentElement.classList.add(\'thumbnail-fallback\');"' +
+        '>'
+      );
+
     }
 
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+
+    /*
+     * No thumbnail:
+     * use the normal background.
+     */
+
+    return "";
 
   }
 
@@ -252,14 +307,14 @@ document.addEventListener("DOMContentLoaded", function () {
               statusClass +
             '">' +
 
-              escapeHtml(
+              escapeHTML(
                 post.status || "UPCOMING"
               ) +
 
             '</span>' +
 
             '<span>' +
-              escapeHtml(
+              escapeHTML(
                 post.category || "Football"
               ) +
             '</span>' +
@@ -270,7 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
           '<div class="teams">' +
 
             '<strong>' +
-              escapeHtml(
+              escapeHTML(
                 post.home || "Team 1"
               ) +
             '</strong>' +
@@ -278,7 +333,7 @@ document.addEventListener("DOMContentLoaded", function () {
             '<span>vs</span>' +
 
             '<strong>' +
-              escapeHtml(
+              escapeHTML(
                 post.away || "Team 2"
               ) +
             '</strong>' +
@@ -287,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           '<div class="match-meta">' +
-            escapeHtml(
+            escapeHTML(
               post.description || ""
             ) +
           '</div>' +
@@ -301,14 +356,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           '<button ' +
+            'type="button" ' +
             'class="watch-btn" ' +
             'data-url="' +
-              escapeHtml(
+              escapeHTML(
                 post.embedUrl || ""
               ) +
             '" ' +
             'data-title="' +
-              escapeHtml(
+              escapeHTML(
                 post.title || "Video"
               ) +
             '">' +
@@ -368,54 +424,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
     highlights.forEach(function (post) {
 
-      var thumbnail =
-        post.thumbnail || "";
-
-
-      var thumbnailHtml = "";
-
-
-      if (thumbnail) {
-
-        thumbnailHtml =
-          '<img ' +
-            'class="media-image" ' +
-            'src="' +
-              escapeHtml(thumbnail) +
-            '" ' +
-            'alt="' +
-              escapeHtml(
-                post.title || "Football Highlight"
-              ) +
-            '" ' +
-            'loading="lazy" ' +
-            'onerror="this.parentElement.classList.add(\'image-failed\'); this.remove();">' +
-
-          '<span class="play">' +
-            '▶' +
-          '</span>';
-
-      } else {
-
-        thumbnailHtml =
-          '<div class="media-placeholder football-thumb">' +
-
-            '<span class="play">' +
-              '▶' +
-            '</span>' +
-
-          '</div>';
-
-      }
+      var thumbnailHTML =
+        createThumbnail(
+          post.thumbnail,
+          "highlight",
+          post.title || "Football Highlight"
+        );
 
 
       html +=
 
         '<article class="media-card">' +
 
-          '<div class="media-thumb">' +
+          '<div class="media-thumb football-thumb ' +
+            (
+              post.thumbnail
+                ? "has-thumbnail"
+                : ""
+            ) +
+          '">' +
 
-            thumbnailHtml +
+            thumbnailHTML +
+
+            '<span class="play">' +
+              '▶' +
+            '</span>' +
 
           '</div>' +
 
@@ -428,7 +461,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             '<h3>' +
-              escapeHtml(
+              escapeHTML(
                 post.title ||
                 "Football Highlight"
               ) +
@@ -436,7 +469,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             '<p>' +
-              escapeHtml(
+              escapeHTML(
                 post.description || ""
               ) +
             '</p>' +
@@ -450,13 +483,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             '<button ' +
+              'type="button" ' +
               'data-url="' +
-                escapeHtml(
+                escapeHTML(
                   post.embedUrl || ""
                 ) +
               '" ' +
               'data-title="' +
-                escapeHtml(
+                escapeHTML(
                   post.title || "Highlight"
                 ) +
               '">' +
@@ -518,67 +552,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
     movies.forEach(function (post) {
 
-      var thumbnail =
-        post.thumbnail || "";
-
-
-      var thumbnailHtml = "";
-
-
-      if (thumbnail) {
-
-        thumbnailHtml =
-          '<img ' +
-            'class="movie-thumbnail" ' +
-            'src="' +
-              escapeHtml(thumbnail) +
-            '" ' +
-            'alt="' +
-              escapeHtml(
-                post.title || "Movie"
-              ) +
-            '" ' +
-            'loading="lazy" ' +
-            'onerror="this.parentElement.classList.add(\'image-failed\'); this.remove();">';
-
-      } else {
-
-        thumbnailHtml =
-          '<div class="movie-placeholder">' +
-
-            '<span>' +
-              escapeHtml(
-                post.category || "MOVIE"
-              ) +
-            '</span>' +
-
-          '</div>';
-
-      }
+      var thumbnailHTML =
+        createThumbnail(
+          post.thumbnail,
+          "movie",
+          post.title || "Movie"
+        );
 
 
       html +=
 
         '<article class="movie-card">' +
 
-          '<div class="movie-poster">' +
+          '<div class="poster poster-one ' +
+            (
+              post.thumbnail
+                ? "has-thumbnail"
+                : ""
+            ) +
+          '">' +
 
-            thumbnailHtml +
+            thumbnailHTML +
+
+            '<span class="poster-category">' +
+              escapeHTML(
+                post.category || "MOVIE"
+              ) +
+            '</span>' +
 
           '</div>' +
 
 
           '<div class="movie-info">' +
 
-            '<span class="tag">' +
-              escapeHtml(
-                post.category || "MOVIE"
-              ) +
-            '</span>' +
-
-
             '<h3>' +
-              escapeHtml(
+              escapeHTML(
                 post.title || "Movie"
               ) +
             '</h3>' +
@@ -592,13 +600,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             '<button ' +
+              'type="button" ' +
               'data-url="' +
-                escapeHtml(
+                escapeHTML(
                   post.embedUrl || ""
                 ) +
               '" ' +
               'data-title="' +
-                escapeHtml(
+                escapeHTML(
                   post.title || "Movie"
                 ) +
               '">' +
@@ -722,6 +731,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
+
+      /* =================================
+         CREATE VIDEO IFRAME
+      ================================= */
+
       if (url) {
 
         var iframe =
@@ -774,8 +788,28 @@ document.addEventListener("DOMContentLoaded", function () {
           iframe
         );
 
+      } else {
+
+        embedArea.innerHTML =
+          '<div class="embed-placeholder">' +
+
+            '<strong>' +
+              'Video unavailable' +
+            '</strong>' +
+
+            '<span class="embed-note">' +
+              'No video URL has been added to this post.' +
+            '</span>' +
+
+          '</div>';
+
       }
 
+
+
+      /* =================================
+         FULLSCREEN CONTROLS
+      ================================= */
 
       var controls =
         document.createElement(
@@ -827,6 +861,11 @@ document.addEventListener("DOMContentLoaded", function () {
         controls
       );
 
+
+
+      /* =================================
+         OPEN MODAL
+      ================================= */
 
       modal.classList.add(
         "open"
@@ -1227,6 +1266,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         mainNav.classList.toggle(
           "open"
+        );
+
+
+        var isOpen =
+          mainNav.classList.contains(
+            "open"
+          );
+
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          isOpen
+            ? "true"
+            : "false"
         );
 
       };
