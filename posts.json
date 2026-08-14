@@ -20,7 +20,7 @@
     "category": "La Liga",
     "description": "Barcelona vs Real Madrid football coverage.",
     "publishedAt": "2026-08-15T18:00:00Z",
-    "thumbnail": "",
+    "thumbnail": "https://m.media-amazon.com/images/M/MV5BZTkyYWVjOTMtMzRkYS00MTAwLWE4NDItNzQ2ZjJhOWE1MjQ4XkEyXkFqcGc@._V1_.jpg",
     "embedUrl": "https://streamtp-golden1.click/global1.php?stream=dsports2"
   },
   {
@@ -49,10 +49,10 @@
   },
   {
     "type": "movie",
-    "title": "https://m.media-amazon.com/images/M/MV5BZTkyYWVjOTMtMzRkYS00MTAwLWE4NDItNzQ2ZjJhOWE1MjQ4XkEyXkFqcGc@._V1_.jpg",
+    "title": "",
     "category": "MOVIE",
     "publishedAt": "2026-08-14T10:00:00Z",
-    "thumbnail": "YOUR_SECOND_MOVIE_THUMBNAIL_URL",
+    "thumbnail": "https://m.media-amazon.com/images/M/MV5BZTkyYWVjOTMtMzRkYS00MTAwLWE4NDItNzQ2ZjJhOWE1MjQ4XkEyXkFqcGc@._V1_.jpg",
     "embedUrl": "YOUR_SECOND_MOVIE_EMBED_URL"
   }
 ]
