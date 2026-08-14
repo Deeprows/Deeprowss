@@ -12,10 +12,12 @@
 
   <meta
     name="description"
-    content="Watch movies on Deeprowss."
+    content="Watch the latest movies on Deeprowss."
   >
 
-  <title>Movies | Deeprowss</title>
+  <title>
+    Movies — Deeprowss
+  </title>
 
   <link
     rel="stylesheet"
@@ -28,84 +30,114 @@
 <body>
 
 
-  <!-- =========================
-       HEADER
-  ========================= -->
+<!-- =========================
+     HEADER
+========================= -->
 
-  <header class="site-header">
+<header class="site-header">
 
-    <div class="container nav-wrap">
+  <div class="container nav-wrap">
 
 
-      <a
-        href="index.html"
-        class="brand"
-      >
+    <!-- LOGO -->
 
-        <span class="brand-mark">
-          D
-        </span>
+    <a
+      class="brand"
+      href="index.html"
+      aria-label="Deeprowss Home"
+    >
 
-        <span>
-          Deeprowss
-        </span>
+      <span class="brand-mark">
+        D
+      </span>
 
+      <span>
+        DEE<span>PROWSS</span>
+      </span>
+
+    </a>
+
+
+    <!-- MOBILE MENU -->
+
+    <button
+      type="button"
+      class="menu-toggle"
+      id="menuToggle"
+      aria-label="Open navigation"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
+
+
+    <!-- NAVIGATION -->
+
+    <nav
+      class="main-nav"
+      id="mainNav"
+      aria-label="Main navigation"
+    >
+
+      <a href="index.html">
+        Home
       </a>
 
+      <a href="football.html">
+        Football Live
+      </a>
 
-      <nav
-        class="main-nav"
-        id="mainNav"
+      <a href="highlights.html">
+        Highlights
+      </a>
+
+      <a href="movies.html">
+        Movies
+      </a>
+
+    </nav>
+
+
+    <!-- SEARCH -->
+
+    <div class="nav-search">
+
+      <label
+        class="sr-only"
+        for="siteSearch"
+      >
+        Search Deeprowss
+      </label>
+
+      <input
+        id="siteSearch"
+        type="search"
+        placeholder="Search..."
+        autocomplete="off"
+        aria-label="Search Deeprowss"
       >
 
-        <a href="index.html">
-          Home
-        </a>
-
-        <a href="football.html">
-          Football
-        </a>
-
-        <a href="highlights.html">
-          Highlights
-        </a>
-
-        <a href="movies.html">
-          Movies
-        </a>
-
-      </nav>
-
-
-      <div class="nav-search">
-
-        <input
-          type="search"
-          placeholder="Search..."
-          aria-label="Search"
-        >
-
-        <span>
-          ⌕
-        </span>
-
-      </div>
-
-
-      <button
-        type="button"
-        class="menu-toggle"
-        id="menuToggle"
-        aria-label="Open menu"
-      >
-        ☰
-      </button>
-
+      <span aria-hidden="true">
+        ⌕
+      </span>
 
     </div>
 
-  </header>
 
+  </div>
+
+</header>
+
+
+
+<!-- =========================
+     PAGE
+========================= -->
+
+<main
+  id="moviesPage"
+  data-page="movies"
+>
 
 
   <!-- =========================
@@ -117,7 +149,7 @@
     <div class="container">
 
       <p class="eyebrow">
-        DEEPROWSS
+        DEEPROWSS ENTERTAINMENT
       </p>
 
       <h1>
@@ -138,172 +170,256 @@
        MOVIES
   ========================= -->
 
-  <main>
+  <section class="section">
 
-    <section class="section">
-
-      <div class="container">
+    <div class="container">
 
 
-        <div class="section-heading">
+      <div class="section-heading">
 
-          <div>
+        <div>
 
-            <h2>
-              Latest Movies
-            </h2>
+          <p class="eyebrow">
+            ENTERTAINMENT
+          </p>
 
-          </div>
+          <h2>
+            Latest Movies
+          </h2>
 
         </div>
 
 
-        <div
-          class="all-posts-grid"
-          id="moviePosts"
+        <a
+          class="section-link"
+          href="index.html"
         >
-
-          <div class="loading">
-            Loading movies...
-          </div>
-
-        </div>
-
+          ← Back home
+        </a>
 
       </div>
 
-    </section>
 
-  </main>
-
-
-
-  <!-- =========================
-       VIDEO MODAL
-  ========================= -->
-
-  <div
-    class="modal"
-    id="embedModal"
-    aria-hidden="true"
-  >
-
-    <div
-      class="modal-backdrop"
-    ></div>
-
-
-    <div
-      class="modal-box"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modalTitle"
-    >
-
-      <button
-        type="button"
-        class="modal-close"
-        onclick="closeEmbed()"
-        aria-label="Close video"
-      >
-        ×
-      </button>
-
-
-      <h2 id="modalTitle">
-        Video
-      </h2>
-
+      <!--
+        Movies are loaded automatically
+        from posts.json by all-posts.js.
+      -->
 
       <div
-        class="embed-area"
-        id="embedArea"
+        id="allPosts"
+        class="all-posts-grid"
+        aria-live="polite"
       >
 
-        <div class="embed-placeholder">
-
-          <strong>
-            Select a movie
-          </strong>
-
-          <span class="embed-note">
-            The movie player will appear here.
-          </span>
-
+        <div class="loading">
+          Loading movies...
         </div>
 
       </div>
 
 
     </div>
+
+  </section>
+
+
+</main>
+
+
+
+<!-- =========================
+     VIDEO MODAL
+========================= -->
+
+<div
+  class="modal"
+  id="embedModal"
+  aria-hidden="true"
+>
+
+
+  <!-- BACKDROP -->
+
+  <div
+    class="modal-backdrop"
+    onclick="closeEmbed()"
+  ></div>
+
+
+  <!-- MODAL BOX -->
+
+  <div
+    class="modal-box"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+  >
+
+
+    <!-- CLOSE -->
+
+    <button
+      type="button"
+      class="modal-close"
+      onclick="closeEmbed()"
+      aria-label="Close video"
+    >
+      ×
+    </button>
+
+
+    <!-- TITLE -->
+
+    <h2 id="modalTitle">
+      Movie
+    </h2>
+
+
+    <!-- PLAYER -->
+
+    <div
+      class="embed-area"
+      id="embedArea"
+    >
+
+      <div class="embed-placeholder">
+
+        <strong>
+          Select a movie
+        </strong>
+
+        <span class="embed-note">
+          The movie player will appear here.
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- NOTE -->
+
+    <p class="embed-note">
+
+      Video content is loaded from an
+      external source.
+
+    </p>
+
 
   </div>
 
+</div>
 
 
-  <!-- =========================
-       FOOTER
-  ========================= -->
 
-  <footer class="footer">
+<!-- =========================
+     NO RESULTS
+========================= -->
 
-    <div class="container footer-wrap">
-
-
-      <div>
-
-        <strong>
-          Deeprowss
-        </strong>
-
-        <p>
-          Football, highlights and movies.
-        </p>
-
-      </div>
+<div
+  class="no-results"
+  id="noResults"
+  aria-live="polite"
+>
+  No matching content found.
+</div>
 
 
-      <div class="footer-links">
 
-        <a href="index.html">
-          Home
-        </a>
+<!-- =========================
+     FOOTER
+========================= -->
 
-        <a href="football.html">
-          Football
-        </a>
+<footer class="footer">
 
-        <a href="highlights.html">
-          Highlights
-        </a>
-
-        <a href="movies.html">
-          Movies
-        </a>
-
-      </div>
+  <div class="container footer-wrap">
 
 
-      <div class="copyright">
+    <!-- FOOTER BRAND -->
 
-        ©
-        <span id="year"></span>
-        Deeprowss. All rights reserved.
+    <div>
 
-      </div>
+      <strong>
+        DEE<span>PROWSS</span>
+      </strong>
 
+      <p>
+        Football • Highlights • Entertainment
+      </p>
 
     </div>
 
-  </footer>
+
+    <!-- FOOTER LINKS -->
+
+    <div class="footer-links">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="football.html">
+        Football Live
+      </a>
+
+      <a href="highlights.html">
+        Highlights
+      </a>
+
+      <a href="movies.html">
+        Movies
+      </a>
+
+    </div>
+
+
+    <!-- COPYRIGHT -->
+
+    <p class="copyright">
+
+      ©
+      <span id="year"></span>
+      Deeprowss.
+      All rights reserved.
+
+    </p>
+
+
+  </div>
+
+</footer>
 
 
 
-  <!-- =========================
-       SCRIPT
-  ========================= -->
+<!-- =========================
+     JAVASCRIPT
+========================= -->
 
-  <script src="script.js"></script>
+<script src="all-posts.js"></script>
+
+
+<script>
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+      const year =
+        document.getElementById("year");
+
+      if (year) {
+
+        year.textContent =
+          new Date().getFullYear();
+
+      }
+
+    }
+  );
+
+</script>
+
 
 </body>
 
