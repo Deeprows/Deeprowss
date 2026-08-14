@@ -18,13 +18,42 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     /*
      * SORT POSTS
-     * Newest posts appear first.
+     * Newest published post appears first.
+     *
+     * publishedAt must be stored in UTC.
+     * Example:
+     * 2026-08-14T18:30:00Z
      */
+
     posts.sort(function (a, b) {
-      return new Date(b.date) - new Date(a.date);
+      return new Date(b.publishedAt) - new Date(a.publishedAt);
     });
 
     console.log("Deeprowss posts:", posts);
+
+
+    /*
+     * FORMAT TIME FOR VISITOR'S TIMEZONE
+     */
+
+    function formatPostDate(dateString) {
+
+      if (!dateString) {
+        return "";
+      }
+
+      const date = new Date(dateString);
+
+      if (isNaN(date.getTime())) {
+        return "";
+      }
+
+      return date.toLocaleString(undefined, {
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+
+    }
 
 
     /*
@@ -90,6 +119,13 @@ document.addEventListener("DOMContentLoaded", async function () {
               <div class="match-meta">
 
                 ${post.description || ""}
+
+              </div>
+
+
+              <div class="post-date">
+
+                ${formatPostDate(post.publishedAt)}
 
               </div>
 
@@ -163,6 +199,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                   ${post.description || ""}
                 </p>
 
+                <div class="post-date">
+
+                  ${formatPostDate(post.publishedAt)}
+
+                </div>
+
+
                 <button
                   data-url="${post.embedUrl || ""}"
                   data-title="${post.title || "Highlight"}">
@@ -225,9 +268,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                   ${post.title || "Movie"}
                 </h3>
 
+
                 <p>
-                  ${post.date || ""}
+                  ${formatPostDate(post.publishedAt)}
                 </p>
+
 
                 <button
                   data-url="${post.embedUrl || ""}"
