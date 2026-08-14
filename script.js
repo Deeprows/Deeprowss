@@ -1,5 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+  "use strict";
+
+  /* =====================================
+     CONTAINERS
+  ===================================== */
+
   var liveContainer =
     document.getElementById("livePosts");
 
@@ -14,17 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     VIDEO BUTTON HANDLER
-     Attach immediately so it also works
-     on section pages and dynamically
-     created content.
-  ===================================== */
-
-  attachVideoButtons();
-
-
-
-  /* =====================================
      LOAD POSTS
   ===================================== */
 
@@ -32,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   xhr.open(
     "GET",
-    "posts.json?v=" + new Date().getTime(),
+    "posts.json?v=" + Date.now(),
     true
   );
 
@@ -52,13 +47,24 @@ document.addEventListener("DOMContentLoaded", function () {
           JSON.parse(xhr.responseText);
 
 
+        if (!Array.isArray(posts)) {
+
+          throw new Error(
+            "posts.json must contain an array."
+          );
+
+        }
+
+
         console.log(
           "Deeprowss posts loaded:",
           posts
         );
 
 
-        /* Newest posts first */
+        /* =================================
+           NEWEST POSTS FIRST
+        ================================= */
 
         posts.sort(function (a, b) {
 
@@ -157,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     FORMAT VISITOR LOCAL TIME
+     FORMAT DATE
   ===================================== */
 
   function formatPostDate(dateString) {
@@ -191,6 +197,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
+     SAFE HTML
+     
+     Prevents titles/descriptions/URLs
+     from breaking the generated HTML.
+  ===================================== */
+
+  function escapeHTML(value) {
+
+    if (value === null || value === undefined) {
+      return "";
+    }
+
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+
+  /* =====================================
      FOOTBALL LIVE
   ===================================== */
 
@@ -204,7 +235,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var livePosts =
       posts.filter(function (post) {
 
-        return post.type === "live";
+        return (
+          String(post.type || "").toLowerCase() ===
+          "live"
+        );
 
       });
 
@@ -226,8 +260,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     livePosts.forEach(function (post) {
 
+      var status =
+        String(
+          post.status || "UPCOMING"
+        ).toUpperCase();
+
+
       var statusClass =
-        post.status === "LIVE"
+        status === "LIVE"
           ? "live-badge"
           : "upcoming-badge";
 
@@ -242,12 +282,14 @@ document.addEventListener("DOMContentLoaded", function () {
               statusClass +
             '">' +
 
-              (post.status || "UPCOMING") +
+              escapeHTML(status) +
 
             '</span>' +
 
             '<span>' +
-              (post.category || "Football") +
+              escapeHTML(
+                post.category || "Football"
+              ) +
             '</span>' +
 
           '</div>' +
@@ -256,37 +298,51 @@ document.addEventListener("DOMContentLoaded", function () {
           '<div class="teams">' +
 
             '<strong>' +
-              (post.home || "Team 1") +
+              escapeHTML(
+                post.home || "Team 1"
+              ) +
             '</strong>' +
 
             '<span>vs</span>' +
 
             '<strong>' +
-              (post.away || "Team 2") +
+              escapeHTML(
+                post.away || "Team 2"
+              ) +
             '</strong>' +
 
           '</div>' +
 
 
           '<div class="match-meta">' +
-            (post.description || "") +
+            escapeHTML(
+              post.description || ""
+            ) +
           '</div>' +
 
 
           '<div class="post-date">' +
-            formatPostDate(
-              post.publishedAt
+            escapeHTML(
+              formatPostDate(
+                post.publishedAt
+              )
             ) +
           '</div>' +
 
 
           '<button ' +
-            'class="watch-btn" ' +
+            'type="button" ' +
+            'class="watch-btn video-button" ' +
+            'data-video-button="true" ' +
             'data-url="' +
-              (post.embedUrl || "") +
+              escapeHTML(
+                post.embedUrl || ""
+              ) +
             '" ' +
             'data-title="' +
-              (post.title || "Video") +
+              escapeHTML(
+                post.title || "Video"
+              ) +
             '">' +
 
             'Watch' +
@@ -319,7 +375,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var highlights =
       posts.filter(function (post) {
 
-        return post.type === "highlight";
+        return (
+          String(post.type || "").toLowerCase() ===
+          "highlight"
+        );
 
       });
 
@@ -362,29 +421,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             '<h3>' +
-              (post.title ||
-               "Football Highlight") +
+              escapeHTML(
+                post.title ||
+                "Football Highlight"
+              ) +
             '</h3>' +
 
 
             '<p>' +
-              (post.description || "") +
+              escapeHTML(
+                post.description || ""
+              ) +
             '</p>' +
 
 
             '<div class="post-date">' +
-              formatPostDate(
-                post.publishedAt
+              escapeHTML(
+                formatPostDate(
+                  post.publishedAt
+                )
               ) +
             '</div>' +
 
 
             '<button ' +
+              'type="button" ' +
+              'class="video-button" ' +
+              'data-video-button="true" ' +
               'data-url="' +
-                (post.embedUrl || "") +
+                escapeHTML(
+                  post.embedUrl || ""
+                ) +
               '" ' +
               'data-title="' +
-                (post.title || "Highlight") +
+                escapeHTML(
+                  post.title ||
+                  "Highlight"
+                ) +
               '">' +
 
               'Watch highlight' +
@@ -419,7 +492,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var movies =
       posts.filter(function (post) {
 
-        return post.type === "movie";
+        return (
+          String(post.type || "").toLowerCase() ===
+          "movie"
+        );
 
       });
 
@@ -448,7 +524,9 @@ document.addEventListener("DOMContentLoaded", function () {
           '<div class="poster poster-one">' +
 
             '<span>' +
-              (post.category || "MOVIE") +
+              escapeHTML(
+                post.category || "MOVIE"
+              ) +
             '</span>' +
 
           '</div>' +
@@ -457,23 +535,34 @@ document.addEventListener("DOMContentLoaded", function () {
           '<div class="movie-info">' +
 
             '<h3>' +
-              (post.title || "Movie") +
+              escapeHTML(
+                post.title || "Movie"
+              ) +
             '</h3>' +
 
 
             '<p>' +
-              formatPostDate(
-                post.publishedAt
+              escapeHTML(
+                formatPostDate(
+                  post.publishedAt
+                )
               ) +
             '</p>' +
 
 
             '<button ' +
+              'type="button" ' +
+              'class="video-button" ' +
+              'data-video-button="true" ' +
               'data-url="' +
-                (post.embedUrl || "") +
+                escapeHTML(
+                  post.embedUrl || ""
+                ) +
               '" ' +
               'data-title="' +
-                (post.title || "Movie") +
+                escapeHTML(
+                  post.title || "Movie"
+                ) +
               '">' +
 
               'View' +
@@ -495,162 +584,99 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     VIDEO BUTTONS
-     Delegated click handler.
+     VIDEO BUTTON SYSTEM
+     
+     IMPORTANT:
+     
+     There is ONLY ONE click handler.
 
-     This works for:
-     - Homepage buttons
+     It uses event delegation, so it
+     automatically works with:
+     
+     - Homepage cards
      - View All pages
      - Section pages
-     - Dynamically created cards
+     - Dynamically loaded cards
+     - Cards inserted after page load
   ===================================== */
 
-  function attachVideoButtons() {
+  document.addEventListener(
+    "click",
+    function (event) {
 
-    if (window.deeprowssVideoHandlerAttached) {
-      return;
-    }
-
-
-    window.deeprowssVideoHandlerAttached =
-      true;
-
-
-    document.addEventListener(
-      "click",
-      function (event) {
-
-        var button =
-          event.target.closest(
-            "[data-url]"
-          );
-
-
-        if (!button) {
-          return;
-        }
-
-
-        var url =
-          button.getAttribute(
-            "data-url"
-          );
-
-
-        var title =
-          button.getAttribute(
-            "data-title"
-          );
-
-
-        if (!url) {
-
-          console.log(
-            "Deeprowss: No video URL found."
-          );
-
-          return;
-
-        }
-
-
-        /*
-         * Open a completely separate page.
-         */
-
-        var videoPage =
-          window.open(
-            "",
-            "_blank"
-          );
-
-
-        if (!videoPage) {
-
-          console.log(
-            "Deeprowss: New window was blocked."
-          );
-
-          return;
-
-        }
-
-
-        videoPage.document.open();
-
-
-        videoPage.document.write(
-          '<!DOCTYPE html>' +
-
-          '<html lang="en">' +
-
-          '<head>' +
-
-            '<meta charset="UTF-8">' +
-
-            '<meta name="viewport" ' +
-              'content="width=device-width, initial-scale=1.0">' +
-
-            '<title>' +
-              (title || "Deeprowss Video") +
-            '</title>' +
-
-            '<style>' +
-
-              'html, body {' +
-                'margin: 0;' +
-                'padding: 0;' +
-                'width: 100%;' +
-                'height: 100%;' +
-                'background: #000;' +
-                'overflow: hidden;' +
-              '}' +
-
-              'iframe {' +
-                'display: block;' +
-                'width: 100%;' +
-                'height: 100%;' +
-                'border: 0;' +
-                'margin: 0;' +
-                'padding: 0;' +
-              '}' +
-
-            '</style>' +
-
-          '</head>' +
-
-          '<body>' +
-
-            '<iframe ' +
-              'src="' + url + '" ' +
-              'allowfullscreen ' +
-              'allow="autoplay; fullscreen; encrypted-media" ' +
-              'frameborder="0" ' +
-              'scrolling="no" ' +
-              'title="' +
-                (title || "Deeprowss Video") +
-              '">' +
-            '</iframe>' +
-
-          '</body>' +
-
-          '</html>'
+      var button =
+        event.target.closest(
+          "[data-video-button='true']"
         );
 
 
-        videoPage.document.close();
+      if (!button) {
+        return;
+      }
+
+
+      /*
+       * Prevent the click from triggering
+       * another link/card handler.
+       */
+
+      event.preventDefault();
+
+      event.stopPropagation();
+
+
+      var url =
+        button.getAttribute(
+          "data-url"
+        );
+
+
+      var title =
+        button.getAttribute(
+          "data-title"
+        );
+
+
+      console.log(
+        "Deeprowss video button clicked:",
+        {
+          title: title,
+          url: url
+        }
+      );
+
+
+      if (!url) {
+
+        console.error(
+          "Deeprowss: This video has no embedUrl."
+        );
+
+        return;
 
       }
-    );
 
-  }
+
+      /*
+       * Use the existing modal.
+       *
+       * This avoids popup blockers and
+       * works reliably on section pages.
+       */
+
+      openEmbed(
+        title || "Video",
+        url
+      );
+
+    },
+    true
+  );
 
 
 
   /* =====================================
      VIDEO MODAL
-     Kept unchanged for compatibility
-     with your existing HTML.
   ===================================== */
 
   window.openEmbed =
@@ -674,10 +700,58 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
-      if (!modal || !embedArea) {
+      if (!modal) {
+
+        console.error(
+          "Deeprowss: #embedModal was not found."
+        );
+
+        /*
+         * Fallback:
+         * If a section page does not contain
+         * the modal HTML, open the video in
+         * a new tab.
+         */
+
+        if (url) {
+
+          window.open(
+            url,
+            "_blank",
+            "noopener,noreferrer"
+          );
+
+        }
+
         return;
+
       }
 
+
+      if (!embedArea) {
+
+        console.error(
+          "Deeprowss: #embedArea was not found."
+        );
+
+        if (url) {
+
+          window.open(
+            url,
+            "_blank",
+            "noopener,noreferrer"
+          );
+
+        }
+
+        return;
+
+      }
+
+
+      /* =================================
+         TITLE
+      ================================= */
 
       if (modalTitle) {
 
@@ -687,7 +761,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      embedArea.innerHTML = "";
+      /* =================================
+         CLEAR OLD PLAYER
+      ================================= */
+
+      embedArea.innerHTML =
+        "";
 
 
       var oldControls =
@@ -700,6 +779,10 @@ document.addEventListener("DOMContentLoaded", function () {
         oldControls.remove();
       }
 
+
+      /* =================================
+         CREATE IFRAME
+      ================================= */
 
       if (url) {
 
@@ -721,13 +804,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         iframe.setAttribute(
           "allow",
-          "autoplay; fullscreen; encrypted-media"
+          "autoplay; fullscreen; encrypted-media; picture-in-picture"
         );
 
 
         iframe.setAttribute(
           "loading",
-          "lazy"
+          "eager"
         );
 
 
@@ -749,12 +832,29 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
+        iframe.style.width =
+          "100%";
+
+
+        iframe.style.height =
+          "100%";
+
+
+        iframe.style.border =
+          "0";
+
+
         embedArea.appendChild(
           iframe
         );
 
       }
 
+
+
+      /* =================================
+         FULLSCREEN BUTTON
+      ================================= */
 
       var controls =
         document.createElement(
@@ -807,6 +907,11 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
 
+
+      /* =================================
+         OPEN MODAL
+      ================================= */
+
       modal.classList.add(
         "open"
       );
@@ -844,6 +949,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
+      event.preventDefault();
+
+      event.stopPropagation();
+
+
       var modalBox =
         document.querySelector(
           ".modal-box"
@@ -875,6 +985,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
           }
 
+
+          /*
+           * Attempt landscape mode.
+           */
 
           if (
             screen.orientation &&
@@ -1032,6 +1146,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
+      /* =================================
+         EXIT FULLSCREEN
+      ================================= */
+
       if (
         document.fullscreenElement
       ) {
@@ -1051,6 +1169,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       }
 
+
+      /* =================================
+         UNLOCK ORIENTATION
+      ================================= */
 
       if (
         screen.orientation &&
@@ -1073,6 +1195,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
+      /* =================================
+         REMOVE VIDEO
+      ================================= */
+
       if (embedArea) {
 
         embedArea.innerHTML =
@@ -1080,6 +1206,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       }
 
+
+      /* =================================
+         REMOVE CONTROLS
+      ================================= */
 
       var controls =
         modal.querySelector(
@@ -1092,6 +1222,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
+      /* =================================
+         CLOSE MODAL
+      ================================= */
+
       modal.classList.remove(
         "open"
       );
@@ -1102,6 +1236,10 @@ document.addEventListener("DOMContentLoaded", function () {
         "true"
       );
 
+
+      /* =================================
+         RESTORE SCROLLING
+      ================================= */
 
       document.body.style.overflow =
         "";
@@ -1153,25 +1291,26 @@ document.addEventListener("DOMContentLoaded", function () {
     function (event) {
 
       if (
-        event.key === "Escape"
+        event.key !== "Escape"
+      ) {
+        return;
+      }
+
+
+      var modal =
+        document.getElementById(
+          "embedModal"
+        );
+
+
+      if (
+        modal &&
+        modal.classList.contains(
+          "open"
+        )
       ) {
 
-        var modal =
-          document.getElementById(
-            "embedModal"
-          );
-
-
-        if (
-          modal &&
-          modal.classList.contains(
-            "open"
-          )
-        ) {
-
-          closeEmbed();
-
-        }
+        closeEmbed();
 
       }
 
@@ -1202,7 +1341,9 @@ document.addEventListener("DOMContentLoaded", function () {
   ) {
 
     menuToggle.onclick =
-      function () {
+      function (event) {
+
+        event.preventDefault();
 
         mainNav.classList.toggle(
           "open"
@@ -1232,3 +1373,4 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 });
+```
