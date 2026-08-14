@@ -22,9 +22,14 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.55;
+}
+
+body,
+button,
+input {
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -37,19 +42,15 @@ input {
   font: inherit;
 }
 
-button {
-  cursor: pointer;
-}
-
 .container {
   width: min(var(--max), calc(100% - 32px));
   margin: auto;
 }
 
 
-/* ==============================
+/* =====================================================
    HEADER
-   ============================== */
+===================================================== */
 
 .site-header {
   position: sticky;
@@ -145,9 +146,9 @@ button {
 }
 
 
-/* ==============================
+/* =====================================================
    HERO
-   ============================== */
+===================================================== */
 
 .hero {
   min-height: 540px;
@@ -155,33 +156,10 @@ button {
   align-items: center;
   position: relative;
   overflow: hidden;
-
   background:
-    radial-gradient(
-      circle at 75% 35%,
-      rgba(255,23,68,.28),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 20% 70%,
-      rgba(65,90,255,.18),
-      transparent 30%
-    ),
-    linear-gradient(
-      120deg,
-      #080b11,
-      #10141d 55%,
-      #090b10
-    );
-}
-
-.hero:after {
-  content: "";
-  position: absolute;
-  inset: auto -10% -35% 35%;
-  height: 380px;
-  transform: rotate(-8deg);
-  background: rgba(255,255,255,.025);
+    radial-gradient(circle at 75% 35%, rgba(255,23,68,.28), transparent 30%),
+    radial-gradient(circle at 20% 70%, rgba(65,90,255,.18), transparent 30%),
+    linear-gradient(120deg,#080b11,#10141d 55%,#090b10);
 }
 
 .hero-content {
@@ -199,7 +177,7 @@ button {
 }
 
 .hero h1 {
-  font-size: clamp(42px, 7vw, 78px);
+  font-size: clamp(42px,7vw,78px);
   line-height: 1.02;
   margin: 0;
   max-width: 800px;
@@ -243,23 +221,9 @@ button {
 }
 
 
-/* ==============================
-   SEARCH
-   ============================== */
-
-.search-section {
-  width: 100%;
-}
-
-#searchStatus {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-
-/* ==============================
+/* =====================================================
    SECTIONS
-   ============================== */
+===================================================== */
 
 .section {
   padding: 68px 0 0;
@@ -288,140 +252,61 @@ button {
 }
 
 
-/* ==============================
-   HORIZONTAL POST ROWS
-   ============================== */
-
-.live-grid,
-.content-grid,
-.movie-grid {
-  display: grid;
-  gap: 18px;
-}
-
+/* =====================================================
+   HORIZONTAL CONTENT ROWS
+===================================================== */
 
 /*
- * Horizontal scrolling on homepage.
+ * IMPORTANT:
+ * Cards stay in one horizontal row.
+ * User can swipe left/right on mobile.
  */
 
 .live-grid,
 .content-grid,
 .movie-grid {
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(300px, 360px);
-
+  display: flex;
+  flex-wrap: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
-
-  padding-bottom: 12px;
-
+  gap: 18px;
+  padding: 2px 2px 14px;
   scroll-snap-type: x proximity;
-
   -webkit-overflow-scrolling: touch;
-
   scrollbar-width: thin;
 }
-
-
-/*
- * Cards snap into place while scrolling.
- */
-
-.live-grid > *,
-.content-grid > *,
-.movie-grid > * {
-  scroll-snap-align: start;
-}
-
-
-/*
- * Scrollbar.
- */
 
 .live-grid::-webkit-scrollbar,
 .content-grid::-webkit-scrollbar,
 .movie-grid::-webkit-scrollbar {
-  height: 6px;
-}
-
-.live-grid::-webkit-scrollbar-track,
-.content-grid::-webkit-scrollbar-track,
-.movie-grid::-webkit-scrollbar-track {
-  background: transparent;
+  height: 5px;
 }
 
 .live-grid::-webkit-scrollbar-thumb,
 .content-grid::-webkit-scrollbar-thumb,
 .movie-grid::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.15);
   border-radius: 20px;
 }
 
 
-/* ==============================
-   FULL GRID MODE
-   ============================== */
-
-.live-grid.full-grid,
-.content-grid.full-grid,
-.movie-grid.full-grid {
-  grid-auto-flow: initial;
-  grid-auto-columns: initial;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-
-  overflow: visible;
-
-  scroll-snap-type: none;
-}
-
-.movie-grid.full-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-
-/* ==============================
-   EMPTY / LOADING
-   ============================== */
-
-.loading,
-.empty-posts {
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: var(--muted);
-
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 15px;
-
-  padding: 25px;
-
-  font-size: 14px;
-}
-
-
-/* ==============================
+/* =====================================================
    LIVE CARDS
-   ============================== */
-
-.live-card,
-.media-card,
-.movie-card {
-  background:
-    linear-gradient(
-      145deg,
-      var(--surface),
-      #0c1016
-    );
-
-  border: 1px solid var(--line);
-  border-radius: 15px;
-  overflow: hidden;
-}
+===================================================== */
 
 .live-card {
+  flex: 0 0 340px;
+  min-width: 340px;
+  scroll-snap-align: start;
+
+  background: linear-gradient(
+    145deg,
+    var(--surface),
+    #0c1016
+  );
+
+  border: 1px solid var(--line);
+  border-radius: 15px;
   padding: 20px;
 }
 
@@ -470,17 +355,6 @@ button {
   min-height: 38px;
 }
 
-.post-date {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 8px;
-}
-
-
-/* ==============================
-   BUTTONS
-   ============================== */
-
 .watch-btn,
 .media-info button,
 .movie-info button {
@@ -505,9 +379,25 @@ button {
 }
 
 
-/* ==============================
-   HIGHLIGHTS
-   ============================== */
+/* =====================================================
+   HIGHLIGHT CARDS
+===================================================== */
+
+.media-card {
+  flex: 0 0 340px;
+  min-width: 340px;
+  scroll-snap-align: start;
+
+  background: linear-gradient(
+    145deg,
+    var(--surface),
+    #0c1016
+  );
+
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  overflow: hidden;
+}
 
 .media-thumb {
   height: 180px;
@@ -526,41 +416,14 @@ button {
     );
 }
 
-.goals-thumb {
-  background:
-    radial-gradient(
-      circle at 30% 30%,
-      #53233a,
-      #16131c 55%,
-      #090b10
-    );
-}
-
-.skills-thumb {
-  background:
-    radial-gradient(
-      circle at 70% 40%,
-      #243f38,
-      #0c1715 55%,
-      #090b10
-    );
-}
-
 .play {
   width: 54px;
   height: 54px;
-
   display: grid;
   place-items: center;
-
   border-radius: 50%;
-
   background: rgba(255,23,68,.92);
-
   padding-left: 3px;
-
-  box-shadow:
-    0 10px 30px rgba(0,0,0,.35);
 }
 
 .media-info,
@@ -589,23 +452,33 @@ button {
 }
 
 
-/* ==============================
+/* =====================================================
    MOVIES
-   ============================== */
+===================================================== */
+
+.movie-card {
+  flex: 0 0 240px;
+  min-width: 240px;
+  scroll-snap-align: start;
+
+  background: linear-gradient(
+    145deg,
+    var(--surface),
+    #0c1016
+  );
+
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  overflow: hidden;
+}
 
 .poster {
   aspect-ratio: 2 / 3;
-
   display: flex;
   align-items: flex-end;
-
   padding: 16px;
-
   font-weight: 900;
   letter-spacing: 1.5px;
-}
-
-.poster-one {
   background:
     linear-gradient(
       145deg,
@@ -615,44 +488,25 @@ button {
     );
 }
 
-.poster-two {
-  background:
-    linear-gradient(
-      145deg,
-      #182f4e,
-      #111521 55%,
-      #090b10
-    );
-}
-
-.poster-three {
-  background:
-    linear-gradient(
-      145deg,
-      #4b3c18,
-      #1c1820 55%,
-      #090b10
-    );
-}
-
-.poster-four {
-  background:
-    linear-gradient(
-      145deg,
-      #173c38,
-      #101a22 55%,
-      #090b10
-    );
-}
-
 .poster span {
   font-size: 11px;
 }
 
 
-/* ==============================
+/* =====================================================
+   POST DATE
+===================================================== */
+
+.post-date {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 8px;
+}
+
+
+/* =====================================================
    ABOUT
-   ============================== */
+===================================================== */
 
 .about {
   display: grid;
@@ -674,9 +528,9 @@ button {
 }
 
 
-/* ==============================
+/* =====================================================
    FOOTER
-   ============================== */
+===================================================== */
 
 .footer {
   border-top: 1px solid var(--line);
@@ -712,16 +566,14 @@ button {
 }
 
 
-/* ==============================
+/* =====================================================
    VIDEO MODAL
-   ============================== */
+===================================================== */
 
 .modal {
   display: none;
-
   position: fixed;
   inset: 0;
-
   z-index: 100;
 }
 
@@ -733,87 +585,164 @@ button {
 .modal-backdrop {
   position: absolute;
   inset: 0;
-
-  background: rgba(0,0,0,.78);
-
-  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,.88);
+  backdrop-filter: blur(5px);
 }
 
 .modal-box {
   position: relative;
   z-index: 2;
 
-  width: min(1100px, calc(100% - 28px));
+  width: min(1100px, 100vw);
+  max-width: 1100px;
 
-  background: #0c1017;
+  background: #05070a;
 
   border: 1px solid var(--line);
+  border-radius: 12px;
 
-  border-radius: 16px;
+  padding: 12px;
 
-  padding: 18px;
-
-  box-shadow:
-    0 30px 90px rgba(0,0,0,.55);
+  box-shadow: 0 30px 90px rgba(0,0,0,.55);
 }
 
 .modal-box h2 {
-  margin: 0 35px 18px 0;
+  margin: 0 40px 10px 4px;
+  font-size: 18px;
 }
 
 .modal-close {
   position: absolute;
-
-  right: 14px;
-  top: 10px;
+  right: 10px;
+  top: 5px;
 
   background: none;
-
   border: 0;
-
   color: white;
 
-  font-size: 32px;
-
+  font-size: 30px;
   cursor: pointer;
 
-  z-index: 20;
+  z-index: 10;
 }
 
 
-/* ==============================
-   VIDEO AREA
-   ============================== */
+/* =====================================================
+   VIDEO PLAYER
+===================================================== */
 
-.embed-area {
+.video-player {
+  position: relative;
   width: 100%;
-
+  height: auto;
   aspect-ratio: 16 / 9;
 
   background: #000;
+  overflow: hidden;
+  border-radius: 6px;
+}
 
-  border-radius: 10px;
+.video-player iframe {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* =====================================================
+   FULLSCREEN ICON
+===================================================== */
+
+.video-controls {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+
+  z-index: 5;
+}
+
+.fullscreen-btn {
+  width: 40px;
+  height: 40px;
 
   display: grid;
   place-items: center;
 
-  overflow: hidden;
+  border: 0;
+  border-radius: 8px;
 
-  position: relative;
+  background: rgba(0,0,0,.72);
+  color: white;
+
+  font-size: 22px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  padding: 0;
 }
 
-.embed-area iframe {
+.fullscreen-btn:hover {
+  background: var(--accent);
+}
+
+
+/* =====================================================
+   FULLSCREEN VIDEO
+===================================================== */
+
+.video-player:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  aspect-ratio: auto;
+  border-radius: 0;
+  background: #000;
+}
+
+.video-player:fullscreen iframe {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Safari / iOS */
+
+.video-player:-webkit-full-screen {
+  width: 100vw;
+  height: 100vh;
+  aspect-ratio: auto;
+  border-radius: 0;
+  background: #000;
+}
+
+.video-player:-webkit-full-screen iframe {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* =====================================================
+   EMBED PLACEHOLDER
+===================================================== */
+
+.embed-placeholder {
   width: 100%;
   height: 100%;
 
-  display: block;
+  min-height: 250px;
 
-  border: 0;
-}
+  display: grid;
+  place-items: center;
 
-.embed-placeholder {
   text-align: center;
+
   padding: 30px;
+
   color: var(--muted);
 }
 
@@ -823,40 +752,10 @@ button {
   margin-bottom: 8px;
 }
 
-
-/* ==============================
-   FULLSCREEN BUTTON
-   ============================== */
-
-.fullscreen-btn {
-  display: block;
-
-  width: 100%;
-
-  margin-top: 12px;
-
-  padding: 12px;
-
-  border: 0;
-
-  border-radius: 8px;
-
-  background: var(--accent);
-
-  color: white;
-
-  font-weight: 800;
-
-  cursor: pointer;
-}
-
-.fullscreen-btn:hover {
-  background: var(--accent-2);
-}
-
 .embed-note {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
+  margin: 8px 2px 0;
 }
 
 code {
@@ -864,58 +763,45 @@ code {
 }
 
 
-/* ==============================
-   NO RESULTS
-   ============================== */
+/* =====================================================
+   EMPTY / LOADING
+===================================================== */
+
+.empty-posts,
+.loading {
+  color: var(--muted);
+  padding: 30px 0;
+}
 
 .no-results {
   display: none;
-
   position: fixed;
-
   right: 20px;
   bottom: 20px;
-
   z-index: 90;
-
   background: #151a22;
-
   border: 1px solid var(--line);
-
   padding: 12px 15px;
-
   border-radius: 9px;
-
   color: #d7dde6;
 }
 
-
-/* ==============================
-   ACCESSIBILITY
-   ============================== */
-
 .sr-only {
   position: absolute;
-
   width: 1px;
   height: 1px;
-
   padding: 0;
   margin: -1px;
-
   overflow: hidden;
-
   clip: rect(0,0,0,0);
-
   white-space: nowrap;
-
   border: 0;
 }
 
 
-/* ==============================
+/* =====================================================
    TABLET
-   ============================== */
+===================================================== */
 
 @media (max-width: 900px) {
 
@@ -923,7 +809,6 @@ code {
     display: none;
 
     position: absolute;
-
     left: 16px;
     right: 16px;
     top: 70px;
@@ -933,7 +818,6 @@ code {
     background: #0b0f15;
 
     border: 1px solid var(--line);
-
     border-radius: 12px;
 
     flex-direction: column;
@@ -952,42 +836,31 @@ code {
     width: 160px;
   }
 
-
-  /*
-   * Grid mode on larger screens.
-   */
-
-  .live-grid.full-grid,
-  .content-grid.full-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .movie-grid.full-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-
   .about {
     grid-template-columns: 1fr;
   }
+
+  .modal-box {
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+  }
+
 }
 
 
-/* ==============================
+/* =====================================================
    MOBILE
-   ============================== */
+===================================================== */
 
 @media (max-width: 600px) {
 
   .container {
-    width: min(
-      var(--max),
-      calc(100% - 20px)
-    );
+    width: calc(100% - 20px);
   }
 
   .nav-wrap {
-    gap: 10px;
+    gap: 8px;
   }
 
   .brand {
@@ -995,11 +868,8 @@ code {
   }
 
   .nav-search {
-    width: 120px;
+    width: 110px;
   }
-
-
-  /* HERO */
 
   .hero {
     min-height: 500px;
@@ -1013,55 +883,94 @@ code {
     font-size: 16px;
   }
 
-
-  /* SECTIONS */
-
   .section {
     padding-top: 50px;
   }
 
-  .section-heading {
-    align-items: start;
-    gap: 10px;
-  }
-
-  .section-heading h2 {
-    font-size: 25px;
-  }
-
-
   /*
-   * Mobile horizontal cards.
+   * Horizontal cards on mobile.
    */
 
   .live-grid,
   .content-grid,
   .movie-grid {
-    grid-auto-columns: minmax(82vw, 82vw);
-
-    gap: 14px;
-
-    padding-bottom: 10px;
+    gap: 12px;
+    padding-left: 0;
+    padding-right: 0;
   }
 
+  .live-card {
+    flex: 0 0 86vw;
+    min-width: 86vw;
+  }
+
+  .media-card {
+    flex: 0 0 86vw;
+    min-width: 86vw;
+  }
+
+  .movie-card {
+    flex: 0 0 65vw;
+    min-width: 65vw;
+  }
 
   /*
-   * Full grid when "View all"
-   * is selected.
+   * Video uses the entire available screen width.
    */
 
-  .live-grid.full-grid,
-  .content-grid.full-grid,
-  .movie-grid.full-grid {
-    grid-template-columns: 1fr;
-
-    grid-auto-flow: row;
-
-    overflow: visible;
+  .modal {
+    align-items: center;
   }
 
+  .modal-box {
+    width: 100vw;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
 
-  /* FOOTER */
+  .modal-box h2 {
+    position: absolute;
+
+    left: 10px;
+    top: -34px;
+
+    margin: 0;
+
+    font-size: 14px;
+
+    z-index: 10;
+  }
+
+  .modal-close {
+    right: 8px;
+    top: 4px;
+  }
+
+  .video-player {
+    width: 100vw;
+    max-width: 100vw;
+
+    aspect-ratio: 16 / 9;
+
+    border-radius: 0;
+  }
+
+  .video-controls {
+    right: 8px;
+    bottom: 8px;
+  }
+
+  .fullscreen-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 7px;
+    font-size: 21px;
+  }
+
+  .embed-note {
+    display: none;
+  }
 
   .footer-wrap {
     grid-template-columns: 1fr;
@@ -1073,141 +982,6 @@ code {
 
   .copyright {
     grid-column: auto;
-  }
-
-
-  /* ==============================
-     MOBILE VIDEO PLAYER
-     ============================== */
-
-  .modal {
-    align-items: center;
-    justify-items: center;
-  }
-
-  .modal-box {
-    width: 100vw;
-
-    height: auto;
-
-    padding: 0;
-
-    border: 0;
-
-    border-radius: 0;
-
-    background: #000;
-
-    box-shadow: none;
-  }
-
-  .modal-box h2 {
-    display: none;
-  }
-
-  .modal-close {
-    right: 8px;
-    top: 3px;
-
-    font-size: 30px;
-
-    text-shadow:
-      0 2px 8px rgba(0,0,0,.8);
-  }
-
-
-  /*
-   * Full width 16:9 player.
-   */
-
-  .embed-area {
-    width: 100vw;
-
-    height: 56.25vw;
-
-    min-height: 220px;
-
-    aspect-ratio: 16 / 9;
-
-    border-radius: 0;
-
-    background: #000;
-  }
-
-  .embed-area iframe {
-    width: 100%;
-    height: 100%;
-
-    border: 0;
-  }
-
-
-  /*
-   * Full screen button.
-   */
-
-  .fullscreen-btn {
-    width: 100%;
-
-    margin: 0;
-
-    border-radius: 0;
-
-    padding: 14px;
-
-    font-size: 15px;
-  }
-
-
-  /*
-   * Hide explanatory text
-   * on small screens.
-   */
-
-  .embed-note {
-    display: none;
-  }
-
-
-  /*
-   * Mobile empty states.
-   */
-
-  .loading,
-  .empty-posts {
-    min-width: 82vw;
-  }
-
-}
-
-
-/* ==============================
-   VERY SMALL PHONES
-   ============================== */
-
-@media (max-width: 380px) {
-
-  .brand {
-    font-size: 11px;
-  }
-
-  .brand-mark {
-    width: 30px;
-    height: 30px;
-  }
-
-  .nav-search {
-    width: 105px;
-  }
-
-  .hero h1 {
-    font-size: 40px;
-  }
-
-  .live-grid,
-  .content-grid,
-  .movie-grid {
-    grid-auto-columns: 88vw;
   }
 
 }
