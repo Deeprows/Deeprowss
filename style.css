@@ -46,11 +46,6 @@ body {
 }
 
 
-body.modal-open {
-  overflow: hidden;
-}
-
-
 a {
   color: inherit;
   text-decoration: none;
@@ -91,6 +86,7 @@ img {
 
 .site-header {
   position: sticky;
+
   top: 0;
 
   z-index: 50;
@@ -114,6 +110,7 @@ img {
   min-height: 70px;
 
   display: flex;
+
   align-items: center;
 
   gap: 28px;
@@ -124,6 +121,7 @@ img {
 
 .brand {
   display: flex;
+
   align-items: center;
 
   gap: 10px;
@@ -136,11 +134,19 @@ img {
 }
 
 
+.brand span:last-child span,
+.footer strong span {
+  color: var(--accent);
+}
+
+
 .brand-mark {
   width: 34px;
+
   height: 34px;
 
   display: grid;
+
   place-items: center;
 
   border-radius: 10px;
@@ -150,12 +156,6 @@ img {
   color: white;
 
   font-size: 19px;
-}
-
-
-.brand span:last-child span,
-.footer strong span {
-  color: var(--accent);
 }
 
 
@@ -229,6 +229,7 @@ img {
   position: absolute;
 
   right: 13px;
+
   top: 7px;
 
   color: var(--muted);
@@ -237,7 +238,7 @@ img {
 }
 
 
-/* MOBILE MENU */
+/* MOBILE MENU BUTTON */
 
 .menu-toggle {
   display: none;
@@ -260,6 +261,7 @@ img {
   min-height: 540px;
 
   display: flex;
+
   align-items: center;
 
   position: relative;
@@ -317,7 +319,8 @@ img {
 
   height: 380px;
 
-  transform: rotate(-8deg);
+  transform:
+    rotate(-8deg);
 
   background:
     rgba(255, 255, 255, .025);
@@ -413,7 +416,8 @@ img {
 
 
 .btn:hover {
-  transform: translateY(-1px);
+  transform:
+    translateY(-1px);
 }
 
 
@@ -434,6 +438,22 @@ img {
 
   background:
     rgba(255, 255, 255, .04);
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-section {
+  min-height: 0;
+}
+
+
+#searchStatus {
+  color: var(--muted);
+
+  font-size: 14px;
 }
 
 
@@ -489,7 +509,7 @@ img {
 
 
 /* =========================
-   HORIZONTAL POSTS
+   HOMEPAGE
 ========================= */
 
 .horizontal-posts {
@@ -564,7 +584,7 @@ img {
 
 
 /* =========================
-   CARDS
+   COMMON CARDS
 ========================= */
 
 .live-card,
@@ -586,6 +606,10 @@ img {
   overflow: hidden;
 }
 
+
+/* =========================
+   FOOTBALL LIVE CARD
+========================= */
 
 .live-card {
   padding: 20px;
@@ -665,6 +689,10 @@ img {
 }
 
 
+/* =========================
+   BUTTONS
+========================= */
+
 .watch-btn,
 .media-info button,
 .movie-info button {
@@ -685,8 +713,7 @@ img {
   font-weight: 800;
 
   transition:
-    background .2s ease,
-    transform .15s ease;
+    background .2s ease;
 }
 
 
@@ -704,13 +731,6 @@ img {
 }
 
 
-.watch-btn:active,
-.media-info button:active,
-.movie-info button:active {
-  transform: scale(.98);
-}
-
-
 /* =========================
    HIGHLIGHTS
 ========================= */
@@ -723,6 +743,8 @@ img {
   place-items: center;
 
   position: relative;
+
+  overflow: hidden;
 }
 
 
@@ -737,8 +759,72 @@ img {
 }
 
 
+.goals-thumb {
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      #53233a,
+      #16131c 55%,
+      #090b10
+    );
+}
+
+
+.skills-thumb {
+  background:
+    radial-gradient(
+      circle at 70% 40%,
+      #243f38,
+      #0c1715 55%,
+      #090b10
+    );
+}
+
+
+/* HIGHLIGHT THUMBNAIL */
+
+.media-thumb img {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+
+  z-index: 1;
+}
+
+
+/* Thumbnail overlay */
+
+.media-thumb::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, .65),
+      transparent 60%
+    );
+
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+
 .play {
   width: 54px;
+
   height: 54px;
 
   display: grid;
@@ -755,6 +841,10 @@ img {
   box-shadow:
     0 10px 30px
     rgba(0, 0, 0, .35);
+
+  position: relative;
+
+  z-index: 3;
 }
 
 
@@ -815,6 +905,53 @@ img {
   font-weight: 900;
 
   letter-spacing: 1.5px;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+/* Movie thumbnail */
+
+.poster img {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  max-width: none;
+
+  object-fit: cover;
+
+  display: block;
+
+  z-index: 1;
+}
+
+
+/* Dark overlay over movie thumbnail */
+
+.poster::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, .72),
+      rgba(0, 0, 0, .08) 65%
+    );
+
+  z-index: 2;
+
+  pointer-events: none;
 }
 
 
@@ -864,11 +1001,58 @@ img {
 
 .poster span {
   font-size: 11px;
+
+  position: relative;
+
+  z-index: 3;
+}
+
+
+.movie-info {
+  padding: 17px;
 }
 
 
 /* =========================
-   PAGE HERO
+   ABOUT
+========================= */
+
+.about {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 40px;
+
+  padding-bottom: 70px;
+}
+
+
+.about h2 {
+  font-size: 34px;
+
+  line-height: 1.15;
+
+  margin: 0;
+}
+
+
+.about > p {
+  color: var(--muted);
+
+  max-width: 600px;
+
+  margin:
+    22px
+    0
+    0;
+}
+
+
+/* =========================
+   FULL POSTS PAGES
 ========================= */
 
 .page-hero {
@@ -948,7 +1132,7 @@ img {
 
 
 /* =========================
-   DATE
+   POST DATE
 ========================= */
 
 .post-date {
@@ -988,8 +1172,7 @@ img {
 
 .all-posts-grid > .loading,
 .all-posts-grid > .empty-posts {
-  grid-column:
-    1 / -1;
+  grid-column: 1 / -1;
 }
 
 
@@ -1004,18 +1187,18 @@ img {
 
   inset: 0;
 
-  z-index: 999999;
+  z-index: 100;
 
   width: 100%;
-  height: 100%;
 
-  align-items: center;
-  justify-content: center;
+  height: 100%;
 }
 
 
 .modal.open {
-  display: flex;
+  display: grid;
+
+  place-items: center;
 }
 
 
@@ -1025,7 +1208,7 @@ img {
   inset: 0;
 
   background:
-    rgba(0, 0, 0, .88);
+    rgba(0, 0, 0, .78);
 
   backdrop-filter:
     blur(6px);
@@ -1073,14 +1256,6 @@ img {
     35px
     18px
     0;
-
-  font-size: 18px;
-
-  white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
 }
 
 
@@ -1131,12 +1306,15 @@ img {
   display: block;
 
   width: 100%;
+
   height: 100%;
 
   min-width: 100%;
+
   min-height: 100%;
 
   margin: 0;
+
   padding: 0;
 
   border: 0;
@@ -1144,7 +1322,7 @@ img {
 
 
 /* =========================
-   FULLSCREEN CONTROLS
+   FULLSCREEN BUTTON
 ========================= */
 
 .video-controls {
@@ -1153,6 +1331,7 @@ img {
   display: flex;
 
   justify-content: center;
+
   align-items: center;
 
   margin-top: 8px;
@@ -1165,6 +1344,7 @@ img {
   display: inline-flex;
 
   align-items: center;
+
   justify-content: center;
 
   background: var(--accent);
@@ -1176,7 +1356,7 @@ img {
   border-radius: 5px;
 
   padding:
-    6px
+    5px
     10px;
 
   font-size: 9px;
@@ -1190,6 +1370,8 @@ img {
   white-space: nowrap;
 
   cursor: pointer;
+
+  opacity: 1;
 
   -webkit-tap-highlight-color:
     transparent;
@@ -1206,12 +1388,13 @@ img {
 
 
 .fullscreen-btn:active {
-  transform: scale(.97);
+  transform:
+    scale(.97);
 }
 
 
 /* =========================
-   FULLSCREEN
+   FULLSCREEN VIDEO
 ========================= */
 
 .modal-box:fullscreen {
@@ -1271,7 +1454,7 @@ img {
 }
 
 
-/* WEBKIT */
+/* WEBKIT FULLSCREEN */
 
 .modal-box:-webkit-full-screen {
   width: 100vw;
@@ -1331,6 +1514,71 @@ img {
 
 
 /* =========================
+   EMBED PLACEHOLDER
+========================= */
+
+.embed-placeholder {
+  text-align: center;
+
+  padding: 30px;
+
+  color: var(--muted);
+}
+
+
+.embed-placeholder strong {
+  display: block;
+
+  color: white;
+
+  margin-bottom: 8px;
+}
+
+
+.embed-note {
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+
+code {
+  color: #ff8ba0;
+}
+
+
+/* =========================
+   NO RESULTS
+========================= */
+
+.no-results {
+  display: none;
+
+  position: fixed;
+
+  right: 20px;
+
+  bottom: 20px;
+
+  z-index: 90;
+
+  background: #151a22;
+
+  border:
+    1px solid
+    var(--line);
+
+  padding:
+    12px
+    15px;
+
+  border-radius: 9px;
+
+  color: #d7dde6;
+}
+
+
+/* =========================
    FOOTER
 ========================= */
 
@@ -1385,14 +1633,38 @@ img {
 
 
 .copyright {
-  grid-column:
-    1 / -1;
+  grid-column: 1 / -1;
 
   padding-top: 10px;
 
   border-top:
     1px solid
     var(--line);
+}
+
+
+/* =========================
+   SCREEN READER
+========================= */
+
+.sr-only {
+  position: absolute;
+
+  width: 1px;
+
+  height: 1px;
+
+  padding: 0;
+
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
 }
 
 
@@ -1408,6 +1680,7 @@ img {
     position: absolute;
 
     left: 16px;
+
     right: 16px;
 
     top: 70px;
@@ -1450,6 +1723,11 @@ img {
       repeat(2, 1fr);
   }
 
+
+  .about {
+    grid-template-columns: 1fr;
+  }
+
 }
 
 
@@ -1465,6 +1743,8 @@ img {
   }
 
 
+  /* HEADER */
+
   .nav-wrap {
     gap: 8px;
   }
@@ -1477,6 +1757,7 @@ img {
 
   .brand-mark {
     width: 32px;
+
     height: 32px;
   }
 
@@ -1494,6 +1775,8 @@ img {
       12px;
   }
 
+
+  /* HERO */
 
   .hero {
     min-height: 500px;
@@ -1524,6 +1807,8 @@ img {
   }
 
 
+  /* SECTIONS */
+
   .section {
     padding-top: 50px;
   }
@@ -1540,6 +1825,8 @@ img {
     font-size: 25px;
   }
 
+
+  /* HORIZONTAL CARDS */
 
   .horizontal-posts {
     gap: 12px;
@@ -1575,12 +1862,16 @@ img {
   }
 
 
+  /* FULL POSTS GRID */
+
   .all-posts-grid {
     grid-template-columns: 1fr;
 
     gap: 14px;
   }
 
+
+  /* PAGE HERO */
 
   .page-hero {
     padding:
@@ -1600,6 +1891,8 @@ img {
   }
 
 
+  /* FOOTER */
+
   .footer-wrap {
     grid-template-columns: 1fr;
   }
@@ -1618,7 +1911,8 @@ img {
 
 
   /* =========================
-     MOBILE MODAL
+     MOBILE VIDEO MODAL
+     4:3 CENTERED
   ========================= */
 
   .modal {
@@ -1692,6 +1986,10 @@ img {
   }
 
 
+  /* =========================
+     4:3 PLAYER
+  ========================= */
+
   .embed-area {
     width: 100%;
 
@@ -1717,17 +2015,24 @@ img {
     display: block;
 
     width: 100%;
+
     height: 100%;
 
     min-width: 100%;
+
     min-height: 100%;
 
     margin: 0;
+
     padding: 0;
 
     border: 0;
   }
 
+
+  /* =========================
+     MOBILE FULLSCREEN BUTTON
+  ========================= */
 
   .video-controls {
     width: 100%;
@@ -1753,6 +2058,20 @@ img {
 
 
   .fullscreen-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--accent);
+
+    color: #fff;
+
+    border: 0;
+
+    border-radius: 5px;
+
     padding:
       5px
       9px;
@@ -1760,8 +2079,40 @@ img {
     min-height: 23px;
 
     font-size: 9px;
+
+    font-weight: 600;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    opacity: 1;
+
+    -webkit-tap-highlight-color:
+      transparent;
+
+    transition:
+      background .2s ease,
+      transform .15s ease;
   }
 
+
+  .fullscreen-btn:hover {
+    background: var(--accent-2);
+  }
+
+
+  .fullscreen-btn:active {
+    transform:
+      scale(.97);
+  }
+
+
+  /* =========================
+     MOBILE FULLSCREEN
+  ========================= */
 
   .modal-box:fullscreen {
     width: 100vw;
@@ -1797,9 +2148,11 @@ img {
   .modal-box:fullscreen .embed-area {
     width: 100vw;
 
-    max-width: 100vw;
+    height: auto;
 
     aspect-ratio: 4 / 3;
+
+    max-width: 100vw;
 
     border-radius: 0;
 
@@ -1816,10 +2169,19 @@ img {
   }
 
 
-  .modal-box:fullscreen .modal-close {
+  .modal-box:fullscreen
+  .modal-close {
     display: none;
   }
 
+
+  .modal-box:fullscreen
+  .fullscreen-btn {
+    font-size: 9px;
+  }
+
+
+  /* WEBKIT FULLSCREEN */
 
   .modal-box:-webkit-full-screen {
     width: 100vw;
@@ -1852,7 +2214,8 @@ img {
   }
 
 
-  .modal-box:-webkit-full-screen .embed-area {
+  .modal-box:-webkit-full-screen
+  .embed-area {
     width: 100vw;
 
     aspect-ratio: 4 / 3;
@@ -1865,7 +2228,8 @@ img {
   }
 
 
-  .modal-box:-webkit-full-screen .video-controls {
+  .modal-box:-webkit-full-screen
+  .video-controls {
     width: 100vw;
 
     height: 28px;
@@ -1874,7 +2238,8 @@ img {
   }
 
 
-  .modal-box:-webkit-full-screen .modal-close {
+  .modal-box:-webkit-full-screen
+  .modal-close {
     display: none;
   }
 
@@ -1894,6 +2259,7 @@ img {
 
   .brand-mark {
     width: 29px;
+
     height: 29px;
 
     border-radius: 8px;
@@ -1926,6 +2292,8 @@ img {
     text-align: center;
   }
 
+
+  /* EXTRA SMALL FULLSCREEN BUTTON */
 
   .fullscreen-btn {
     padding:
