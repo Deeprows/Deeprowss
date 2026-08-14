@@ -2,25 +2,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   "use strict";
 
-
-  /* =========================================================
-     DEEPROWSS GLOBAL VIDEO SYSTEM
-     
-     IMPORTANT:
-     This handler is delegated to DOCUMENT.
-     
-     Therefore ANY future element such as:
-     
-       <button data-url="...">Watch</button>
-     
-     or:
-     
-       <a href="#" data-url="...">Watch</a>
-     
-     will work automatically, even if the element is created
-     later by another script.
-  ========================================================= */
-
+  /*
+   * DEEPROWSS UNIVERSAL VIDEO SYSTEM
+   *
+   * Works across:
+   * - Homepage
+   * - View All pages
+   * - Section pages
+   * - Dynamically created posts
+   * - Future posts loaded from posts.json
+   *
+   * Any Watch/View control using:
+   * data-url
+   * data-embed-url
+   * data-video-url
+   *
+   * will open the video in a NEW BROWSER PAGE/TAB.
+   *
+   * The video is NOT opened inside a modal.
+   */
 
   var liveContainer =
     document.getElementById("livePosts");
@@ -33,28 +33,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   console.log(
-    "Deeprowss script loaded successfully."
+    "Deeprowss: Universal video system loaded."
   );
-
 
 
   /* =========================================================
      UNIVERSAL VIDEO CLICK HANDLER
   ========================================================= */
 
-  if (!window.deeprowssGlobalVideoHandler) {
+  if (!window.deeprowssVideoSystemAttached) {
 
-    window.deeprowssGlobalVideoHandler = true;
-
+    window.deeprowssVideoSystemAttached = true;
 
     document.addEventListener(
       "click",
       function (event) {
-
-        /*
-         * Find a video button even if the user clicks
-         * a span, icon, text, etc. inside the button.
-         */
 
         var button =
           event.target.closest(
@@ -62,18 +55,13 @@ document.addEventListener("DOMContentLoaded", function () {
           );
 
 
-        /*
-         * Nothing to do if this click was not on a
-         * video element.
-         */
-
         if (!button) {
           return;
         }
 
 
         /*
-         * Ignore the fullscreen button.
+         * Do not intercept fullscreen controls.
          */
 
         if (
@@ -86,62 +74,84 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         /*
-         * Stop parent links/forms/scripts from hijacking
-         * the click.
+         * Only treat actual Watch/View controls
+         * as video controls.
+         */
+
+        var tagName =
+          button.tagName
+            ? button.tagName.toLowerCase()
+            : "";
+
+
+        var isVideoControl =
+          tagName === "button" ||
+          tagName === "a" ||
+          button.classList.contains("watch-btn") ||
+          button.classList.contains("video-btn") ||
+          button.classList.contains("watch-button");
+
+
+        if (!isVideoControl) {
+          return;
+        }
+
+
+        /*
+         * Stop the normal link/button action.
          */
 
         event.preventDefault();
 
-        event.stopPropagation();
-
 
         /*
-         * Support all three possible attribute names.
+         * Get video URL.
          */
 
         var url =
-          button.getAttribute(
-            "data-url"
-          ) ||
-          button.getAttribute(
-            "data-embed-url"
-          ) ||
-          button.getAttribute(
-            "data-video-url"
-          );
+          button.getAttribute("data-url") ||
+          button.getAttribute("data-embed-url") ||
+          button.getAttribute("data-video-url") ||
+          "";
+
+
+        url =
+          String(url).trim();
 
 
         /*
-         * Get title.
+         * Get video title.
          */
 
         var title =
-          button.getAttribute(
-            "data-title"
-          ) ||
-          button.getAttribute(
-            "data-video-title"
-          ) ||
-          button.textContent.trim() ||
-          "Deeprowss Video";
+          button.getAttribute("data-title") ||
+          button.getAttribute("data-video-title") ||
+          "";
 
-
-        /*
-         * Clean title.
-         */
 
         title =
-          title.trim();
+          String(title).trim();
+
+
+        if (!title) {
+
+          title =
+            button.textContent
+              .replace(/\s+/g, " ")
+              .trim() ||
+            "Deeprowss Video";
+
+        }
 
 
         /*
-         * No URL means the post has no video.
+         * Do not attempt to open a missing URL.
          */
 
         if (!url) {
 
           console.error(
-            "Deeprowss: Watch button has no video URL.",
+            "Deeprowss: Watch/View button has no video URL:",
             button
           );
 
@@ -150,22 +160,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-         * Clean URL.
-         */
-
-        url =
-          url.trim();
-
-
         console.log(
-          "Deeprowss: Opening video:",
-          url
+          "Deeprowss: Opening video in new page:",
+          {
+            title: title,
+            url: url,
+            page: window.location.href
+          }
         );
 
 
         /*
-         * Open video.
+         * Open the video in a completely separate page.
          */
 
         openVideoPage(
@@ -174,25 +180,22 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
       },
-      true
+      false
     );
 
   }
 
 
-
   /* =========================================================
-     OPEN VIDEO PAGE
+     OPEN VIDEO IN NEW PAGE
      
-     Opens the video in a completely separate page.
+     IMPORTANT:
+     Clicking Watch/View from the homepage, View All page,
+     section page, or any future post opens a separate page.
      
-     This is intentionally NOT dependent on:
-     
-       #embedModal
-       #embedArea
-       .modal-box
-     
-     Therefore section pages don't need the modal HTML.
+     It does NOT use #embedModal.
+     It does NOT open inside the homepage.
+     It does NOT depend on modal HTML.
   ========================================================= */
 
   function openVideoPage(
@@ -201,8 +204,8 @@ document.addEventListener("DOMContentLoaded", function () {
   ) {
 
     /*
-     * Try opening immediately while the browser still considers
-     * this to be a direct user click.
+     * Open a blank page immediately while this function
+     * is still running from the visitor's click.
      */
 
     var videoPage =
@@ -213,21 +216,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /*
-     * Browser blocked popup.
+     * If the browser blocks the new page,
+     * do not replace or navigate the current page.
      */
 
     if (!videoPage) {
 
       console.error(
-        "Deeprowss: Browser blocked the video window."
+        "Deeprowss: Browser blocked the new video page."
       );
-
-
-      /*
-       * Fallback:
-       * navigate current page only if opening a new page
-       * was blocked.
-       */
 
       return;
 
@@ -235,14 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /*
-     * Prevent the new page from retaining an old document.
-     */
-
-    videoPage.document.open();
-
-
-    /*
-     * Safely escape values before inserting them into HTML.
+     * Safely prepare title and URL.
      */
 
     var safeTitle =
@@ -256,6 +246,12 @@ document.addEventListener("DOMContentLoaded", function () {
         url
       );
 
+
+    /*
+     * Build the completely separate video page.
+     */
+
+    videoPage.document.open();
 
     videoPage.document.write(
 
@@ -276,29 +272,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
         "<style>" +
 
-          "html, body {" +
-            "margin: 0;" +
-            "padding: 0;" +
-            "width: 100%;" +
-            "height: 100%;" +
-            "background: #000;" +
-            "overflow: hidden;" +
+          "html,body{" +
+            "margin:0;" +
+            "padding:0;" +
+            "width:100%;" +
+            "height:100%;" +
+            "background:#000;" +
+            "overflow:hidden;" +
           "}" +
 
-          "body {" +
-            "display: flex;" +
-            "align-items: center;" +
-            "justify-content: center;" +
+          "body{" +
+            "display:flex;" +
+            "align-items:center;" +
+            "justify-content:center;" +
           "}" +
 
-          "iframe {" +
-            "display: block;" +
-            "width: 100%;" +
-            "height: 100%;" +
-            "border: 0;" +
-            "margin: 0;" +
-            "padding: 0;" +
-            "background: #000;" +
+          "iframe{" +
+            "display:block;" +
+            "width:100%;" +
+            "height:100%;" +
+            "border:0;" +
+            "margin:0;" +
+            "padding:0;" +
+            "background:#000;" +
           "}" +
 
         "</style>" +
@@ -338,12 +334,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     );
 
-
     videoPage.document.close();
 
 
     /*
-     * Focus the new video page.
+     * Focus the newly opened video page.
      */
 
     try {
@@ -353,7 +348,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (error) {
 
       console.log(
-        "Could not focus video window:",
+        "Deeprowss: Could not focus video page.",
         error
       );
 
@@ -362,65 +357,39 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
   /* =========================================================
-     HTML ESCAPE
+     OPEN EMBED COMPATIBILITY
+     
+     Other existing scripts can still call:
+     
+       openEmbed(title, url)
+     
+     It now opens the video in a separate page too.
   ========================================================= */
 
-  function escapeHTML(
-    value
-  ) {
+  window.openEmbed =
+    function (
+      title,
+      url
+    ) {
 
-    return String(value)
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      )
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-      .replace(
-        /'/g,
-        "&#039;"
+      if (!url) {
+
+        console.error(
+          "Deeprowss: openEmbed called without a URL."
+        );
+
+        return;
+
+      }
+
+
+      openVideoPage(
+        title || "Video",
+        url
       );
 
-  }
-
-
-
-  function escapeAttribute(
-    value
-  ) {
-
-    return String(value)
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      );
-
-  }
-
+    };
 
 
   /* =========================================================
@@ -462,10 +431,6 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-          /*
-           * Make sure posts is actually an array.
-           */
-
           if (
             !Array.isArray(posts)
           ) {
@@ -478,7 +443,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           console.log(
-            "Deeprowss posts loaded:",
+            "Deeprowss: Posts loaded:",
             posts
           );
 
@@ -505,7 +470,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           /*
-           * Render all sections.
+           * Render every section.
            */
 
           displayLivePosts(
@@ -526,7 +491,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
 
           console.error(
-            "Could not read posts.json:",
+            "Deeprowss: Could not read posts.json:",
             error
           );
 
@@ -538,7 +503,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
 
         console.error(
-          "Could not load posts.json. Status:",
+          "Deeprowss: Could not load posts.json. Status:",
           xhr.status
         );
 
@@ -554,7 +519,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function () {
 
       console.error(
-        "Network error loading posts.json."
+        "Deeprowss: Network error loading posts.json."
       );
 
 
@@ -564,7 +529,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   xhr.send();
-
 
 
   /* =========================================================
@@ -603,7 +567,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
   }
-
 
 
   /* =========================================================
@@ -649,7 +612,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
   /* =========================================================
      FOOTBALL LIVE
   ========================================================= */
@@ -692,7 +654,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    var html = "";
+    var html =
+      "";
 
 
     livePosts.forEach(
@@ -705,7 +668,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var statusClass =
           String(status)
-            .toUpperCase() === "LIVE"
+            .toUpperCase() ===
+          "LIVE"
             ? "live-badge"
             : "upcoming-badge";
 
@@ -716,10 +680,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         var url =
-          post.embedUrl ||
-          post.embedURL ||
-          post.url ||
-          "";
+          getPostVideoURL(
+            post
+          );
 
 
         html +=
@@ -739,10 +702,12 @@ document.addEventListener("DOMContentLoaded", function () {
               "</span>" +
 
               "<span>" +
+
                 escapeHTML(
                   post.category ||
                   "Football"
                 ) +
+
               "</span>" +
 
             "</div>" +
@@ -751,36 +716,44 @@ document.addEventListener("DOMContentLoaded", function () {
             '<div class="teams">' +
 
               "<strong>" +
+
                 escapeHTML(
                   post.home ||
                   "Team 1"
                 ) +
+
               "</strong>" +
 
               "<span>vs</span>" +
 
               "<strong>" +
+
                 escapeHTML(
                   post.away ||
                   "Team 2"
                 ) +
+
               "</strong>" +
 
             "</div>" +
 
 
             '<div class="match-meta">' +
+
               escapeHTML(
                 post.description ||
                 ""
               ) +
+
             "</div>" +
 
 
             '<div class="post-date">' +
+
               formatPostDate(
                 post.publishedAt
               ) +
+
             "</div>" +
 
 
@@ -791,15 +764,19 @@ document.addEventListener("DOMContentLoaded", function () {
               'class="watch-btn" ' +
 
               'data-url="' +
+
                 escapeAttribute(
                   url
                 ) +
+
               '" ' +
 
               'data-title="' +
+
                 escapeAttribute(
                   title
                 ) +
+
               '">' +
 
               "Watch" +
@@ -816,7 +793,6 @@ document.addEventListener("DOMContentLoaded", function () {
       html;
 
   }
-
 
 
   /* =========================================================
@@ -861,7 +837,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    var html = "";
+    var html =
+      "";
 
 
     highlights.forEach(
@@ -873,10 +850,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         var url =
-          post.embedUrl ||
-          post.embedURL ||
-          post.url ||
-          "";
+          getPostVideoURL(
+            post
+          );
 
 
         html +=
@@ -900,24 +876,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
               "<h3>" +
+
                 escapeHTML(
                   title
                 ) +
+
               "</h3>" +
 
 
               "<p>" +
+
                 escapeHTML(
                   post.description ||
                   ""
                 ) +
+
               "</p>" +
 
 
               '<div class="post-date">' +
+
                 formatPostDate(
                   post.publishedAt
                 ) +
+
               "</div>" +
 
 
@@ -928,15 +910,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 'class="watch-btn" ' +
 
                 'data-url="' +
+
                   escapeAttribute(
                     url
                   ) +
+
                 '" ' +
 
                 'data-title="' +
+
                   escapeAttribute(
                     title
                   ) +
+
                 '">' +
 
                 "Watch highlight" +
@@ -955,7 +941,6 @@ document.addEventListener("DOMContentLoaded", function () {
       html;
 
   }
-
 
 
   /* =========================================================
@@ -1000,7 +985,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    var html = "";
+    var html =
+      "";
 
 
     movies.forEach(
@@ -1012,10 +998,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         var url =
-          post.embedUrl ||
-          post.embedURL ||
-          post.url ||
-          "";
+          getPostVideoURL(
+            post
+          );
 
 
         html +=
@@ -1063,15 +1048,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 'class="watch-btn" ' +
 
                 'data-url="' +
+
                   escapeAttribute(
                     url
                   ) +
+
                 '" ' +
 
                 'data-title="' +
+
                   escapeAttribute(
                     title
                   ) +
+
                 '">' +
 
                 "View" +
@@ -1092,614 +1081,101 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
   /* =========================================================
-     OPTIONAL MODAL SYSTEM
+     POST VIDEO URL
      
-     Kept for compatibility with existing HTML.
+     Every future post can use any of these:
+     
+       embedUrl
+       embedURL
+       videoUrl
+       videoURL
+       url
+     
+     The first available value is used.
   ========================================================= */
 
-  window.openEmbed =
-    function (
-      title,
-      url
-    ) {
-
-      if (!url) {
-
-        console.error(
-          "Deeprowss: openEmbed called without a URL."
-        );
-
-        return;
-
-      }
-
-
-      var modal =
-        document.getElementById(
-          "embedModal"
-        );
-
-
-      var modalTitle =
-        document.getElementById(
-          "modalTitle"
-        );
-
-
-      var embedArea =
-        document.getElementById(
-          "embedArea"
-        );
-
-
-      /*
-       * If the modal doesn't exist, use the universal
-       * video page instead.
-       */
-
-      if (
-        !modal ||
-        !embedArea
-      ) {
-
-        openVideoPage(
-          title ||
-          "Video",
-          url
-        );
-
-        return;
-
-      }
-
-
-      if (modalTitle) {
-
-        modalTitle.textContent =
-          title ||
-          "Video";
-
-      }
-
-
-      embedArea.innerHTML =
-        "";
-
-
-      var oldControls =
-        modal.querySelector(
-          ".video-controls"
-        );
-
-
-      if (oldControls) {
-        oldControls.remove();
-      }
-
-
-      var iframe =
-        document.createElement(
-          "iframe"
-        );
-
-
-      iframe.src =
-        url;
-
-
-      iframe.setAttribute(
-        "allowfullscreen",
-        ""
-      );
-
-
-      iframe.setAttribute(
-        "allow",
-        "autoplay; fullscreen; encrypted-media; picture-in-picture"
-      );
-
-
-      iframe.setAttribute(
-        "loading",
-        "lazy"
-      );
-
-
-      iframe.setAttribute(
-        "frameborder",
-        "0"
-      );
-
-
-      iframe.setAttribute(
-        "scrolling",
-        "no"
-      );
-
-
-      iframe.setAttribute(
-        "title",
-        title ||
-        "Video"
-      );
-
-
-      embedArea.appendChild(
-        iframe
-      );
-
-
-      /*
-       * Fullscreen controls.
-       */
-
-      var controls =
-        document.createElement(
-          "div"
-        );
-
-
-      controls.className =
-        "video-controls";
-
-
-      var fullscreenButton =
-        document.createElement(
-          "button"
-        );
-
-
-      fullscreenButton.type =
-        "button";
-
-
-      fullscreenButton.className =
-        "fullscreen-btn";
-
-
-      fullscreenButton.setAttribute(
-        "aria-label",
-        "Tap to watch in Fullscreen"
-      );
-
-
-      fullscreenButton.setAttribute(
-        "title",
-        "Tap to watch in Fullscreen"
-      );
-
-
-      fullscreenButton.textContent =
-        "Tap to watch in Fullscreen";
-
-
-      controls.appendChild(
-        fullscreenButton
-      );
-
-
-      embedArea.insertAdjacentElement(
-        "afterend",
-        controls
-      );
-
-
-      modal.classList.add(
-        "open"
-      );
-
-
-      modal.setAttribute(
-        "aria-hidden",
-        "false"
-      );
-
-
-      document.body.style.overflow =
-        "hidden";
-
-    };
-
-
-
-  /* =========================================================
-     FULLSCREEN
-  ========================================================= */
-
-  document.addEventListener(
-    "click",
-    async function (event) {
-
-      var button =
-        event.target.closest(
-          ".fullscreen-btn"
-        );
-
-
-      if (!button) {
-        return;
-      }
-
-
-      event.preventDefault();
-
-      event.stopPropagation();
-
-
-      var modalBox =
-        document.querySelector(
-          ".modal-box"
-        );
-
-
-      if (!modalBox) {
-        return;
-      }
-
-
-      try {
-
-        if (
-          !document.fullscreenElement
-        ) {
-
-          if (
-            modalBox.requestFullscreen
-          ) {
-
-            await modalBox.requestFullscreen();
-
-          } else {
-
-            console.log(
-              "Fullscreen API is not supported."
-            );
-
-            return;
-
-          }
-
-
-          /*
-           * Attempt landscape orientation.
-           */
-
-          if (
-            screen.orientation &&
-            screen.orientation.lock
-          ) {
-
-            try {
-
-              await screen.orientation.lock(
-                "landscape"
-              );
-
-            } catch (
-              orientationError
-            ) {
-
-              console.log(
-                "Landscape orientation lock unavailable:",
-                orientationError
-              );
-
-            }
-
-          }
-
-        } else {
-
-          if (
-            document.exitFullscreen
-          ) {
-
-            await document.exitFullscreen();
-
-          }
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Fullscreen error:",
-          error
-        );
-
-      }
-
+  function getPostVideoURL(
+    post
+  ) {
+
+    if (!post) {
+      return "";
     }
-  );
 
 
-
-  /* =========================================================
-     FULLSCREEN CHANGE
-  ========================================================= */
-
-  document.addEventListener(
-    "fullscreenchange",
-    function () {
-
-      var button =
-        document.querySelector(
-          ".fullscreen-btn"
-        );
-
-
-      if (
-        document.fullscreenElement
-      ) {
-
-        if (button) {
-
-          button.textContent =
-            "Exit Fullscreen";
-
-
-          button.setAttribute(
-            "aria-label",
-            "Exit Fullscreen"
-          );
-
-
-          button.setAttribute(
-            "title",
-            "Exit Fullscreen"
-          );
-
-        }
-
-      } else {
-
-        if (button) {
-
-          button.textContent =
-            "Tap to watch in Fullscreen";
-
-
-          button.setAttribute(
-            "aria-label",
-            "Tap to watch in Fullscreen"
-          );
-
-
-          button.setAttribute(
-            "title",
-            "Tap to watch in Fullscreen"
-          );
-
-        }
-
-
-        if (
-          screen.orientation &&
-          screen.orientation.unlock
-        ) {
-
-          try {
-
-            screen.orientation.unlock();
-
-          } catch (error) {
-
-            console.log(
-              "Orientation unlock unavailable:",
-              error
-            );
-
-          }
-
-        }
-
-      }
-
-    }
-  );
-
-
-
-  /* =========================================================
-     CLOSE VIDEO MODAL
-  ========================================================= */
-
-  window.closeEmbed =
-    async function () {
-
-      var modal =
-        document.getElementById(
-          "embedModal"
-        );
-
-
-      var embedArea =
-        document.getElementById(
-          "embedArea"
-        );
-
-
-      if (!modal) {
-        return;
-      }
-
-
-      /*
-       * Exit fullscreen.
-       */
-
-      if (
-        document.fullscreenElement
-      ) {
-
-        try {
-
-          await document.exitFullscreen();
-
-        } catch (error) {
-
-          console.log(
-            "Could not exit fullscreen:",
-            error
-          );
-
-        }
-
-      }
-
-
-      /*
-       * Unlock orientation.
-       */
-
-      if (
-        screen.orientation &&
-        screen.orientation.unlock
-      ) {
-
-        try {
-
-          screen.orientation.unlock();
-
-        } catch (error) {
-
-          console.log(
-            "Could not unlock orientation:",
-            error
-          );
-
-        }
-
-      }
-
-
-      /*
-       * Remove iframe.
-       */
-
-      if (embedArea) {
-
-        embedArea.innerHTML =
-          "";
-
-      }
-
-
-      /*
-       * Remove controls.
-       */
-
-      var controls =
-        modal.querySelector(
-          ".video-controls"
-        );
-
-
-      if (controls) {
-        controls.remove();
-      }
-
-
-      /*
-       * Close modal.
-       */
-
-      modal.classList.remove(
-        "open"
-      );
-
-
-      modal.setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-
-      /*
-       * Restore scrolling.
-       */
-
-      document.body.style.overflow =
-        "";
-
-    };
-
-
-
-  /* =========================================================
-     MODAL BACKDROP
-  ========================================================= */
-
-  var modal =
-    document.getElementById(
-      "embedModal"
-    );
-
-
-  if (modal) {
-
-    modal.addEventListener(
-      "click",
-      function (event) {
-
-        if (
-          event.target === modal ||
-          (
-            event.target.classList &&
-            event.target.classList.contains(
-              "modal-backdrop"
-            )
-          )
-        ) {
-
-          closeEmbed();
-
-        }
-
-      }
+    return (
+      post.embedUrl ||
+      post.embedURL ||
+      post.videoUrl ||
+      post.videoURL ||
+      post.url ||
+      ""
     );
 
   }
 
 
-
   /* =========================================================
-     ESC KEY
+     ESCAPE HTML
   ========================================================= */
 
-  document.addEventListener(
-    "keydown",
-    function (event) {
+  function escapeHTML(
+    value
+  ) {
 
-      if (
-        event.key !== "Escape"
-      ) {
-        return;
-      }
+    return String(value)
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
 
 
-      var modal =
-        document.getElementById(
-          "embedModal"
-        );
+  /* =========================================================
+     ESCAPE ATTRIBUTE
+  ========================================================= */
 
+  function escapeAttribute(
+    value
+  ) {
 
-      if (
-        modal &&
-        modal.classList.contains(
-          "open"
-        )
-      ) {
+    return String(value)
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      );
 
-        closeEmbed();
-
-      }
-
-    }
-  );
-
+  }
 
 
   /* =========================================================
@@ -1738,7 +1214,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
   /* =========================================================
      COPYRIGHT YEAR
   ========================================================= */
@@ -1757,21 +1232,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
   /* =========================================================
-     DEBUG INFORMATION
-     
-     This helps identify section-page problems.
+     FINAL STATUS
   ========================================================= */
 
   console.log(
-    "Deeprowss universal video handler is ACTIVE."
+    "Deeprowss: Universal video handler ACTIVE."
   );
 
 
   console.log(
-    "Any element using [data-url], [data-embed-url], " +
-    "or [data-video-url] can now open a video."
+    "Deeprowss: Every Watch/View control with a video URL " +
+    "opens its video in a separate page."
   );
 
 });
