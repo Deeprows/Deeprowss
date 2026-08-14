@@ -1,8 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  var liveContainer = document.getElementById("livePosts");
-  var highlightContainer = document.getElementById("highlightPosts");
-  var movieContainer = document.getElementById("moviePosts");
+  var liveContainer =
+    document.getElementById("livePosts");
+
+  var highlightContainer =
+    document.getElementById("highlightPosts");
+
+  var movieContainer =
+    document.getElementById("moviePosts");
 
   console.log("Deeprowss script loaded");
 
@@ -30,17 +35,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
 
-        var posts = JSON.parse(xhr.responseText);
+        var posts =
+          JSON.parse(xhr.responseText);
 
-        console.log("Deeprowss posts loaded:", posts);
+        console.log(
+          "Deeprowss posts loaded:",
+          posts
+        );
 
 
         /* Newest posts first */
 
         posts.sort(function (a, b) {
 
-          return new Date(b.publishedAt).getTime() -
-                 new Date(a.publishedAt).getTime();
+          return (
+            new Date(b.publishedAt).getTime() -
+            new Date(a.publishedAt).getTime()
+          );
 
         });
 
@@ -79,7 +90,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   xhr.onerror = function () {
 
-    console.error("Network error loading posts.json");
+    console.error(
+      "Network error loading posts.json"
+    );
 
     showError();
 
@@ -140,17 +153,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    var date = new Date(dateString);
+    var date =
+      new Date(dateString);
 
 
     if (isNaN(date.getTime())) {
       return "";
     }
 
-
-    /*
-     * Try visitor's local timezone.
-     */
 
     try {
 
@@ -177,11 +187,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    var livePosts = posts.filter(function (post) {
+    var livePosts =
+      posts.filter(function (post) {
 
-      return post.type === "live";
+        return post.type === "live";
 
-    });
+      });
 
 
     if (livePosts.length === 0) {
@@ -249,7 +260,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           '<div class="post-date">' +
-            formatPostDate(post.publishedAt) +
+            formatPostDate(
+              post.publishedAt
+            ) +
           '</div>' +
 
 
@@ -271,7 +284,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    liveContainer.innerHTML = html;
+    liveContainer.innerHTML =
+      html;
 
 
     attachVideoButtons();
@@ -291,11 +305,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    var highlights = posts.filter(function (post) {
+    var highlights =
+      posts.filter(function (post) {
 
-      return post.type === "highlight";
+        return post.type === "highlight";
 
-    });
+      });
 
 
     if (highlights.length === 0) {
@@ -334,17 +349,24 @@ document.addEventListener("DOMContentLoaded", function () {
               'HIGHLIGHT' +
             '</span>' +
 
+
             '<h3>' +
-              (post.title || "Football Highlight") +
+              (post.title ||
+               "Football Highlight") +
             '</h3>' +
+
 
             '<p>' +
               (post.description || "") +
             '</p>' +
 
+
             '<div class="post-date">' +
-              formatPostDate(post.publishedAt) +
+              formatPostDate(
+                post.publishedAt
+              ) +
             '</div>' +
+
 
             '<button ' +
               'data-url="' +
@@ -365,7 +387,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    highlightContainer.innerHTML = html;
+    highlightContainer.innerHTML =
+      html;
 
 
     attachVideoButtons();
@@ -385,11 +408,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    var movies = posts.filter(function (post) {
+    var movies =
+      posts.filter(function (post) {
 
-      return post.type === "movie";
+        return post.type === "movie";
 
-    });
+      });
 
 
     if (movies.length === 0) {
@@ -428,9 +452,13 @@ document.addEventListener("DOMContentLoaded", function () {
               (post.title || "Movie") +
             '</h3>' +
 
+
             '<p>' +
-              formatPostDate(post.publishedAt) +
+              formatPostDate(
+                post.publishedAt
+              ) +
             '</p>' +
+
 
             '<button ' +
               'data-url="' +
@@ -451,7 +479,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    movieContainer.innerHTML = html;
+    movieContainer.innerHTML =
+      html;
 
 
     attachVideoButtons();
@@ -467,7 +496,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function attachVideoButtons() {
 
     var buttons =
-      document.querySelectorAll("[data-url]");
+      document.querySelectorAll(
+        "[data-url]"
+      );
 
 
     for (
@@ -476,18 +507,27 @@ document.addEventListener("DOMContentLoaded", function () {
       i++
     ) {
 
-      buttons[i].onclick = function () {
+      buttons[i].onclick =
+        function () {
 
-        var url =
-          this.getAttribute("data-url");
+          var url =
+            this.getAttribute(
+              "data-url"
+            );
 
-        var title =
-          this.getAttribute("data-title");
+
+          var title =
+            this.getAttribute(
+              "data-title"
+            );
 
 
-        openEmbed(title, url);
+          openEmbed(
+            title,
+            url
+          );
 
-      };
+        };
 
     }
 
@@ -499,63 +539,273 @@ document.addEventListener("DOMContentLoaded", function () {
      VIDEO MODAL
   ===================================== */
 
-  window.openEmbed = function (title, url) {
+  window.openEmbed =
+    function (title, url) {
 
-    var modal =
-      document.getElementById("embedModal");
-
-    var modalTitle =
-      document.getElementById("modalTitle");
-
-    var embedArea =
-      document.getElementById("embedArea");
+      var modal =
+        document.getElementById(
+          "embedModal"
+        );
 
 
-    if (!modal) {
-      return;
+      var modalTitle =
+        document.getElementById(
+          "modalTitle"
+        );
+
+
+      var embedArea =
+        document.getElementById(
+          "embedArea"
+        );
+
+
+      if (!modal || !embedArea) {
+        return;
+      }
+
+
+      /*
+       * Keep title available for desktop,
+       * while your mobile CSS hides it.
+       */
+
+      if (modalTitle) {
+
+        modalTitle.textContent =
+          title || "Video";
+
+      }
+
+
+      /*
+       * Remove previous player.
+       */
+
+      embedArea.innerHTML = "";
+
+
+      /*
+       * Only create iframe when a URL exists.
+       *
+       * No external-source text is displayed.
+       */
+
+      if (url) {
+
+        var iframe =
+          document.createElement(
+            "iframe"
+          );
+
+
+        iframe.src = url;
+
+        iframe.setAttribute(
+          "allowfullscreen",
+          ""
+        );
+
+
+        iframe.setAttribute(
+          "allow",
+          "autoplay; fullscreen; encrypted-media"
+        );
+
+
+        iframe.setAttribute(
+          "loading",
+          "lazy"
+        );
+
+
+        iframe.setAttribute(
+          "frameborder",
+          "0"
+        );
+
+
+        embedArea.appendChild(
+          iframe
+        );
+
+      }
+
+
+      /*
+       * Open modal.
+       */
+
+      modal.classList.add(
+        "open"
+      );
+
+
+      modal.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      /*
+       * Prevent background scrolling.
+       */
+
+      document.body.style.overflow =
+        "hidden";
+
+    };
+
+
+
+  /* =====================================
+     FULLSCREEN BUTTON
+  ===================================== */
+
+  document.addEventListener(
+    "click",
+    async function (event) {
+
+      var button =
+        event.target.closest(
+          ".fullscreen-btn"
+        );
+
+
+      if (!button) {
+        return;
+      }
+
+
+      var modalBox =
+        document.querySelector(
+          ".modal-box"
+        );
+
+
+      if (!modalBox) {
+        return;
+      }
+
+
+      try {
+
+        /*
+         * ENTER FULLSCREEN
+         */
+
+        if (!document.fullscreenElement) {
+
+          if (
+            modalBox.requestFullscreen
+          ) {
+
+            await modalBox.requestFullscreen();
+
+          }
+
+
+          /*
+           * Try to rotate device
+           * to landscape.
+           *
+           * Supported mainly by
+           * Android browsers.
+           */
+
+          if (
+            screen.orientation &&
+            screen.orientation.lock
+          ) {
+
+            try {
+
+              await screen.orientation.lock(
+                "landscape"
+              );
+
+            } catch (orientationError) {
+
+              console.log(
+                "Landscape orientation lock is not supported:",
+                orientationError
+              );
+
+            }
+
+          }
+
+        }
+
+        /*
+         * EXIT FULLSCREEN
+         */
+
+        else {
+
+          if (
+            document.exitFullscreen
+          ) {
+
+            await document.exitFullscreen();
+
+          }
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Fullscreen error:",
+          error
+        );
+
+      }
+
     }
+  );
 
 
-    modalTitle.textContent =
-      title || "Video";
 
+  /* =====================================
+     FULLSCREEN CHANGE
+  ===================================== */
 
-    if (url) {
+  document.addEventListener(
+    "fullscreenchange",
+    function () {
 
-      embedArea.innerHTML =
-        '<iframe ' +
-          'src="' + url + '" ' +
-          'allowfullscreen ' +
-          'loading="lazy">' +
-        '</iframe>';
+      /*
+       * When fullscreen closes,
+       * release orientation lock.
+       */
 
-    } else {
+      if (!document.fullscreenElement) {
 
-      embedArea.innerHTML =
-        '<div class="embed-placeholder">' +
+        if (
+          screen.orientation &&
+          screen.orientation.unlock
+        ) {
 
-          '<strong>' +
-            'Video not available yet' +
-          '</strong>' +
+          try {
 
-          '<p>' +
-            'Add an authorized external embed URL ' +
-            'to this post.' +
-          '</p>' +
+            screen.orientation.unlock();
 
-        '</div>';
+          } catch (error) {
+
+            console.log(
+              "Could not unlock orientation:",
+              error
+            );
+
+          }
+
+        }
+
+      }
 
     }
-
-
-    modal.classList.add("open");
-
-    modal.setAttribute(
-      "aria-hidden",
-      "false"
-    );
-
-  };
+  );
 
 
 
@@ -563,33 +813,185 @@ document.addEventListener("DOMContentLoaded", function () {
      CLOSE VIDEO
   ===================================== */
 
-  window.closeEmbed = function () {
+  window.closeEmbed =
+    async function () {
 
-    var modal =
-      document.getElementById("embedModal");
-
-    var embedArea =
-      document.getElementById("embedArea");
-
-
-    if (!modal) {
-      return;
-    }
+      var modal =
+        document.getElementById(
+          "embedModal"
+        );
 
 
-    modal.classList.remove("open");
+      var embedArea =
+        document.getElementById(
+          "embedArea"
+        );
 
-    modal.setAttribute(
-      "aria-hidden",
-      "true"
+
+      if (!modal) {
+        return;
+      }
+
+
+      /*
+       * Exit fullscreen first.
+       */
+
+      if (
+        document.fullscreenElement
+      ) {
+
+        try {
+
+          await document.exitFullscreen();
+
+        } catch (error) {
+
+          console.log(
+            "Could not exit fullscreen:",
+            error
+          );
+
+        }
+
+      }
+
+
+      /*
+       * Unlock orientation.
+       */
+
+      if (
+        screen.orientation &&
+        screen.orientation.unlock
+      ) {
+
+        try {
+
+          screen.orientation.unlock();
+
+        } catch (error) {
+
+          console.log(
+            "Could not unlock orientation:",
+            error
+          );
+
+        }
+
+      }
+
+
+      /*
+       * Close modal.
+       */
+
+      modal.classList.remove(
+        "open"
+      );
+
+
+      modal.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      /*
+       * Remove video iframe.
+       */
+
+      if (embedArea) {
+
+        embedArea.innerHTML =
+          "";
+
+      }
+
+
+      /*
+       * Restore page scrolling.
+       */
+
+      document.body.style.overflow =
+        "";
+
+    };
+
+
+
+  /* =====================================
+     CLOSE MODAL WITH BACKDROP
+  ===================================== */
+
+  var modal =
+    document.getElementById(
+      "embedModal"
     );
 
 
-    if (embedArea) {
-      embedArea.innerHTML = "";
-    }
+  if (modal) {
 
-  };
+    modal.addEventListener(
+      "click",
+      function (event) {
+
+        /*
+         * Only close when clicking
+         * directly on the modal/backdrop.
+         */
+
+        if (
+          event.target === modal ||
+          event.target.classList.contains(
+            "modal-backdrop"
+          )
+        ) {
+
+          closeEmbed();
+
+        }
+
+      }
+    );
+
+  }
+
+
+
+  /* =====================================
+     ESC KEY
+  ===================================== */
+
+  document.addEventListener(
+    "keydown",
+    function (event) {
+
+      if (
+        event.key === "Escape"
+      ) {
+
+        var modal =
+          document.getElementById(
+            "embedModal"
+          );
+
+
+        if (
+          modal &&
+          modal.classList.contains(
+            "open"
+          )
+        ) {
+
+          closeEmbed();
+
+        }
+
+      }
+
+    }
+  );
 
 
 
@@ -598,19 +1000,30 @@ document.addEventListener("DOMContentLoaded", function () {
   ===================================== */
 
   var menuToggle =
-    document.getElementById("menuToggle");
+    document.getElementById(
+      "menuToggle"
+    );
+
 
   var mainNav =
-    document.getElementById("mainNav");
+    document.getElementById(
+      "mainNav"
+    );
 
 
-  if (menuToggle && mainNav) {
+  if (
+    menuToggle &&
+    mainNav
+  ) {
 
-    menuToggle.onclick = function () {
+    menuToggle.onclick =
+      function () {
 
-      mainNav.classList.toggle("open");
+        mainNav.classList.toggle(
+          "open"
+        );
 
-    };
+      };
 
   }
 
@@ -621,7 +1034,9 @@ document.addEventListener("DOMContentLoaded", function () {
   ===================================== */
 
   var year =
-    document.getElementById("year");
+    document.getElementById(
+      "year"
+    );
 
 
   if (year) {
