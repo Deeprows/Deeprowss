@@ -1,29 +1,52 @@
 [
   {
-    "id": "1",
+    "type": "live",
     "title": "Arsenal vs Chelsea",
-    "category": "Premier League",
-    "date": "2026-08-14",
     "home": "Arsenal",
     "away": "Chelsea",
-    "thumbnail": "",
-    "description": "Arsenal vs Chelsea football coverage.",
-    "embedUrl": "https://filemoon.org/en/LJlGnPwv315w/embed",
     "status": "UPCOMING",
-    "type": "live"
+    "category": "Premier League",
+    "description": "Arsenal vs Chelsea football coverage.",
+    "publishedAt": "2026-08-14T18:00:00Z",
+    "embedUrl": "https://filemoon.org/en/LJlGnPwv315w/embed"
   },
-
   {
-    "id": "2",
+    "type": "live",
     "title": "Barcelona vs Real Madrid",
-    "category": "La Liga",
-    "date": "2026-08-15",
     "home": "Barcelona",
     "away": "Real Madrid",
-    "thumbnail": "",
-    "description": "Barcelona vs Real Madrid football coverage.",
-    "embedUrl": "https://streamtp-golden1.click/global1.php?stream=dsports2",
     "status": "UPCOMING",
-    "type": "live"
+    "category": "La Liga",
+    "description": "Barcelona vs Real Madrid football coverage.",
+    "publishedAt": "2026-08-15T18:00:00Z",
+    "embedUrl": "https://streamtp-golden1.click/global1.php?stream=dsports2"
+  },
+  {
+    "type": "highlight",
+    "title": "YOUR HIGHLIGHT TITLE",
+    "description": "YOUR HIGHLIGHT DESCRIPTION",
+    "publishedAt": "2026-08-14T16:00:00Z",
+    "embedUrl": "YOUR_HIGHLIGHT_EMBED_URL"
+  },
+  {
+    "type": "highlight",
+    "title": "YOUR SECOND HIGHLIGHT TITLE",
+    "description": "YOUR SECOND HIGHLIGHT DESCRIPTION",
+    "publishedAt": "2026-08-14T14:00:00Z",
+    "embedUrl": "YOUR_SECOND_HIGHLIGHT_EMBED_URL"
+  },
+  {
+    "type": "movie",
+    "title": "YOUR MOVIE TITLE",
+    "category": "Moana 2026",
+    "publishedAt": "2026-08-14T12:00:00Z",
+    "embedUrl": "https://vsembed.su/embed/movie/tt27419466"
+  },
+  {
+    "type": "movie",
+    "title": "YOUR SECOND MOVIE TITLE",
+    "category": "MOVIE",
+    "publishedAt": "2026-08-14T10:00:00Z",
+    "embedUrl": "YOUR_SECOND_MOVIE_EMBED_URL"
   }
 ]
