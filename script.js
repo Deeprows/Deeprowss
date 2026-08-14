@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var movieContainer =
     document.getElementById("moviePosts");
 
+
   console.log("Deeprowss script loaded");
 
 
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     true
   );
 
+
   xhr.onreadystatechange = function () {
 
     if (xhr.readyState !== 4) {
@@ -37,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var posts =
           JSON.parse(xhr.responseText);
+
 
         console.log(
           "Deeprowss posts loaded:",
@@ -565,10 +568,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /*
-       * Keep title available for desktop,
-       * while your mobile CSS hides it.
-       */
+      /* Set title */
 
       if (modalTitle) {
 
@@ -578,18 +578,27 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /*
-       * Remove previous player.
-       */
+      /* Remove old player */
 
       embedArea.innerHTML = "";
 
 
-      /*
-       * Only create iframe when a URL exists.
-       *
-       * No external-source text is displayed.
-       */
+      /* Remove old fullscreen controls */
+
+      var oldControls =
+        modal.querySelector(
+          ".video-controls"
+        );
+
+
+      if (oldControls) {
+        oldControls.remove();
+      }
+
+
+      /* =================================
+         CREATE IFRAME
+      ================================= */
 
       if (url) {
 
@@ -599,7 +608,9 @@ document.addEventListener("DOMContentLoaded", function () {
           );
 
 
-        iframe.src = url;
+        iframe.src =
+          url;
+
 
         iframe.setAttribute(
           "allowfullscreen",
@@ -625,6 +636,12 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
+        iframe.setAttribute(
+          "scrolling",
+          "no"
+        );
+
+
         embedArea.appendChild(
           iframe
         );
@@ -632,9 +649,69 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
+      /* =================================
+         FULLSCREEN CONTROLS
+      ================================= */
+
+      var controls =
+        document.createElement(
+          "div"
+        );
+
+
+      controls.className =
+        "video-controls";
+
+
+      var fullscreenButton =
+        document.createElement(
+          "button"
+        );
+
+
+      fullscreenButton.type =
+        "button";
+
+
+      fullscreenButton.className =
+        "fullscreen-btn";
+
+
+      fullscreenButton.setAttribute(
+        "aria-label",
+        "Fullscreen"
+      );
+
+
+      fullscreenButton.setAttribute(
+        "title",
+        "Fullscreen"
+      );
+
+
+      fullscreenButton.innerHTML =
+        "⛶";
+
+
+      controls.appendChild(
+        fullscreenButton
+      );
+
+
       /*
-       * Open modal.
+       * Put controls immediately
+       * underneath the player.
        */
+
+      embedArea.insertAdjacentElement(
+        "afterend",
+        controls
+      );
+
+
+      /* =================================
+         OPEN MODAL
+      ================================= */
 
       modal.classList.add(
         "open"
@@ -646,10 +723,6 @@ document.addEventListener("DOMContentLoaded", function () {
         "false"
       );
 
-
-      /*
-       * Prevent background scrolling.
-       */
 
       document.body.style.overflow =
         "hidden";
@@ -690,9 +763,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
 
-        /*
-         * ENTER FULLSCREEN
-         */
+        /* ===============================
+           ENTER FULLSCREEN
+        =============================== */
 
         if (!document.fullscreenElement) {
 
@@ -707,10 +780,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           /*
            * Try to rotate device
-           * to landscape.
-           *
-           * Supported mainly by
-           * Android browsers.
+           * into landscape.
            */
 
           if (
@@ -727,7 +797,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } catch (orientationError) {
 
               console.log(
-                "Landscape orientation lock is not supported:",
+                "Landscape orientation lock unavailable:",
                 orientationError
               );
 
@@ -737,9 +807,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-        /*
-         * EXIT FULLSCREEN
-         */
+
+        /* ===============================
+           EXIT FULLSCREEN
+        =============================== */
 
         else {
 
@@ -775,12 +846,54 @@ document.addEventListener("DOMContentLoaded", function () {
     "fullscreenchange",
     function () {
 
-      /*
-       * When fullscreen closes,
-       * release orientation lock.
-       */
+      var button =
+        document.querySelector(
+          ".fullscreen-btn"
+        );
 
-      if (!document.fullscreenElement) {
+
+      if (document.fullscreenElement) {
+
+        if (button) {
+
+          button.innerHTML =
+            "⛶";
+
+          button.setAttribute(
+            "aria-label",
+            "Exit fullscreen"
+          );
+
+          button.setAttribute(
+            "title",
+            "Exit fullscreen"
+          );
+
+        }
+
+      } else {
+
+        if (button) {
+
+          button.innerHTML =
+            "⛶";
+
+          button.setAttribute(
+            "aria-label",
+            "Fullscreen"
+          );
+
+          button.setAttribute(
+            "title",
+            "Fullscreen"
+          );
+
+        }
+
+
+        /*
+         * Unlock orientation.
+         */
 
         if (
           screen.orientation &&
@@ -794,7 +907,7 @@ document.addEventListener("DOMContentLoaded", function () {
           } catch (error) {
 
             console.log(
-              "Could not unlock orientation:",
+              "Orientation unlock unavailable:",
               error
             );
 
@@ -833,9 +946,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /*
-       * Exit fullscreen first.
-       */
+      /* Exit fullscreen */
 
       if (
         document.fullscreenElement
@@ -857,9 +968,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /*
-       * Unlock orientation.
-       */
+      /* Unlock orientation */
 
       if (
         screen.orientation &&
@@ -882,9 +991,30 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /*
-       * Close modal.
-       */
+      /* Remove video */
+
+      if (embedArea) {
+
+        embedArea.innerHTML =
+          "";
+
+      }
+
+
+      /* Remove controls */
+
+      var controls =
+        modal.querySelector(
+          ".video-controls"
+        );
+
+
+      if (controls) {
+        controls.remove();
+      }
+
+
+      /* Close modal */
 
       modal.classList.remove(
         "open"
@@ -897,21 +1027,7 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
 
-      /*
-       * Remove video iframe.
-       */
-
-      if (embedArea) {
-
-        embedArea.innerHTML =
-          "";
-
-      }
-
-
-      /*
-       * Restore page scrolling.
-       */
+      /* Restore scrolling */
 
       document.body.style.overflow =
         "";
@@ -921,7 +1037,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     CLOSE MODAL WITH BACKDROP
+     CLOSE BACKDROP
   ===================================== */
 
   var modal =
@@ -935,11 +1051,6 @@ document.addEventListener("DOMContentLoaded", function () {
     modal.addEventListener(
       "click",
       function (event) {
-
-        /*
-         * Only close when clicking
-         * directly on the modal/backdrop.
-         */
 
         if (
           event.target === modal ||
