@@ -21,11 +21,9 @@
   box-sizing: border-box;
 }
 
-
 html {
   scroll-behavior: smooth;
 }
-
 
 body {
   margin: 0;
@@ -45,23 +43,19 @@ body {
   line-height: 1.55;
 }
 
-
 a {
   color: inherit;
   text-decoration: none;
 }
-
 
 button,
 input {
   font: inherit;
 }
 
-
 button {
   cursor: pointer;
 }
-
 
 img {
   max-width: 100%;
@@ -70,11 +64,10 @@ img {
 
 
 .container {
-  width:
-    min(
-      var(--max),
-      calc(100% - 32px)
-    );
+  width: min(
+    var(--max),
+    calc(100% - 32px)
+  );
 
   margin: auto;
 }
@@ -86,23 +79,15 @@ img {
 
 .site-header {
   position: sticky;
-
   top: 0;
-
   z-index: 50;
 
-  background:
-    rgba(7, 9, 13, .88);
+  background: rgba(7, 9, 13, .88);
 
-  backdrop-filter:
-    blur(16px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 
-  -webkit-backdrop-filter:
-    blur(16px);
-
-  border-bottom:
-    1px solid
-    var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
 
@@ -110,18 +95,14 @@ img {
   min-height: 70px;
 
   display: flex;
-
   align-items: center;
 
   gap: 28px;
 }
 
 
-/* LOGO */
-
 .brand {
   display: flex;
-
   align-items: center;
 
   gap: 10px;
@@ -142,11 +123,9 @@ img {
 
 .brand-mark {
   width: 34px;
-
   height: 34px;
 
   display: grid;
-
   place-items: center;
 
   border-radius: 10px;
@@ -159,7 +138,9 @@ img {
 }
 
 
-/* NAV */
+/* =========================
+   NAV
+========================= */
 
 .main-nav {
   display: flex;
@@ -176,8 +157,7 @@ img {
 
   font-size: 14px;
 
-  transition:
-    color .2s ease;
+  transition: color .2s ease;
 }
 
 
@@ -187,7 +167,9 @@ img {
 }
 
 
-/* SEARCH */
+/* =========================
+   SEARCH
+========================= */
 
 .nav-search {
   position: relative;
@@ -203,9 +185,7 @@ img {
 
   color: white;
 
-  border:
-    1px solid
-    var(--line);
+  border: 1px solid var(--line);
 
   border-radius: 999px;
 
@@ -229,7 +209,6 @@ img {
   position: absolute;
 
   right: 13px;
-
   top: 7px;
 
   color: var(--muted);
@@ -237,8 +216,6 @@ img {
   font-size: 20px;
 }
 
-
-/* MOBILE MENU BUTTON */
 
 .menu-toggle {
   display: none;
@@ -261,7 +238,6 @@ img {
   min-height: 540px;
 
   display: flex;
-
   align-items: center;
 
   position: relative;
@@ -319,8 +295,7 @@ img {
 
   height: 380px;
 
-  transform:
-    rotate(-8deg);
+  transform: rotate(-8deg);
 
   background:
     rgba(255, 255, 255, .025);
@@ -416,8 +391,7 @@ img {
 
 
 .btn:hover {
-  transform:
-    translateY(-1px);
+  transform: translateY(-1px);
 }
 
 
@@ -438,22 +412,6 @@ img {
 
   background:
     rgba(255, 255, 255, .04);
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-.search-section {
-  min-height: 0;
-}
-
-
-#searchStatus {
-  color: var(--muted);
-
-  font-size: 14px;
 }
 
 
@@ -509,7 +467,7 @@ img {
 
 
 /* =========================
-   HOMEPAGE
+   HORIZONTAL POSTS
 ========================= */
 
 .horizontal-posts {
@@ -527,11 +485,9 @@ img {
     14px
     2px;
 
-  scroll-snap-type:
-    x proximity;
+  scroll-snap-type: x proximity;
 
-  -webkit-overflow-scrolling:
-    touch;
+  -webkit-overflow-scrolling: touch;
 
   scrollbar-width: thin;
 }
@@ -608,7 +564,7 @@ img {
 
 
 /* =========================
-   FOOTBALL LIVE CARD
+   LIVE CARD
 ========================= */
 
 .live-card {
@@ -738,13 +694,41 @@ img {
 .media-thumb {
   height: 180px;
 
+  position: relative;
+
+  display: grid;
+
+  place-items: center;
+
+  overflow: hidden;
+
+  background: #090c12;
+}
+
+
+.media-image {
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
+}
+
+
+.media-placeholder {
+  width: 100%;
+
+  height: 100%;
+
   display: grid;
 
   place-items: center;
 
   position: relative;
-
-  overflow: hidden;
 }
 
 
@@ -759,72 +743,16 @@ img {
 }
 
 
-.goals-thumb {
-  background:
-    radial-gradient(
-      circle at 30% 30%,
-      #53233a,
-      #16131c 55%,
-      #090b10
-    );
-}
-
-
-.skills-thumb {
-  background:
-    radial-gradient(
-      circle at 70% 40%,
-      #243f38,
-      #0c1715 55%,
-      #090b10
-    );
-}
-
-
-/* HIGHLIGHT THUMBNAIL */
-
-.media-thumb img {
-  position: absolute;
-
-  inset: 0;
-
-  width: 100%;
-
-  height: 100%;
-
-  object-fit: cover;
-
-  display: block;
-
-  z-index: 1;
-}
-
-
-/* Thumbnail overlay */
-
-.media-thumb::after {
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  background:
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, .65),
-      transparent 60%
-    );
-
-  z-index: 2;
-
-  pointer-events: none;
-}
-
-
 .play {
-  width: 54px;
+  position: absolute;
 
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 54px;
   height: 54px;
 
   display: grid;
@@ -842,9 +770,7 @@ img {
     0 10px 30px
     rgba(0, 0, 0, .35);
 
-  position: relative;
-
-  z-index: 3;
+  z-index: 2;
 }
 
 
@@ -893,69 +819,48 @@ img {
    MOVIES
 ========================= */
 
-.poster {
-  aspect-ratio: 2 / 3;
+/*
+   Movies now use the same compact
+   visual structure as highlights.
+*/
 
-  display: flex;
-
-  align-items: flex-end;
-
-  padding: 16px;
-
-  font-weight: 900;
-
-  letter-spacing: 1.5px;
+.movie-poster {
+  height: 180px;
 
   position: relative;
 
+  display: grid;
+
+  place-items: center;
+
   overflow: hidden;
+
+  background: #090c12;
 }
 
 
-/* Movie thumbnail */
-
-.poster img {
-  position: absolute;
-
-  inset: 0;
-
+.movie-thumbnail {
   width: 100%;
 
   height: 100%;
 
-  max-width: none;
+  display: block;
 
   object-fit: cover;
 
-  display: block;
-
-  z-index: 1;
+  object-position: center;
 }
 
 
-/* Dark overlay over movie thumbnail */
+.movie-placeholder {
+  width: 100%;
 
-.poster::after {
-  content: "";
+  height: 100%;
 
-  position: absolute;
+  display: grid;
 
-  inset: 0;
+  place-items: center;
 
-  background:
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, .72),
-      rgba(0, 0, 0, .08) 65%
-    );
-
-  z-index: 2;
-
-  pointer-events: none;
-}
-
-
-.poster-one {
   background:
     linear-gradient(
       145deg,
@@ -963,53 +868,67 @@ img {
       #1d1724 55%,
       #090b10
     );
+
+  color: white;
+
+  font-weight: 900;
+
+  letter-spacing: 1.5px;
 }
 
 
-.poster-two {
-  background:
-    linear-gradient(
-      145deg,
-      #182f4e,
-      #111521 55%,
-      #090b10
-    );
-}
-
-
-.poster-three {
-  background:
-    linear-gradient(
-      145deg,
-      #4b3c18,
-      #1c1820 55%,
-      #090b10
-    );
-}
-
-
-.poster-four {
-  background:
-    linear-gradient(
-      145deg,
-      #173c38,
-      #101a22 55%,
-      #090b10
-    );
-}
-
-
-.poster span {
+.movie-placeholder span {
   font-size: 11px;
-
-  position: relative;
-
-  z-index: 3;
 }
 
 
-.movie-info {
+.movie-card .movie-info {
   padding: 17px;
+}
+
+
+.movie-card .movie-info h3 {
+  margin:
+    7px
+    0
+    5px;
+
+  font-size: 18px;
+}
+
+
+.movie-card .movie-info p {
+  margin:
+    0
+    0
+    14px;
+}
+
+
+/* =========================
+   IMAGE FAILURE
+========================= */
+
+.image-failed {
+  background:
+    linear-gradient(
+      145deg,
+      #171c25,
+      #090b10
+    );
+
+  display: grid;
+
+  place-items: center;
+}
+
+
+.image-failed:after {
+  content: "Image unavailable";
+
+  color: var(--muted);
+
+  font-size: 12px;
 }
 
 
@@ -1052,7 +971,7 @@ img {
 
 
 /* =========================
-   FULL POSTS PAGES
+   PAGE HERO
 ========================= */
 
 .page-hero {
@@ -1210,11 +1129,8 @@ img {
   background:
     rgba(0, 0, 0, .78);
 
-  backdrop-filter:
-    blur(6px);
-
-  -webkit-backdrop-filter:
-    blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 
@@ -1282,7 +1198,6 @@ img {
 
 /* =========================
    VIDEO PLAYER
-   4:3
 ========================= */
 
 .embed-area {
@@ -1371,8 +1286,6 @@ img {
 
   cursor: pointer;
 
-  opacity: 1;
-
   -webkit-tap-highlight-color:
     transparent;
 
@@ -1388,13 +1301,12 @@ img {
 
 
 .fullscreen-btn:active {
-  transform:
-    scale(.97);
+  transform: scale(.97);
 }
 
 
 /* =========================
-   FULLSCREEN VIDEO
+   FULLSCREEN
 ========================= */
 
 .modal-box:fullscreen {
@@ -1454,8 +1366,6 @@ img {
 }
 
 
-/* WEBKIT FULLSCREEN */
-
 .modal-box:-webkit-full-screen {
   width: 100vw;
 
@@ -1510,71 +1420,6 @@ img {
 .modal-box:-webkit-full-screen .modal-close,
 .modal-box:-webkit-full-screen h2 {
   display: none;
-}
-
-
-/* =========================
-   EMBED PLACEHOLDER
-========================= */
-
-.embed-placeholder {
-  text-align: center;
-
-  padding: 30px;
-
-  color: var(--muted);
-}
-
-
-.embed-placeholder strong {
-  display: block;
-
-  color: white;
-
-  margin-bottom: 8px;
-}
-
-
-.embed-note {
-  color: var(--muted);
-
-  font-size: 12px;
-}
-
-
-code {
-  color: #ff8ba0;
-}
-
-
-/* =========================
-   NO RESULTS
-========================= */
-
-.no-results {
-  display: none;
-
-  position: fixed;
-
-  right: 20px;
-
-  bottom: 20px;
-
-  z-index: 90;
-
-  background: #151a22;
-
-  border:
-    1px solid
-    var(--line);
-
-  padding:
-    12px
-    15px;
-
-  border-radius: 9px;
-
-  color: #d7dde6;
 }
 
 
@@ -1680,7 +1525,6 @@ code {
     position: absolute;
 
     left: 16px;
-
     right: 16px;
 
     top: 70px;
@@ -1743,8 +1587,6 @@ code {
   }
 
 
-  /* HEADER */
-
   .nav-wrap {
     gap: 8px;
   }
@@ -1776,8 +1618,6 @@ code {
   }
 
 
-  /* HERO */
-
   .hero {
     min-height: 500px;
   }
@@ -1807,8 +1647,6 @@ code {
   }
 
 
-  /* SECTIONS */
-
   .section {
     padding-top: 50px;
   }
@@ -1825,8 +1663,6 @@ code {
     font-size: 25px;
   }
 
-
-  /* HORIZONTAL CARDS */
 
   .horizontal-posts {
     gap: 12px;
@@ -1862,16 +1698,12 @@ code {
   }
 
 
-  /* FULL POSTS GRID */
-
   .all-posts-grid {
     grid-template-columns: 1fr;
 
     gap: 14px;
   }
 
-
-  /* PAGE HERO */
 
   .page-hero {
     padding:
@@ -1891,8 +1723,6 @@ code {
   }
 
 
-  /* FOOTER */
-
   .footer-wrap {
     grid-template-columns: 1fr;
   }
@@ -1911,8 +1741,17 @@ code {
 
 
   /* =========================
+     MOBILE MEDIA THUMBNAILS
+  ========================= */
+
+  .media-thumb,
+  .movie-poster {
+    height: 180px;
+  }
+
+
+  /* =========================
      MOBILE VIDEO MODAL
-     4:3 CENTERED
   ========================= */
 
   .modal {
@@ -1986,10 +1825,6 @@ code {
   }
 
 
-  /* =========================
-     4:3 PLAYER
-  ========================= */
-
   .embed-area {
     width: 100%;
 
@@ -2010,29 +1845,6 @@ code {
     flex-shrink: 0;
   }
 
-
-  .embed-area iframe {
-    display: block;
-
-    width: 100%;
-
-    height: 100%;
-
-    min-width: 100%;
-
-    min-height: 100%;
-
-    margin: 0;
-
-    padding: 0;
-
-    border: 0;
-  }
-
-
-  /* =========================
-     MOBILE FULLSCREEN BUTTON
-  ========================= */
 
   .video-controls {
     width: 100%;
@@ -2058,20 +1870,6 @@ code {
 
 
   .fullscreen-btn {
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: var(--accent);
-
-    color: #fff;
-
-    border: 0;
-
-    border-radius: 5px;
-
     padding:
       5px
       9px;
@@ -2079,40 +1877,8 @@ code {
     min-height: 23px;
 
     font-size: 9px;
-
-    font-weight: 600;
-
-    line-height: 1;
-
-    white-space: nowrap;
-
-    cursor: pointer;
-
-    opacity: 1;
-
-    -webkit-tap-highlight-color:
-      transparent;
-
-    transition:
-      background .2s ease,
-      transform .15s ease;
   }
 
-
-  .fullscreen-btn:hover {
-    background: var(--accent-2);
-  }
-
-
-  .fullscreen-btn:active {
-    transform:
-      scale(.97);
-  }
-
-
-  /* =========================
-     MOBILE FULLSCREEN
-  ========================= */
 
   .modal-box:fullscreen {
     width: 100vw;
@@ -2169,19 +1935,10 @@ code {
   }
 
 
-  .modal-box:fullscreen
-  .modal-close {
+  .modal-box:fullscreen .modal-close {
     display: none;
   }
 
-
-  .modal-box:fullscreen
-  .fullscreen-btn {
-    font-size: 9px;
-  }
-
-
-  /* WEBKIT FULLSCREEN */
 
   .modal-box:-webkit-full-screen {
     width: 100vw;
@@ -2214,8 +1971,7 @@ code {
   }
 
 
-  .modal-box:-webkit-full-screen
-  .embed-area {
+  .modal-box:-webkit-full-screen .embed-area {
     width: 100vw;
 
     aspect-ratio: 4 / 3;
@@ -2228,8 +1984,7 @@ code {
   }
 
 
-  .modal-box:-webkit-full-screen
-  .video-controls {
+  .modal-box:-webkit-full-screen .video-controls {
     width: 100vw;
 
     height: 28px;
@@ -2238,8 +1993,7 @@ code {
   }
 
 
-  .modal-box:-webkit-full-screen
-  .modal-close {
+  .modal-box:-webkit-full-screen .modal-close {
     display: none;
   }
 
@@ -2292,8 +2046,6 @@ code {
     text-align: center;
   }
 
-
-  /* EXTRA SMALL FULLSCREEN BUTTON */
 
   .fullscreen-btn {
     padding:
