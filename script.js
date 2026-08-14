@@ -1,4 +1,3 @@
-```javascript
 document.addEventListener("DOMContentLoaded", function () {
 
   var liveContainer =
@@ -273,10 +272,10 @@ document.addEventListener("DOMContentLoaded", function () {
           '<button ' +
             'class="watch-btn" ' +
             'data-url="' +
-              escapeAttribute(post.embedUrl || "") +
+              (post.embedUrl || "") +
             '" ' +
             'data-title="' +
-              escapeAttribute(post.title || "Video") +
+              (post.title || "Video") +
             '">' +
 
             'Watch' +
@@ -355,17 +354,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             '<h3>' +
-              escapeHTML(
-                post.title ||
-                "Football Highlight"
-              ) +
+              (post.title ||
+               "Football Highlight") +
             '</h3>' +
 
 
             '<p>' +
-              escapeHTML(
-                post.description || ""
-              ) +
+              (post.description || "") +
             '</p>' +
 
 
@@ -378,12 +373,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             '<button ' +
               'data-url="' +
-                escapeAttribute(post.embedUrl || "") +
+                (post.embedUrl || "") +
               '" ' +
               'data-title="' +
-                escapeAttribute(
-                  post.title || "Highlight"
-                ) +
+                (post.title || "Highlight") +
               '">' +
 
               'Watch highlight' +
@@ -450,9 +443,7 @@ document.addEventListener("DOMContentLoaded", function () {
           '<div class="poster poster-one">' +
 
             '<span>' +
-              escapeHTML(
-                post.category || "MOVIE"
-              ) +
+              (post.category || "MOVIE") +
             '</span>' +
 
           '</div>' +
@@ -461,9 +452,7 @@ document.addEventListener("DOMContentLoaded", function () {
           '<div class="movie-info">' +
 
             '<h3>' +
-              escapeHTML(
-                post.title || "Movie"
-              ) +
+              (post.title || "Movie") +
             '</h3>' +
 
 
@@ -476,12 +465,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             '<button ' +
               'data-url="' +
-                escapeAttribute(post.embedUrl || "") +
+                (post.embedUrl || "") +
               '" ' +
               'data-title="' +
-                escapeAttribute(
-                  post.title || "Movie"
-                ) +
+                (post.title || "Movie") +
               '">' +
 
               'View' +
@@ -505,39 +492,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  /* =====================================
-     ESCAPE HTML
-  ===================================== */
-
-  function escapeHTML(value) {
-
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-  }
-
-
-
-  /* =====================================
-     ESCAPE ATTRIBUTE
-  ===================================== */
-
-  function escapeAttribute(value) {
-
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/"/g, "&quot;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-
-  }
-
-
-
+  ```javascript
   /* =====================================
      VIDEO BUTTONS
   ===================================== */
@@ -571,349 +526,688 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-          openEmbed(
-            title,
-            url
+          if (!url) {
+            return;
+          }
+
+
+          /*
+           * Open a new page containing
+           * the iframe.
+           */
+
+          var videoPage =
+            window.open(
+              "",
+              "_blank"
+            );
+
+
+          if (!videoPage) {
+            return;
+          }
+
+
+          videoPage.document.open();
+
+
+          videoPage.document.write(
+            '<!DOCTYPE html>' +
+            '<html lang="en">' +
+
+            '<head>' +
+
+              '<meta charset="UTF-8">' +
+
+              '<meta name="viewport" ' +
+                'content="width=device-width, initial-scale=1.0">' +
+
+              '<title>' +
+                (title || "Deeprowss Video") +
+              '</title>' +
+
+              '<style>' +
+
+                'html, body {' +
+                  'margin: 0;' +
+                  'padding: 0;' +
+                  'width: 100%;' +
+                  'height: 100%;' +
+                  'background: #000;' +
+                  'overflow: hidden;' +
+                '}' +
+
+                'iframe {' +
+                  'display: block;' +
+                  'width: 100%;' +
+                  'height: 100%;' +
+                  'border: 0;' +
+                  'margin: 0;' +
+                  'padding: 0;' +
+                '}' +
+
+              '</style>' +
+
+            '</head>' +
+
+            '<body>' +
+
+              '<iframe ' +
+                'src="' + url + '" ' +
+                'allowfullscreen ' +
+                'allow="autoplay; fullscreen; encrypted-media" ' +
+                'frameborder="0" ' +
+                'scrolling="no" ' +
+                'title="' +
+                  (title || "Deeprowss Video") +
+                '">' +
+              '</iframe>' +
+
+            '</body>' +
+
+            '</html>'
           );
+
+
+          videoPage.document.close();
 
         };
 
     }
 
   }
+```
+
 
 
 
   /* =====================================
-     OPEN VIDEO ON SEPARATE PAGE
+     VIDEO MODAL
   ===================================== */
 
   window.openEmbed =
     function (title, url) {
 
-      /*
-       * No video URL
-       */
-
-      if (!url) {
-
-        alert(
-          "Video not available yet."
+      var modal =
+        document.getElementById(
+          "embedModal"
         );
 
+
+      var modalTitle =
+        document.getElementById(
+          "modalTitle"
+        );
+
+
+      var embedArea =
+        document.getElementById(
+          "embedArea"
+        );
+
+
+      if (!modal || !embedArea) {
         return;
+      }
+
+
+      /* Set title */
+
+      if (modalTitle) {
+
+        modalTitle.textContent =
+          title || "Video";
 
       }
 
 
-      /*
-       * Open a new browser tab/page
-       */
+      /* Remove previous player */
 
-      var videoWindow =
-        window.open(
-          "",
-          "_blank"
+      embedArea.innerHTML = "";
+
+
+      /* Remove previous fullscreen controls */
+
+      var oldControls =
+        modal.querySelector(
+          ".video-controls"
         );
 
 
-      /*
-       * Browser blocked popup
-       */
+      if (oldControls) {
+        oldControls.remove();
+      }
 
-      if (!videoWindow) {
 
-        alert(
-          "Please allow pop-ups for Deeprowss."
+      /* =================================
+         CREATE VIDEO IFRAME
+      ================================= */
+
+      if (url) {
+
+        var iframe =
+          document.createElement(
+            "iframe"
+          );
+
+
+        iframe.src =
+          url;
+
+
+        iframe.setAttribute(
+          "allowfullscreen",
+          ""
         );
 
-        return;
+
+        iframe.setAttribute(
+          "allow",
+          "autoplay; fullscreen; encrypted-media"
+        );
+
+
+        iframe.setAttribute(
+          "loading",
+          "lazy"
+        );
+
+
+        iframe.setAttribute(
+          "frameborder",
+          "0"
+        );
+
+
+        iframe.setAttribute(
+          "scrolling",
+          "no"
+        );
+
+
+        iframe.setAttribute(
+          "title",
+          title || "Video"
+        );
+
+
+        embedArea.appendChild(
+          iframe
+        );
 
       }
 
 
-      /*
-       * Safely prepare title
-       */
+      /* =================================
+         FULLSCREEN CONTROLS
+      ================================= */
 
-      var safeTitle =
-        escapeHTML(
-          title || "Deeprowss Video"
+      var controls =
+        document.createElement(
+          "div"
         );
 
 
-      /*
-       * Safely prepare URL
-       */
+      controls.className =
+        "video-controls";
 
-      var safeURL =
-        escapeAttribute(url);
 
+      var fullscreenButton =
+        document.createElement(
+          "button"
+        );
 
-      /*
-       * Build separate video page
-       */
 
-      videoWindow.document.open();
+      fullscreenButton.type =
+        "button";
 
 
-      videoWindow.document.write(
+      fullscreenButton.className =
+        "fullscreen-btn";
 
-        '<!DOCTYPE html>' +
 
-        '<html lang="en">' +
-
-        '<head>' +
-
-          '<meta charset="UTF-8">' +
-
-          '<meta name="viewport" ' +
-            'content="width=device-width, ' +
-            'initial-scale=1.0">' +
-
-          '<title>' +
-            safeTitle +
-            ' — Deeprowss' +
-          '</title>' +
-
-
-          '<style>' +
-
-            '* {' +
-
-              'box-sizing:border-box;' +
-
-            '}' +
-
-
-            'html,' +
-            'body {' +
-
-              'margin:0;' +
-
-              'padding:0;' +
-
-              'width:100%;' +
-
-              'height:100%;' +
-
-              'background:#000;' +
-
-              'overflow:hidden;' +
-
-              'font-family:Arial,sans-serif;' +
-
-            '}' +
-
-
-            '.video-page {' +
-
-              'width:100%;' +
-
-              'height:100%;' +
-
-              'display:flex;' +
-
-              'flex-direction:column;' +
-
-              'background:#000;' +
-
-            '}' +
-
-
-            '.video-header {' +
-
-              'height:50px;' +
-
-              'min-height:50px;' +
-
-              'display:flex;' +
-
-              'align-items:center;' +
-
-              'gap:8px;' +
-
-              'padding:0 10px;' +
-
-              'background:#08090d;' +
-
-              'color:#fff;' +
-
-            '}' +
-
-
-            '.back-button {' +
-
-              'border:0;' +
-
-              'background:transparent;' +
-
-              'color:#fff;' +
-
-              'font-size:14px;' +
-
-              'padding:8px 10px;' +
-
-              'cursor:pointer;' +
-
-            '}' +
-
-
-            '.video-title {' +
-
-              'font-size:14px;' +
-
-              'font-weight:700;' +
-
-              'white-space:nowrap;' +
-
-              'overflow:hidden;' +
-
-              'text-overflow:ellipsis;' +
-
-            '}' +
-
-
-            '.iframe-container {' +
-
-              'width:100%;' +
-
-              'height:calc(100% - 50px);' +
-
-              'background:#000;' +
-
-              'overflow:hidden;' +
-
-            '}' +
-
-
-            'iframe {' +
-
-              'display:block;' +
-
-              'width:100%;' +
-
-              'height:100%;' +
-
-              'border:0;' +
-
-              'margin:0;' +
-
-              'padding:0;' +
-
-            '}' +
-
-
-            '@media (max-width:600px) {' +
-
-              '.video-header {' +
-
-                'height:44px;' +
-
-                'min-height:44px;' +
-
-                'padding:0 5px;' +
-
-              '}' +
-
-              '.iframe-container {' +
-
-                'height:calc(100% - 44px);' +
-
-              '}' +
-
-              '.video-title {' +
-
-                'font-size:13px;' +
-
-              '}' +
-
-            '}' +
-
-          '</style>' +
-
-        '</head>' +
-
-
-        '<body>' +
-
-          '<div class="video-page">' +
-
-            '<div class="video-header">' +
-
-              '<button ' +
-                'class="back-button" ' +
-                'onclick="history.back()">' +
-
-                '← Back' +
-
-              '</button>' +
-
-              '<div class="video-title">' +
-                safeTitle +
-              '</div>' +
-
-            '</div>' +
-
-
-            '<div class="iframe-container">' +
-
-              '<iframe ' +
-
-                'src="' +
-                  safeURL +
-                '" ' +
-
-                'allowfullscreen ' +
-
-                'allow="' +
-                  'autoplay; fullscreen; ' +
-                  'encrypted-media; ' +
-                  'picture-in-picture"' +
-
-                'loading="eager" ' +
-
-                'frameborder="0" ' +
-
-                'scrolling="no" ' +
-
-                'title="' +
-                  safeTitle +
-                '">' +
-
-              '</iframe>' +
-
-            '</div>' +
-
-          '</div>' +
-
-        '</body>' +
-
-        '</html>'
-
+      fullscreenButton.setAttribute(
+        "aria-label",
+        "Tap to watch in Fullscreen"
       );
 
 
-      videoWindow.document.close();
+      fullscreenButton.setAttribute(
+        "title",
+        "Tap to watch in Fullscreen"
+      );
+
+
+      fullscreenButton.textContent =
+        "Tap to watch in Fullscreen";
+
+
+      controls.appendChild(
+        fullscreenButton
+      );
 
 
       /*
-       * Focus new page
+       * Place button directly
+       * underneath the player.
        */
+
+      embedArea.insertAdjacentElement(
+        "afterend",
+        controls
+      );
+
+
+      /* =================================
+         OPEN MODAL
+      ================================= */
+
+      modal.classList.add(
+        "open"
+      );
+
+
+      modal.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      document.body.style.overflow =
+        "hidden";
+
+    };
+
+
+
+  /* =====================================
+     FULLSCREEN
+  ===================================== */
+
+  document.addEventListener(
+    "click",
+    async function (event) {
+
+      var button =
+        event.target.closest(
+          ".fullscreen-btn"
+        );
+
+
+      if (!button) {
+        return;
+      }
+
+
+      var modalBox =
+        document.querySelector(
+          ".modal-box"
+        );
+
+
+      if (!modalBox) {
+        return;
+      }
+
 
       try {
 
-        videoWindow.focus();
+        /* ===============================
+           ENTER FULLSCREEN
+        =============================== */
+
+        if (!document.fullscreenElement) {
+
+          if (
+            modalBox.requestFullscreen
+          ) {
+
+            await modalBox.requestFullscreen();
+
+          } else {
+
+            /*
+             * Fullscreen API not supported.
+             */
+
+            console.log(
+              "Fullscreen API is not supported."
+            );
+
+            return;
+
+          }
+
+
+          /*
+           * Try to rotate the device
+           * into landscape.
+           */
+
+          if (
+            screen.orientation &&
+            screen.orientation.lock
+          ) {
+
+            try {
+
+              await screen.orientation.lock(
+                "landscape"
+              );
+
+            } catch (orientationError) {
+
+              console.log(
+                "Landscape orientation lock unavailable:",
+                orientationError
+              );
+
+            }
+
+          }
+
+        }
+
+
+        /* ===============================
+           EXIT FULLSCREEN
+        =============================== */
+
+        else {
+
+          if (
+            document.exitFullscreen
+          ) {
+
+            await document.exitFullscreen();
+
+          }
+
+        }
 
       } catch (error) {
 
-        console.log(
-          "Could not focus video page."
+        console.error(
+          "Fullscreen error:",
+          error
         );
 
       }
 
+    }
+  );
+
+
+
+  /* =====================================
+     FULLSCREEN CHANGE
+  ===================================== */
+
+  document.addEventListener(
+    "fullscreenchange",
+    function () {
+
+      var button =
+        document.querySelector(
+          ".fullscreen-btn"
+        );
+
+
+      if (document.fullscreenElement) {
+
+        if (button) {
+
+          button.textContent =
+            "Exit Fullscreen";
+
+
+          button.setAttribute(
+            "aria-label",
+            "Exit Fullscreen"
+          );
+
+
+          button.setAttribute(
+            "title",
+            "Exit Fullscreen"
+          );
+
+        }
+
+      } else {
+
+        if (button) {
+
+          button.textContent =
+            "Tap to watch in Fullscreen";
+
+
+          button.setAttribute(
+            "aria-label",
+            "Tap to watch in Fullscreen"
+          );
+
+
+          button.setAttribute(
+            "title",
+            "Tap to watch in Fullscreen"
+          );
+
+        }
+
+
+        /*
+         * Unlock device orientation.
+         */
+
+        if (
+          screen.orientation &&
+          screen.orientation.unlock
+        ) {
+
+          try {
+
+            screen.orientation.unlock();
+
+          } catch (error) {
+
+            console.log(
+              "Orientation unlock unavailable:",
+              error
+            );
+
+          }
+
+        }
+
+      }
+
+    }
+  );
+
+
+
+  /* =====================================
+     CLOSE VIDEO
+  ===================================== */
+
+  window.closeEmbed =
+    async function () {
+
+      var modal =
+        document.getElementById(
+          "embedModal"
+        );
+
+
+      var embedArea =
+        document.getElementById(
+          "embedArea"
+        );
+
+
+      if (!modal) {
+        return;
+      }
+
+
+      /* Exit fullscreen */
+
+      if (
+        document.fullscreenElement
+      ) {
+
+        try {
+
+          await document.exitFullscreen();
+
+        } catch (error) {
+
+          console.log(
+            "Could not exit fullscreen:",
+            error
+          );
+
+        }
+
+      }
+
+
+      /* Unlock orientation */
+
+      if (
+        screen.orientation &&
+        screen.orientation.unlock
+      ) {
+
+        try {
+
+          screen.orientation.unlock();
+
+        } catch (error) {
+
+          console.log(
+            "Could not unlock orientation:",
+            error
+          );
+
+        }
+
+      }
+
+
+      /* Remove video */
+
+      if (embedArea) {
+
+        embedArea.innerHTML =
+          "";
+
+      }
+
+
+      /* Remove fullscreen controls */
+
+      var controls =
+        modal.querySelector(
+          ".video-controls"
+        );
+
+
+      if (controls) {
+        controls.remove();
+      }
+
+
+      /* Close modal */
+
+      modal.classList.remove(
+        "open"
+      );
+
+
+      modal.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      /* Restore page scrolling */
+
+      document.body.style.overflow =
+        "";
+
     };
+
+
+
+  /* =====================================
+     CLOSE MODAL WITH BACKDROP
+  ===================================== */
+
+  var modal =
+    document.getElementById(
+      "embedModal"
+    );
+
+
+  if (modal) {
+
+    modal.addEventListener(
+      "click",
+      function (event) {
+
+        if (
+          event.target === modal ||
+          event.target.classList.contains(
+            "modal-backdrop"
+          )
+        ) {
+
+          closeEmbed();
+
+        }
+
+      }
+    );
+
+  }
+
+
+
+  /* =====================================
+     ESC KEY
+  ===================================== */
+
+  document.addEventListener(
+    "keydown",
+    function (event) {
+
+      if (
+        event.key === "Escape"
+      ) {
+
+        var modal =
+          document.getElementById(
+            "embedModal"
+          );
+
+
+        if (
+          modal &&
+          modal.classList.contains(
+            "open"
+          )
+        ) {
+
+          closeEmbed();
+
+        }
+
+      }
+
+    }
+  );
 
 
 
@@ -945,14 +1239,6 @@ document.addEventListener("DOMContentLoaded", function () {
           "open"
         );
 
-
-        menuToggle.setAttribute(
-          "aria-expanded",
-          mainNav.classList.contains(
-            "open"
-          )
-        );
-
       };
 
   }
@@ -977,4 +1263,3 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 });
-```
