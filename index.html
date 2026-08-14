@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Deeprowss - football live, football highlights and entertainment.">
+  <title>Deeprowss — Football Live, Highlights & Movies</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#home" aria-label="Deeprowss home">
+        <span class="brand-mark">D</span>
+        <span>DEE<span>PROWSS</span></span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="#home">Home</a>
+        <a href="#live">Football Live</a>
+        <a href="#highlights">Highlights</a>
+        <a href="#movies">Movies</a>
+      </nav>
+
+      <div class="nav-search">
+        <label class="sr-only" for="siteSearch">Search Deeprowss</label>
+        <input id="siteSearch" type="search" placeholder="Search..." autocomplete="off">
+        <span>⌕</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <div class="container hero-content">
+        <p class="eyebrow">WELCOME TO DEEPROWSS</p>
+        <h1>Football. Highlights.<br><span>Entertainment.</span></h1>
+        <p class="hero-copy">Follow live football, catch the latest highlights and discover entertainment in one place.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#live">Explore Football</a>
+          <a class="btn btn-ghost" href="#movies">Browse Movies</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <section class="section" id="live">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">FOOTBALL</p>
+            <h2>Football Live</h2>
+          </div>
+          <a class="section-link" href="#live">View all →</a>
+        </div>
+
+        <div class="live-grid">
+          <article class="live-card" data-search="Arsenal Chelsea Premier League">
+            <div class="match-top"><span class="live-badge">● LIVE</span><span>Premier League</span></div>
+            <div class="teams"><strong>Arsenal</strong><span>vs</span><strong>Chelsea</strong></div>
+            <div class="match-meta">Add your official live/embed link below</div>
+            <button class="watch-btn" onclick="openEmbed('Arsenal vs Chelsea — Live', 'PASTE-YOUR-EMBED-URL-HERE')">Watch</button>
+          </article>
+
+          <article class="live-card" data-search="Barcelona Real Madrid La Liga">
+            <div class="match-top"><span class="upcoming-badge">UPCOMING</span><span>La Liga</span></div>
+            <div class="teams"><strong>Barcelona</strong><span>vs</span><strong>Real Madrid</strong></div>
+            <div class="match-meta">Add your official live/embed link below</div>
+            <button class="watch-btn" onclick="openEmbed('Barcelona vs Real Madrid — Live', 'PASTE-YOUR-EMBED-URL-HERE')">Watch</button>
+          </article>
+
+          <article class="live-card" data-search="Liverpool Manchester United Premier League">
+            <div class="match-top"><span class="upcoming-badge">UPCOMING</span><span>Premier League</span></div>
+            <div class="teams"><strong>Liverpool</strong><span>vs</span><strong>Man United</strong></div>
+            <div class="match-meta">Add your official live/embed link below</div>
+            <button class="watch-btn" onclick="openEmbed('Liverpool vs Manchester United — Live', 'PASTE-YOUR-EMBED-URL-HERE')">Watch</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="highlights">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">FOOTBALL</p>
+            <h2>Latest Highlights</h2>
+          </div>
+          <a class="section-link" href="#highlights">More highlights →</a>
+        </div>
+
+        <div class="content-grid">
+          <article class="media-card" data-search="Football match highlights">
+            <div class="media-thumb football-thumb"><span class="play">▶</span></div>
+            <div class="media-info"><span class="tag">HIGHLIGHT</span><h3>Match Highlights</h3><p>Replace this with your licensed/official highlight embed.</p><button onclick="openEmbed('Match Highlights', 'PASTE-YOUR-EMBED-URL-HERE')">Watch highlight</button></div>
+          </article>
+
+          <article class="media-card" data-search="Top goals football highlights">
+            <div class="media-thumb goals-thumb"><span class="play">▶</span></div>
+            <div class="media-info"><span class="tag">GOALS</span><h3>Top Goals</h3><p>Place an official or authorized video embed here.</p><button onclick="openEmbed('Top Goals', 'PASTE-YOUR-EMBED-URL-HERE')">Watch highlights</button></div>
+          </article>
+
+          <article class="media-card" data-search="Football skills highlights">
+            <div class="media-thumb skills-thumb"><span class="play">▶</span></div>
+            <div class="media-info"><span class="tag">FEATURED</span><h3>Football Moments</h3><p>Use an authorized external video source.</p><button onclick="openEmbed('Football Moments', 'PASTE-YOUR-EMBED-URL-HERE')">Watch video</button></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="movies">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ENTERTAINMENT</p>
+            <h2>Movies</h2>
+          </div>
+          <a class="section-link" href="#movies">Browse all →</a>
+        </div>
+
+        <div class="movie-grid">
+          <article class="movie-card" data-search="Featured Movie">
+            <div class="poster poster-one"><span>FEATURED</span></div>
+            <div class="movie-info"><h3>Featured Movie</h3><p>2026 • Drama</p><button onclick="openEmbed('Featured Movie', 'PASTE-YOUR-EMBED-URL-HERE')">View</button></div>
+          </article>
+          <article class="movie-card" data-search="Action Movie">
+            <div class="poster poster-two"><span>ACTION</span></div>
+            <div class="movie-info"><h3>Action Movie</h3><p>2026 • Action</p><button onclick="openEmbed('Action Movie', 'PASTE-YOUR-EMBED-URL-HERE')">View</button></div>
+          </article>
+          <article class="movie-card" data-search="Comedy Movie">
+            <div class="poster poster-three"><span>COMEDY</span></div>
+            <div class="movie-info"><h3>Comedy Movie</h3><p>2026 • Comedy</p><button onclick="openEmbed('Comedy Movie', 'PASTE-YOUR-EMBED-URL-HERE')">View</button></div>
+          </article>
+          <article class="movie-card" data-search="New Release Movie">
+            <div class="poster poster-four"><span>NEW</span></div>
+            <div class="movie-info"><h3>New Release</h3><p>2026 • Entertainment</p><button onclick="openEmbed('New Release', 'PASTE-YOUR-EMBED-URL-HERE')">View</button></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section about">
+        <div>
+          <p class="eyebrow">ABOUT DEEPROWSS</p>
+          <h2>Your daily destination for football & entertainment.</h2>
+        </div>
+        <p>Deeprowss brings football coverage, highlights and entertainment together in a fast, mobile-friendly experience. Video placeholders are ready for authorized external embeds.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-wrap">
+      <div><strong>DEE<span>PROWSS</span></strong><p>Football • Highlights • Entertainment</p></div>
+      <div class="footer-links"><a href="#home">Home</a><a href="#live">Football Live</a><a href="#highlights">Highlights</a><a href="#movies">Movies</a></div>
+      <p class="copyright">© <span id="year"></span> Deeprowss. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="modal" id="embedModal" aria-hidden="true">
+    <div class="modal-backdrop" onclick="closeEmbed()"></div>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" onclick="closeEmbed()" aria-label="Close">×</button>
+      <h2 id="modalTitle">Video</h2>
+      <div class="embed-area" id="embedArea"></div>
+      <p class="embed-note">Replace <code>PASTE-YOUR-EMBED-URL-HERE</code> in the HTML with an authorized external embed URL.</p>
+    </div>
+  </div>
+
+  <div class="no-results" id="noResults">No matching content found.</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
