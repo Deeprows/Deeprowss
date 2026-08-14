@@ -26,9 +26,7 @@
 
 </head>
 
-
 <body>
-
 
 <!-- =========================
      HEADER
@@ -37,9 +35,6 @@
 <header class="site-header">
 
   <div class="container nav-wrap">
-
-
-    <!-- LOGO -->
 
     <a
       class="brand"
@@ -57,21 +52,16 @@
 
     </a>
 
-
-    <!-- MOBILE MENU -->
-
     <button
       type="button"
       class="menu-toggle"
       id="menuToggle"
       aria-label="Open navigation"
       aria-expanded="false"
+      aria-controls="mainNav"
     >
       ☰
     </button>
-
-
-    <!-- NAVIGATION -->
 
     <nav
       class="main-nav"
@@ -91,14 +81,14 @@
         Highlights
       </a>
 
-      <a href="movies.html">
+      <a
+        href="movies.html"
+        aria-current="page"
+      >
         Movies
       </a>
 
     </nav>
-
-
-    <!-- SEARCH -->
 
     <div class="nav-search">
 
@@ -115,6 +105,7 @@
         placeholder="Search..."
         autocomplete="off"
         aria-label="Search Deeprowss"
+        spellcheck="false"
       >
 
       <span aria-hidden="true">
@@ -123,12 +114,9 @@
 
     </div>
 
-
   </div>
 
 </header>
-
-
 
 <!-- =========================
      PAGE
@@ -138,11 +126,6 @@
   id="moviesPage"
   data-page="movies"
 >
-
-
-  <!-- =========================
-       PAGE HERO
-  ========================= -->
 
   <section class="page-hero">
 
@@ -164,16 +147,9 @@
 
   </section>
 
-
-
-  <!-- =========================
-       MOVIES
-  ========================= -->
-
   <section class="section">
 
     <div class="container">
-
 
       <div class="section-heading">
 
@@ -189,7 +165,6 @@
 
         </div>
 
-
         <a
           class="section-link"
           href="index.html"
@@ -199,10 +174,9 @@
 
       </div>
 
-
       <!--
-        Movies are loaded automatically
-        from posts.json by all-posts.js.
+        script.js loads posts.json and filters
+        movie posts automatically on movies.html.
       -->
 
       <div
@@ -217,15 +191,11 @@
 
       </div>
 
-
     </div>
 
   </section>
 
-
 </main>
-
-
 
 <!-- =========================
      VIDEO MODAL
@@ -237,16 +207,9 @@
   aria-hidden="true"
 >
 
-
-  <!-- BACKDROP -->
-
   <div
     class="modal-backdrop"
-    onclick="closeEmbed()"
   ></div>
-
-
-  <!-- MODAL BOX -->
 
   <div
     class="modal-box"
@@ -255,27 +218,18 @@
     aria-labelledby="modalTitle"
   >
 
-
-    <!-- CLOSE -->
-
     <button
       type="button"
       class="modal-close"
-      onclick="closeEmbed()"
       aria-label="Close video"
+      title="Close"
     >
       ×
     </button>
 
-
-    <!-- TITLE -->
-
     <h2 id="modalTitle">
       Movie
     </h2>
-
-
-    <!-- PLAYER -->
 
     <div
       class="embed-area"
@@ -296,9 +250,6 @@
 
     </div>
 
-
-    <!-- NOTE -->
-
     <p class="embed-note">
 
       Video content is loaded from an
@@ -306,12 +257,9 @@
 
     </p>
 
-
   </div>
 
 </div>
-
-
 
 <!-- =========================
      NO RESULTS
@@ -325,8 +273,6 @@
   No matching content found.
 </div>
 
-
-
 <!-- =========================
      FOOTER
 ========================= -->
@@ -334,9 +280,6 @@
 <footer class="footer">
 
   <div class="container footer-wrap">
-
-
-    <!-- FOOTER BRAND -->
 
     <div>
 
@@ -349,9 +292,6 @@
       </p>
 
     </div>
-
-
-    <!-- FOOTER LINKS -->
 
     <div class="footer-links">
 
@@ -367,14 +307,14 @@
         Highlights
       </a>
 
-      <a href="movies.html">
+      <a
+        href="movies.html"
+        aria-current="page"
+      >
         Movies
       </a>
 
     </div>
-
-
-    <!-- COPYRIGHT -->
 
     <p class="copyright">
 
@@ -385,42 +325,15 @@
 
     </p>
 
-
   </div>
 
 </footer>
-
-
 
 <!-- =========================
      JAVASCRIPT
 ========================= -->
 
-<script src="all-posts.js"></script>
-
-
-<script>
-
-  document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-      const year =
-        document.getElementById("year");
-
-      if (year) {
-
-        year.textContent =
-          new Date().getFullYear();
-
-      }
-
-    }
-  );
-
-</script>
-
+<script src="script.js"></script>
 
 </body>
-
 </html>
