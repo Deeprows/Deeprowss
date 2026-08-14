@@ -1,85 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Deeprowss Football Highlights">
-  <title>Highlights — Deeprowss</title>
-  <link rel="stylesheet" href="style.css">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Watch the latest football highlights on Deeprowss."
+  >
+
+  <title>
+    Highlights | Deeprowss
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
 </head>
+
 
 <body>
 
-<header class="site-header">
-  <div class="container nav-wrap">
 
-    <a class="brand" href="index.html">
-      <span class="brand-mark">D</span>
-      <span>DEE<span>PROWSS</span></span>
-    </a>
+  <!-- =========================
+       HEADER
+  ========================= -->
 
-    <button class="menu-toggle" id="menuToggle">☰</button>
+  <header class="site-header">
 
-    <nav class="main-nav" id="mainNav">
-      <a href="index.html">Home</a>
-      <a href="football.html">Football Live</a>
-      <a href="highlights.html">Highlights</a>
-      <a href="movies.html">Movies</a>
-    </nav>
+    <div class="container nav-wrap">
 
-    <div class="nav-search">
-      <input id="siteSearch" type="search" placeholder="Search...">
-      <span>⌕</span>
-    </div>
 
-  </div>
-</header>
+      <!-- LOGO -->
 
-<main>
+      <a
+        class="brand"
+        href="index.html"
+        aria-label="Deeprowss Home"
+      >
 
-  <section class="page-hero">
-    <div class="container">
-      <p class="eyebrow">FOOTBALL</p>
-      <h1>Latest Highlights</h1>
-      <p>All football highlights on Deeprowss.</p>
-    </div>
-  </section>
+        <span class="brand-mark">
+          D
+        </span>
 
-  <div class="container">
+        <span>
+          DEE<span>PROWSS</span>
+        </span>
 
-    <section class="section">
+      </a>
 
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">ALL POSTS</p>
-          <h2>Highlights</h2>
-        </div>
 
-        <a class="section-link" href="index.html">
-          ← Back home
+
+      <!-- MOBILE MENU -->
+
+      <button
+        type="button"
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        aria-controls="mainNav"
+      >
+
+        ☰
+
+      </button>
+
+
+
+      <!-- NAVIGATION -->
+
+      <nav
+        class="main-nav"
+        id="mainNav"
+        aria-label="Main navigation"
+      >
+
+        <a href="index.html">
+          Home
         </a>
+
+        <a href="football.html">
+          Football Live
+        </a>
+
+        <a
+          href="highlights.html"
+          aria-current="page"
+        >
+          Highlights
+        </a>
+
+        <a href="movies.html">
+          Movies
+        </a>
+
+      </nav>
+
+
+
+      <!-- SEARCH -->
+
+      <div class="nav-search">
+
+        <label
+          class="sr-only"
+          for="siteSearch"
+        >
+          Search Deeprowss
+        </label>
+
+        <input
+          id="siteSearch"
+          type="search"
+          placeholder="Search..."
+          autocomplete="off"
+          spellcheck="false"
+        >
+
+        <span aria-hidden="true">
+          ⌕
+        </span>
+
       </div>
 
-      <div class="all-posts-grid" id="allPosts">
-        <div class="loading">Loading highlights...</div>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================
+       MAIN
+  ========================= -->
+
+  <main>
+
+
+    <!-- =========================
+         PAGE HERO
+    ========================= -->
+
+    <section class="page-hero">
+
+      <div class="container">
+
+        <p class="eyebrow">
+          DEEPROWSS FOOTBALL
+        </p>
+
+        <h1>
+          Latest Highlights
+        </h1>
+
+        <p>
+          Watch the latest football highlights on Deeprowss.
+        </p>
+
       </div>
 
     </section>
 
-  </div>
 
-</main>
 
-<footer class="footer">
-  <div class="container footer-wrap">
-    <div>
-      <strong>DEE<span>PROWSS</span></strong>
-      <p>Football • Highlights • Entertainment</p>
+    <!-- =========================
+         SEARCH STATUS
+    ========================= -->
+
+    <section
+      class="search-section"
+      aria-live="polite"
+    >
+
+      <div class="container">
+
+        <div id="searchStatus"></div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         HIGHLIGHTS
+    ========================= -->
+
+    <div class="container">
+
+      <section class="section">
+
+
+        <div class="section-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              ALL POSTS
+            </p>
+
+            <h2>
+              Highlights
+            </h2>
+
+          </div>
+
+
+          <a
+            class="section-link"
+            href="index.html"
+          >
+
+            ← Back home
+
+          </a>
+
+        </div>
+
+
+
+        <!--
+          script.js automatically loads
+          type: "highlight" posts here.
+        -->
+
+        <div
+          class="all-posts-grid"
+          id="highlightPosts"
+        >
+
+          <div class="loading">
+            Loading highlights...
+          </div>
+
+        </div>
+
+
+      </section>
+
     </div>
-  </div>
-</footer>
 
-<script src="all-posts.js"></script>
+
+  </main>
+
+
+
+  <!-- =========================
+       VIDEO MODAL
+  ========================= -->
+
+  <div
+    class="modal"
+    id="embedModal"
+    aria-hidden="true"
+  >
+
+
+    <div
+      class="modal-backdrop"
+      onclick="closeEmbed()"
+    ></div>
+
+
+
+    <div
+      class="modal-box"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+    >
+
+
+      <button
+        type="button"
+        class="modal-close"
+        onclick="closeEmbed()"
+        aria-label="Close video"
+      >
+
+        ×
+
+      </button>
+
+
+
+      <h2 id="modalTitle">
+        Video
+      </h2>
+
+
+
+      <div
+        class="embed-area"
+        id="embedArea"
+      >
+
+        <div class="embed-placeholder">
+
+          <strong>
+            Select a highlight
+          </strong>
+
+          <span class="embed-note">
+            The highlight player will appear here.
+          </span>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================
+       NO RESULTS
+  ========================= -->
+
+  <div
+    class="no-results"
+    id="noResults"
+    role="status"
+    aria-live="polite"
+  >
+
+    No matching content found.
+
+  </div>
+
+
+
+  <!-- =========================
+       FOOTER
+  ========================= -->
+
+  <footer class="footer">
+
+    <div class="container footer-wrap">
+
+
+      <div>
+
+        <strong>
+          DEE<span>PROWSS</span>
+        </strong>
+
+        <p>
+          Football • Highlights • Entertainment
+        </p>
+
+      </div>
+
+
+
+      <div class="footer-links">
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="football.html">
+          Football Live
+        </a>
+
+        <a
+          href="highlights.html"
+          aria-current="page"
+        >
+          Highlights
+        </a>
+
+        <a href="movies.html">
+          Movies
+        </a>
+
+      </div>
+
+
+
+      <p class="copyright">
+
+        &copy;
+
+        <span id="year"></span>
+
+        Deeprowss.
+        All rights reserved.
+
+      </p>
+
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
+  <script src="script.js"></script>
+
 
 </body>
+
 </html>
