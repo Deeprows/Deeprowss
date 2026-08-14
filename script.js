@@ -16,13 +16,24 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const posts = await response.json();
 
+    /*
+     * SORT POSTS
+     * Newest posts appear first.
+     */
+    posts.sort(function (a, b) {
+      return new Date(b.date) - new Date(a.date);
+    });
+
     console.log("Deeprowss posts:", posts);
+
 
     /*
      * FOOTBALL LIVE
      */
 
-    const livePosts = posts.filter(post => post.type === "live");
+    const livePosts = posts.filter(function (post) {
+      return post.type === "live";
+    });
 
     if (liveContainer) {
 
@@ -36,63 +47,67 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       } else {
 
-        liveContainer.innerHTML = livePosts.map(post => `
+        liveContainer.innerHTML = livePosts.map(function (post) {
 
-          <article class="live-card">
+          return `
 
-            <div class="match-top">
+            <article class="live-card">
 
-              <span class="${
-                post.status === "LIVE"
-                  ? "live-badge"
-                  : "upcoming-badge"
-              }">
+              <div class="match-top">
 
-                ${post.status || "UPCOMING"}
+                <span class="${
+                  post.status === "LIVE"
+                    ? "live-badge"
+                    : "upcoming-badge"
+                }">
 
-              </span>
+                  ${post.status || "UPCOMING"}
 
-              <span>
-                ${post.category || "Football"}
-              </span>
+                </span>
 
-            </div>
+                <span>
+                  ${post.category || "Football"}
+                </span>
 
-
-            <div class="teams">
-
-              <strong>
-                ${post.home || "Team 1"}
-              </strong>
-
-              <span>vs</span>
-
-              <strong>
-                ${post.away || "Team 2"}
-              </strong>
-
-            </div>
+              </div>
 
 
-            <div class="match-meta">
+              <div class="teams">
 
-              ${post.description || ""}
+                <strong>
+                  ${post.home || "Team 1"}
+                </strong>
 
-            </div>
+                <span>vs</span>
+
+                <strong>
+                  ${post.away || "Team 2"}
+                </strong>
+
+              </div>
 
 
-            <button
-              class="watch-btn"
-              data-url="${post.embedUrl || ""}"
-              data-title="${post.title || "Video"}">
+              <div class="match-meta">
 
-              Watch
+                ${post.description || ""}
 
-            </button>
+              </div>
 
-          </article>
 
-        `).join("");
+              <button
+                class="watch-btn"
+                data-url="${post.embedUrl || ""}"
+                data-title="${post.title || "Video"}">
+
+                Watch
+
+              </button>
+
+            </article>
+
+          `;
+
+        }).join("");
 
       }
 
@@ -100,12 +115,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     /*
-     * HIGHLIGHTS
+     * FOOTBALL HIGHLIGHTS
      */
 
-    const highlights = posts.filter(
-      post => post.type === "highlight"
-    );
+    const highlights = posts.filter(function (post) {
+      return post.type === "highlight";
+    });
 
     if (highlightContainer) {
 
@@ -119,43 +134,50 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       } else {
 
-        highlightContainer.innerHTML = highlights.map(post => `
+        highlightContainer.innerHTML = highlights.map(function (post) {
 
-          <article class="media-card">
+          return `
 
-            <div class="media-thumb football-thumb">
+            <article class="media-card">
 
-              <span class="play">▶</span>
+              <div class="media-thumb football-thumb">
 
-            </div>
+                <span class="play">
+                  ▶
+                </span>
 
-            <div class="media-info">
+              </div>
 
-              <span class="tag">
-                HIGHLIGHT
-              </span>
 
-              <h3>
-                ${post.title || "Football Highlight"}
-              </h3>
+              <div class="media-info">
 
-              <p>
-                ${post.description || ""}
-              </p>
+                <span class="tag">
+                  HIGHLIGHT
+                </span>
 
-              <button
-                data-url="${post.embedUrl || ""}"
-                data-title="${post.title || "Highlight"}">
+                <h3>
+                  ${post.title || "Football Highlight"}
+                </h3>
 
-                Watch highlight
+                <p>
+                  ${post.description || ""}
+                </p>
 
-              </button>
+                <button
+                  data-url="${post.embedUrl || ""}"
+                  data-title="${post.title || "Highlight"}">
 
-            </div>
+                  Watch highlight
 
-          </article>
+                </button>
 
-        `).join("");
+              </div>
+
+            </article>
+
+          `;
+
+        }).join("");
 
       }
 
@@ -166,9 +188,9 @@ document.addEventListener("DOMContentLoaded", async function () {
      * MOVIES
      */
 
-    const movies = posts.filter(
-      post => post.type === "movie"
-    );
+    const movies = posts.filter(function (post) {
+      return post.type === "movie";
+    });
 
     if (movieContainer) {
 
@@ -182,41 +204,46 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       } else {
 
-        movieContainer.innerHTML = movies.map(post => `
+        movieContainer.innerHTML = movies.map(function (post) {
 
-          <article class="movie-card">
+          return `
 
-            <div class="poster poster-one">
+            <article class="movie-card">
 
-              <span>
-                ${post.category || "MOVIE"}
-              </span>
+              <div class="poster poster-one">
 
-            </div>
+                <span>
+                  ${post.category || "MOVIE"}
+                </span>
 
-            <div class="movie-info">
+              </div>
 
-              <h3>
-                ${post.title || "Movie"}
-              </h3>
 
-              <p>
-                ${post.date || ""}
-              </p>
+              <div class="movie-info">
 
-              <button
-                data-url="${post.embedUrl || ""}"
-                data-title="${post.title || "Movie"}">
+                <h3>
+                  ${post.title || "Movie"}
+                </h3>
 
-                View
+                <p>
+                  ${post.date || ""}
+                </p>
 
-              </button>
+                <button
+                  data-url="${post.embedUrl || ""}"
+                  data-title="${post.title || "Movie"}">
 
-            </div>
+                  View
 
-          </article>
+                </button>
 
-        `).join("");
+              </div>
+
+            </article>
+
+          `;
+
+        }).join("");
 
       }
 
@@ -227,24 +254,19 @@ document.addEventListener("DOMContentLoaded", async function () {
      * VIDEO BUTTONS
      */
 
-    document.querySelectorAll(
-      "[data-url]"
-    ).forEach(button => {
+    document.querySelectorAll("[data-url]").forEach(function (button) {
 
-      button.addEventListener(
-        "click",
-        function () {
+      button.addEventListener("click", function () {
 
-          const url =
-            this.getAttribute("data-url");
+        const url =
+          this.getAttribute("data-url");
 
-          const title =
-            this.getAttribute("data-title");
+        const title =
+          this.getAttribute("data-title");
 
-          openEmbed(title, url);
+        openEmbed(title, url);
 
-        }
-      );
+      });
 
     });
 
@@ -335,6 +357,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   };
 
+
+  /*
+   * CLOSE VIDEO MODAL
+   */
 
   window.closeEmbed = function () {
 
