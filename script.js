@@ -1,5 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+  "use strict";
+
+
+  console.log("Deeprowss script loaded");
+
+
+  /* =====================================
+     ELEMENTS
+  ===================================== */
+
   var liveContainer =
     document.getElementById("livePosts");
 
@@ -9,100 +19,213 @@ document.addEventListener("DOMContentLoaded", function () {
   var movieContainer =
     document.getElementById("moviePosts");
 
+  var searchInput =
+    document.getElementById("siteSearch");
 
-  console.log("Deeprowss script loaded");
+  var searchStatus =
+    document.getElementById("searchStatus");
+
+  var noResults =
+    document.getElementById("noResults");
+
+  var menuToggle =
+    document.getElementById("menuToggle");
+
+  var mainNav =
+    document.getElementById("mainNav");
+
+
+  /*
+   * Keep the loaded posts available
+   * for search and other functionality.
+   */
+
+  var allPosts = [];
+
 
 
   /* =====================================
      LOAD POSTS
   ===================================== */
 
-  var xhr = new XMLHttpRequest();
+  var xhr =
+    new XMLHttpRequest();
+
 
   xhr.open(
     "GET",
-    "posts.json?v=" + new Date().getTime(),
+    "posts.json?v=" +
+      new Date().getTime(),
     true
   );
 
 
-  xhr.onreadystatechange = function () {
+  xhr.onreadystatechange =
+    function () {
 
-    if (xhr.readyState !== 4) {
-      return;
-    }
-
-
-    if (xhr.status >= 200 && xhr.status < 300) {
-
-      try {
-
-        var posts =
-          JSON.parse(xhr.responseText);
+      if (
+        xhr.readyState !== 4
+      ) {
+        return;
+      }
 
 
-        console.log(
-          "Deeprowss posts loaded:",
-          posts
-        );
+      if (
+        xhr.status >= 200 &&
+        xhr.status < 300
+      ) {
+
+        try {
+
+          var posts =
+            JSON.parse(
+              xhr.responseText
+            );
 
 
-        /* Newest posts first */
+          if (
+            !Array.isArray(posts)
+          ) {
 
-        posts.sort(function (a, b) {
+            throw new Error(
+              "posts.json must contain an array."
+            );
 
-          return (
-            new Date(b.publishedAt).getTime() -
-            new Date(a.publishedAt).getTime()
+          }
+
+
+          /*
+           * Save posts globally.
+           */
+
+          allPosts =
+            posts.slice();
+
+
+          /*
+           * Newest first.
+           */
+
+          allPosts.sort(
+            function (a, b) {
+
+              return (
+                getPostTime(b) -
+                getPostTime(a)
+              );
+
+            }
           );
 
-        });
+
+          console.log(
+            "Deeprowss posts loaded:",
+            allPosts
+          );
 
 
-        displayLivePosts(posts);
+          /*
+           * Homepage sections.
+           *
+           * These functions simply return
+           * when their container doesn't
+           * exist.
+           */
 
-        displayHighlightPosts(posts);
+          displayLivePosts(
+            allPosts
+          );
 
-        displayMoviePosts(posts);
+
+          displayHighlightPosts(
+            allPosts
+          );
 
 
-      } catch (error) {
+          displayMoviePosts(
+            allPosts
+          );
+
+
+          /*
+           * Search becomes active after
+           * posts have loaded.
+           */
+
+          setupSearch();
+
+
+        } catch (error) {
+
+          console.error(
+            "Could not read posts.json:",
+            error
+          );
+
+
+          showError();
+
+        }
+
+      } else {
 
         console.error(
-          "Could not read posts.json:",
-          error
+          "Could not load posts.json. Status:",
+          xhr.status
         );
+
 
         showError();
 
       }
 
-    } else {
+    };
+
+
+  xhr.onerror =
+    function () {
 
       console.error(
-        "Could not load posts.json. Status:",
-        xhr.status
+        "Network error loading posts.json"
       );
+
 
       showError();
 
-    }
-
-  };
-
-
-  xhr.onerror = function () {
-
-    console.error(
-      "Network error loading posts.json"
-    );
-
-    showError();
-
-  };
+    };
 
 
   xhr.send();
+
+
+
+  /* =====================================
+     DATE
+  ===================================== */
+
+  function getPostTime(post) {
+
+    if (
+      !post ||
+      !post.publishedAt
+    ) {
+
+      return 0;
+
+    }
+
+
+    var time =
+      new Date(
+        post.publishedAt
+      ).getTime();
+
+
+    return isNaN(time)
+      ? 0
+      : time;
+
+  }
 
 
 
@@ -151,26 +274,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function escapeHTML(value) {
 
-    if (value === undefined || value === null) {
+    if (
+      value === undefined ||
+      value === null
+    ) {
+
       return "";
+
     }
 
+
     return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
 
   }
 
 
 
   /* =====================================
-     FORMAT VISITOR LOCAL TIME
+     FORMAT DATE
   ===================================== */
 
-  function formatPostDate(dateString) {
+  function formatPostDate(
+    dateString
+  ) {
 
     if (!dateString) {
       return "";
@@ -178,23 +324,95 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     var date =
-      new Date(dateString);
+      new Date(
+        dateString
+      );
 
 
-    if (isNaN(date.getTime())) {
+    if (
+      isNaN(
+        date.getTime()
+      )
+    ) {
+
       return "";
+
     }
 
 
     try {
 
-      return date.toLocaleString();
+      return date.toLocaleString(
+        undefined,
+        {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }
+      );
 
     } catch (error) {
 
-      return date.toString();
+      return date.toLocaleString();
 
     }
+
+  }
+
+
+
+  /* =====================================
+     THUMBNAIL VALIDATION
+  ===================================== */
+
+  function hasThumbnail(
+    thumbnail
+  ) {
+
+    if (
+      thumbnail === undefined ||
+      thumbnail === null
+    ) {
+
+      return false;
+
+    }
+
+
+    var value =
+      String(thumbnail)
+        .trim();
+
+
+    if (!value) {
+      return false;
+    }
+
+
+    /*
+     * Don't render placeholder
+     * values from posts.json.
+     */
+
+    var invalidValues = [
+      "YOUR_THUMBNAIL_URL",
+      "YOUR_HIGHLIGHT_THUMBNAIL_URL",
+      "YOUR_SECOND_HIGHLIGHT_THUMBNAIL_URL",
+      "YOUR_SECOND_MOVIE_THUMBNAIL_URL"
+    ];
+
+
+    if (
+      invalidValues.indexOf(
+        value
+      ) !== -1
+    ) {
+
+      return false;
+
+    }
+
+
+    return true;
 
   }
 
@@ -206,50 +424,62 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function createThumbnail(
     thumbnail,
-    type,
     altText
   ) {
 
-    var safeThumbnail =
-      escapeHTML(thumbnail);
+    if (
+      !hasThumbnail(
+        thumbnail
+      )
+    ) {
 
-    var safeAlt =
-      escapeHTML(
-        altText || "Thumbnail"
-      );
-
-
-    /*
-     * If a thumbnail exists,
-     * display the real image.
-     */
-
-    if (safeThumbnail) {
-
-      return (
-        '<img ' +
-          'class="post-thumbnail" ' +
-          'src="' +
-            safeThumbnail +
-          '" ' +
-          'alt="' +
-            safeAlt +
-          '" ' +
-          'loading="lazy" ' +
-          'onerror="this.style.display=\'none\';' +
-            'this.parentElement.classList.add(\'thumbnail-fallback\');"' +
-        '>'
-      );
+      return "";
 
     }
 
 
-    /*
-     * No thumbnail:
-     * use the normal background.
-     */
+    var safeThumbnail =
+      escapeHTML(
+        String(thumbnail).trim()
+      );
 
-    return "";
+
+    var safeAlt =
+      escapeHTML(
+        altText ||
+        "Thumbnail"
+      );
+
+
+    return (
+
+      '<img ' +
+
+        'class="post-thumbnail" ' +
+
+        'src="' +
+          safeThumbnail +
+        '" ' +
+
+        'alt="' +
+          safeAlt +
+        '" ' +
+
+        'loading="lazy" ' +
+
+        'decoding="async" ' +
+
+        'onerror="' +
+
+          'this.style.display=\'none\';' +
+
+          'this.parentElement.classList.add(\'thumbnail-fallback\');' +
+
+        '"' +
+
+      '>'
+
+    );
 
   }
 
@@ -259,7 +489,9 @@ document.addEventListener("DOMContentLoaded", function () {
      FOOTBALL LIVE
   ===================================== */
 
-  function displayLivePosts(posts) {
+  function displayLivePosts(
+    posts
+  ) {
 
     if (!liveContainer) {
       return;
@@ -267,14 +499,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     var livePosts =
-      posts.filter(function (post) {
+      posts.filter(
+        function (post) {
 
-        return post.type === "live";
+          return (
+            post &&
+            post.type === "live"
+          );
 
-      });
+        }
+      );
 
 
-    if (livePosts.length === 0) {
+    if (
+      livePosts.length === 0
+    ) {
 
       liveContainer.innerHTML =
         '<div class="empty-posts">' +
@@ -289,93 +528,118 @@ document.addEventListener("DOMContentLoaded", function () {
     var html = "";
 
 
-    livePosts.forEach(function (post) {
+    livePosts.forEach(
+      function (post) {
 
-      var statusClass =
-        post.status === "LIVE"
-          ? "live-badge"
-          : "upcoming-badge";
+        var status =
+          String(
+            post.status ||
+            "UPCOMING"
+          ).toUpperCase();
 
 
-      html +=
+        var statusClass =
+          status === "LIVE"
+            ? "live-badge"
+            : "upcoming-badge";
 
-        '<article class="live-card">' +
 
-          '<div class="match-top">' +
+        html +=
 
-            '<span class="' +
-              statusClass +
-            '">' +
+          '<article class="live-card">' +
+
+            '<div class="match-top">' +
+
+              '<span class="' +
+                statusClass +
+              '">' +
+
+                escapeHTML(
+                  status
+                ) +
+
+              '</span>' +
+
+              '<span>' +
+
+                escapeHTML(
+                  post.category ||
+                  "Football"
+                ) +
+
+              '</span>' +
+
+            '</div>' +
+
+
+            '<div class="teams">' +
+
+              '<strong>' +
+                escapeHTML(
+                  post.home ||
+                  "Team 1"
+                ) +
+              '</strong>' +
+
+              '<span>vs</span>' +
+
+              '<strong>' +
+                escapeHTML(
+                  post.away ||
+                  "Team 2"
+                ) +
+              '</strong>' +
+
+            '</div>' +
+
+
+            '<div class="match-meta">' +
 
               escapeHTML(
-                post.status || "UPCOMING"
+                post.description ||
+                ""
               ) +
 
-            '</span>' +
+            '</div>' +
 
-            '<span>' +
-              escapeHTML(
-                post.category || "Football"
+
+            '<div class="post-date">' +
+
+              formatPostDate(
+                post.publishedAt
               ) +
-            '</span>' +
 
-          '</div>' +
-
-
-          '<div class="teams">' +
-
-            '<strong>' +
-              escapeHTML(
-                post.home || "Team 1"
-              ) +
-            '</strong>' +
-
-            '<span>vs</span>' +
-
-            '<strong>' +
-              escapeHTML(
-                post.away || "Team 2"
-              ) +
-            '</strong>' +
-
-          '</div>' +
+            '</div>' +
 
 
-          '<div class="match-meta">' +
-            escapeHTML(
-              post.description || ""
-            ) +
-          '</div>' +
+            '<button ' +
 
+              'type="button" ' +
 
-          '<div class="post-date">' +
-            formatPostDate(
-              post.publishedAt
-            ) +
-          '</div>' +
+              'class="watch-btn" ' +
 
+              'data-url="' +
+                escapeHTML(
+                  post.embedUrl ||
+                  ""
+                ) +
+              '" ' +
 
-          '<button ' +
-            'type="button" ' +
-            'class="watch-btn" ' +
-            'data-url="' +
-              escapeHTML(
-                post.embedUrl || ""
-              ) +
-            '" ' +
-            'data-title="' +
-              escapeHTML(
-                post.title || "Video"
-              ) +
-            '">' +
+              'data-title="' +
+                escapeHTML(
+                  post.title ||
+                  "Football"
+                ) +
+              '">' +
 
-            'Watch' +
+              'Watch' +
 
-          '</button>' +
+            '</button>' +
 
-        '</article>';
+          '</article>';
 
-    });
+      }
+    );
 
 
     liveContainer.innerHTML =
@@ -392,7 +656,9 @@ document.addEventListener("DOMContentLoaded", function () {
      HIGHLIGHTS
   ===================================== */
 
-  function displayHighlightPosts(posts) {
+  function displayHighlightPosts(
+    posts
+  ) {
 
     if (!highlightContainer) {
       return;
@@ -400,14 +666,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     var highlights =
-      posts.filter(function (post) {
+      posts.filter(
+        function (post) {
 
-        return post.type === "highlight";
+          return (
+            post &&
+            post.type === "highlight"
+          );
 
-      });
+        }
+      );
 
 
-    if (highlights.length === 0) {
+    if (
+      highlights.length === 0
+    ) {
 
       highlightContainer.innerHTML =
         '<div class="empty-posts">' +
@@ -422,88 +695,112 @@ document.addEventListener("DOMContentLoaded", function () {
     var html = "";
 
 
-    highlights.forEach(function (post) {
+    highlights.forEach(
+      function (post) {
 
-      var thumbnailHTML =
-        createThumbnail(
-          post.thumbnail,
-          "highlight",
-          post.title || "Football Highlight"
-        );
-
-
-      html +=
-
-        '<article class="media-card">' +
-
-          '<div class="media-thumb football-thumb ' +
-            (
-              post.thumbnail
-                ? "has-thumbnail"
-                : ""
-            ) +
-          '">' +
-
-            thumbnailHTML +
-
-            '<span class="play">' +
-              '▶' +
-            '</span>' +
-
-          '</div>' +
+        var thumbnailExists =
+          hasThumbnail(
+            post.thumbnail
+          );
 
 
-          '<div class="media-info">' +
+        var thumbnailHTML =
+          createThumbnail(
+            post.thumbnail,
+            post.title ||
+            "Football Highlight"
+          );
 
-            '<span class="tag">' +
-              'HIGHLIGHT' +
-            '</span>' +
+
+        html +=
+
+          '<article class="media-card">' +
 
 
-            '<h3>' +
-              escapeHTML(
-                post.title ||
-                "Football Highlight"
+            '<div class="media-thumb football-thumb ' +
+
+              (
+                thumbnailExists
+                  ? "has-thumbnail"
+                  : ""
               ) +
-            '</h3>' +
+
+            '">' +
+
+              thumbnailHTML +
 
 
-            '<p>' +
-              escapeHTML(
-                post.description || ""
-              ) +
-            '</p>' +
+              '<span class="play" aria-hidden="true">' +
+                '▶' +
+              '</span>' +
 
-
-            '<div class="post-date">' +
-              formatPostDate(
-                post.publishedAt
-              ) +
             '</div>' +
 
 
-            '<button ' +
-              'type="button" ' +
-              'data-url="' +
+            '<div class="media-info">' +
+
+              '<span class="tag">' +
+                'HIGHLIGHT' +
+              '</span>' +
+
+
+              '<h3>' +
+
                 escapeHTML(
-                  post.embedUrl || ""
+                  post.title ||
+                  "Football Highlight"
                 ) +
-              '" ' +
-              'data-title="' +
+
+              '</h3>' +
+
+
+              '<p>' +
+
                 escapeHTML(
-                  post.title || "Highlight"
+                  post.description ||
+                  ""
                 ) +
-              '">' +
 
-              'Watch highlight' +
+              '</p>' +
 
-            '</button>' +
 
-          '</div>' +
+              '<div class="post-date">' +
 
-        '</article>';
+                formatPostDate(
+                  post.publishedAt
+                ) +
 
-    });
+              '</div>' +
+
+
+              '<button ' +
+
+                'type="button" ' +
+
+                'data-url="' +
+                  escapeHTML(
+                    post.embedUrl ||
+                    ""
+                  ) +
+                '" ' +
+
+                'data-title="' +
+                  escapeHTML(
+                    post.title ||
+                    "Highlight"
+                  ) +
+                '">' +
+
+                'Watch highlight' +
+
+              '</button>' +
+
+            '</div>' +
+
+          '</article>';
+
+      }
+    );
 
 
     highlightContainer.innerHTML =
@@ -520,7 +817,9 @@ document.addEventListener("DOMContentLoaded", function () {
      MOVIES
   ===================================== */
 
-  function displayMoviePosts(posts) {
+  function displayMoviePosts(
+    posts
+  ) {
 
     if (!movieContainer) {
       return;
@@ -528,14 +827,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     var movies =
-      posts.filter(function (post) {
+      posts.filter(
+        function (post) {
 
-        return post.type === "movie";
+          return (
+            post &&
+            post.type === "movie"
+          );
 
-      });
+        }
+      );
 
 
-    if (movies.length === 0) {
+    if (
+      movies.length === 0
+    ) {
 
       movieContainer.innerHTML =
         '<div class="empty-posts">' +
@@ -550,77 +856,102 @@ document.addEventListener("DOMContentLoaded", function () {
     var html = "";
 
 
-    movies.forEach(function (post) {
+    movies.forEach(
+      function (post) {
 
-      var thumbnailHTML =
-        createThumbnail(
-          post.thumbnail,
-          "movie",
-          post.title || "Movie"
-        );
+        var thumbnailExists =
+          hasThumbnail(
+            post.thumbnail
+          );
 
 
-      html +=
+        var thumbnailHTML =
+          createThumbnail(
+            post.thumbnail,
+            post.title ||
+            "Movie"
+          );
 
-        '<article class="movie-card">' +
 
-          '<div class="poster poster-one ' +
-            (
-              post.thumbnail
-                ? "has-thumbnail"
-                : ""
-            ) +
-          '">' +
+        html +=
 
-            thumbnailHTML +
+          '<article class="movie-card">' +
 
-            '<span class="poster-category">' +
-              escapeHTML(
-                post.category || "MOVIE"
+
+            '<div class="poster poster-one ' +
+
+              (
+                thumbnailExists
+                  ? "has-thumbnail"
+                  : ""
               ) +
-            '</span>' +
 
-          '</div>' +
+            '">' +
 
-
-          '<div class="movie-info">' +
-
-            '<h3>' +
-              escapeHTML(
-                post.title || "Movie"
-              ) +
-            '</h3>' +
+              thumbnailHTML +
 
 
-            '<p>' +
-              formatPostDate(
-                post.publishedAt
-              ) +
-            '</p>' +
+              '<span class="poster-category">' +
 
-
-            '<button ' +
-              'type="button" ' +
-              'data-url="' +
                 escapeHTML(
-                  post.embedUrl || ""
+                  post.category ||
+                  "MOVIE"
                 ) +
-              '" ' +
-              'data-title="' +
+
+              '</span>' +
+
+            '</div>' +
+
+
+            '<div class="movie-info">' +
+
+              '<h3>' +
+
                 escapeHTML(
-                  post.title || "Movie"
+                  post.title ||
+                  "Movie"
                 ) +
-              '">' +
 
-              'View' +
+              '</h3>' +
 
-            '</button>' +
 
-          '</div>' +
+              '<p>' +
 
-        '</article>';
+                formatPostDate(
+                  post.publishedAt
+                ) +
 
-    });
+              '</p>' +
+
+
+              '<button ' +
+
+                'type="button" ' +
+
+                'data-url="' +
+                  escapeHTML(
+                    post.embedUrl ||
+                    ""
+                  ) +
+                '" ' +
+
+                'data-title="' +
+                  escapeHTML(
+                    post.title ||
+                    "Movie"
+                  ) +
+                '">' +
+
+                'Watch' +
+
+              '</button>' +
+
+            '</div>' +
+
+          '</article>';
+
+      }
+    );
 
 
     movieContainer.innerHTML =
@@ -684,7 +1015,10 @@ document.addEventListener("DOMContentLoaded", function () {
   ===================================== */
 
   window.openEmbed =
-    function (title, url) {
+    function (
+      title,
+      url
+    ) {
 
       var modal =
         document.getElementById(
@@ -704,20 +1038,27 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
-      if (!modal || !embedArea) {
+      if (
+        !modal ||
+        !embedArea
+      ) {
+
         return;
+
       }
 
 
       if (modalTitle) {
 
         modalTitle.textContent =
-          title || "Video";
+          title ||
+          "Video";
 
       }
 
 
-      embedArea.innerHTML = "";
+      embedArea.innerHTML =
+        "";
 
 
       var oldControls =
@@ -727,16 +1068,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       if (oldControls) {
+
         oldControls.remove();
+
       }
 
 
 
       /* =================================
-         CREATE VIDEO IFRAME
+         IFRAME
       ================================= */
 
-      if (url) {
+      if (
+        url &&
+        String(url).trim()
+      ) {
 
         var iframe =
           document.createElement(
@@ -745,7 +1091,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         iframe.src =
-          url;
+          String(url).trim();
 
 
         iframe.setAttribute(
@@ -756,13 +1102,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         iframe.setAttribute(
           "allow",
-          "autoplay; fullscreen; encrypted-media"
+          "autoplay; fullscreen; encrypted-media; picture-in-picture"
         );
 
 
         iframe.setAttribute(
           "loading",
-          "lazy"
+          "eager"
         );
 
 
@@ -780,7 +1126,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         iframe.setAttribute(
           "title",
-          title || "Video"
+          title ||
+          "Video"
         );
 
 
@@ -788,9 +1135,11 @@ document.addEventListener("DOMContentLoaded", function () {
           iframe
         );
 
+
       } else {
 
         embedArea.innerHTML =
+
           '<div class="embed-placeholder">' +
 
             '<strong>' +
@@ -808,7 +1157,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       /* =================================
-         FULLSCREEN CONTROLS
+         FULLSCREEN CONTROL
       ================================= */
 
       var controls =
@@ -864,7 +1213,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       /* =================================
-         OPEN MODAL
+         OPEN
       ================================= */
 
       modal.classList.add(
@@ -880,6 +1229,118 @@ document.addEventListener("DOMContentLoaded", function () {
 
       document.body.style.overflow =
         "hidden";
+
+    };
+
+
+
+  /* =====================================
+     CLOSE VIDEO
+  ===================================== */
+
+  window.closeEmbed =
+    async function () {
+
+      var modal =
+        document.getElementById(
+          "embedModal"
+        );
+
+
+      var embedArea =
+        document.getElementById(
+          "embedArea"
+        );
+
+
+      if (!modal) {
+        return;
+      }
+
+
+      /*
+       * Exit fullscreen first.
+       */
+
+      if (
+        document.fullscreenElement
+      ) {
+
+        try {
+
+          await document.exitFullscreen();
+
+        } catch (error) {
+
+          console.log(
+            "Could not exit fullscreen:",
+            error
+          );
+
+        }
+
+      }
+
+
+      /*
+       * Unlock orientation.
+       */
+
+      if (
+        screen.orientation &&
+        screen.orientation.unlock
+      ) {
+
+        try {
+
+          screen.orientation.unlock();
+
+        } catch (error) {
+
+          console.log(
+            "Orientation unlock unavailable:",
+            error
+          );
+
+        }
+
+      }
+
+
+      if (embedArea) {
+
+        embedArea.innerHTML =
+          "";
+
+      }
+
+
+      var controls =
+        modal.querySelector(
+          ".video-controls"
+        );
+
+
+      if (controls) {
+
+        controls.remove();
+
+      }
+
+
+      modal.classList.remove(
+        "open"
+      );
+
+
+      modal.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      document.body.style.overflow =
+        "";
 
     };
 
@@ -917,7 +1378,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
 
-        if (!document.fullscreenElement) {
+        if (
+          !document.fullscreenElement
+        ) {
 
           if (
             modalBox.requestFullscreen
@@ -935,6 +1398,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
           }
 
+
+          /*
+           * Try landscape on mobile.
+           * Some browsers don't allow it.
+           */
 
           if (
             screen.orientation &&
@@ -998,7 +1466,9 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
-      if (document.fullscreenElement) {
+      if (
+        document.fullscreenElement
+      ) {
 
         if (button) {
 
@@ -1069,109 +1539,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     CLOSE VIDEO
-  ===================================== */
-
-  window.closeEmbed =
-    async function () {
-
-      var modal =
-        document.getElementById(
-          "embedModal"
-        );
-
-
-      var embedArea =
-        document.getElementById(
-          "embedArea"
-        );
-
-
-      if (!modal) {
-        return;
-      }
-
-
-      if (
-        document.fullscreenElement
-      ) {
-
-        try {
-
-          await document.exitFullscreen();
-
-        } catch (error) {
-
-          console.log(
-            "Could not exit fullscreen:",
-            error
-          );
-
-        }
-
-      }
-
-
-      if (
-        screen.orientation &&
-        screen.orientation.unlock
-      ) {
-
-        try {
-
-          screen.orientation.unlock();
-
-        } catch (error) {
-
-          console.log(
-            "Could not unlock orientation:",
-            error
-          );
-
-        }
-
-      }
-
-
-      if (embedArea) {
-
-        embedArea.innerHTML =
-          "";
-
-      }
-
-
-      var controls =
-        modal.querySelector(
-          ".video-controls"
-        );
-
-
-      if (controls) {
-        controls.remove();
-      }
-
-
-      modal.classList.remove(
-        "open"
-      );
-
-
-      modal.setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-
-      document.body.style.overflow =
-        "";
-
-    };
-
-
-
-  /* =====================================
-     CLOSE MODAL WITH BACKDROP
+     MODAL BACKDROP
   ===================================== */
 
   var modal =
@@ -1216,15 +1584,15 @@ document.addEventListener("DOMContentLoaded", function () {
         event.key === "Escape"
       ) {
 
-        var modal =
+        var currentModal =
           document.getElementById(
             "embedModal"
           );
 
 
         if (
-          modal &&
-          modal.classList.contains(
+          currentModal &&
+          currentModal.classList.contains(
             "open"
           )
         ) {
@@ -1244,33 +1612,17 @@ document.addEventListener("DOMContentLoaded", function () {
      MOBILE MENU
   ===================================== */
 
-  var menuToggle =
-    document.getElementById(
-      "menuToggle"
-    );
-
-
-  var mainNav =
-    document.getElementById(
-      "mainNav"
-    );
-
-
   if (
     menuToggle &&
     mainNav
   ) {
 
-    menuToggle.onclick =
+    menuToggle.addEventListener(
+      "click",
       function () {
 
-        mainNav.classList.toggle(
-          "open"
-        );
-
-
         var isOpen =
-          mainNav.classList.contains(
+          mainNav.classList.toggle(
             "open"
           );
 
@@ -1282,7 +1634,273 @@ document.addEventListener("DOMContentLoaded", function () {
             : "false"
         );
 
-      };
+
+        menuToggle.setAttribute(
+          "aria-label",
+          isOpen
+            ? "Close navigation"
+            : "Open navigation"
+        );
+
+      }
+    );
+
+
+    /*
+     * Close mobile navigation when
+     * a navigation link is selected.
+     */
+
+    var navLinks =
+      mainNav.querySelectorAll(
+        "a"
+      );
+
+
+    for (
+      var i = 0;
+      i < navLinks.length;
+      i++
+    ) {
+
+      navLinks[i].addEventListener(
+        "click",
+        function () {
+
+          mainNav.classList.remove(
+            "open"
+          );
+
+
+          menuToggle.setAttribute(
+            "aria-expanded",
+            "false"
+          );
+
+
+          menuToggle.setAttribute(
+            "aria-label",
+            "Open navigation"
+          );
+
+        }
+      );
+
+    }
+
+  }
+
+
+
+  /* =====================================
+     SEARCH
+  ===================================== */
+
+  function setupSearch() {
+
+    if (!searchInput) {
+      return;
+    }
+
+
+    searchInput.addEventListener(
+      "input",
+      function () {
+
+        performSearch(
+          searchInput.value
+        );
+
+      }
+    );
+
+
+    /*
+     * Search when Enter is pressed.
+     */
+
+    searchInput.addEventListener(
+      "keydown",
+      function (event) {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          event.preventDefault();
+
+
+          performSearch(
+            searchInput.value
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+
+
+  /* =====================================
+     SEARCH
+  ===================================== */
+
+  function performSearch(
+    query
+  ) {
+
+    var search =
+      String(
+        query || ""
+      )
+      .trim()
+      .toLowerCase();
+
+
+    /*
+     * Empty search restores everything.
+     */
+
+    if (!search) {
+
+      clearSearch();
+
+      return;
+
+    }
+
+
+    var visibleCount = 0;
+
+
+    /*
+     * Search currently rendered cards.
+     *
+     * This works on homepage sections
+     * as well as cards rendered by
+     * all-posts.js on separate pages.
+     */
+
+    var cards =
+      document.querySelectorAll(
+        ".live-card, .media-card, .movie-card"
+      );
+
+
+    for (
+      var i = 0;
+      i < cards.length;
+      i++
+    ) {
+
+      var card =
+        cards[i];
+
+
+      var text =
+        (
+          card.textContent ||
+          ""
+        )
+        .toLowerCase();
+
+
+      var matches =
+        text.indexOf(
+          search
+        ) !== -1;
+
+
+      card.style.display =
+        matches
+          ? ""
+          : "none";
+
+
+      if (matches) {
+        visibleCount++;
+      }
+
+    }
+
+
+    /*
+     * Search status.
+     */
+
+    if (searchStatus) {
+
+      searchStatus.textContent =
+        visibleCount +
+        (
+          visibleCount === 1
+            ? " result"
+            : " results"
+        ) +
+        " found for \"" +
+        query +
+        "\"";
+
+    }
+
+
+    /*
+     * No-results message.
+     */
+
+    if (noResults) {
+
+      noResults.style.display =
+        visibleCount === 0
+          ? "block"
+          : "none";
+
+    }
+
+  }
+
+
+
+  /* =====================================
+     CLEAR SEARCH
+  ===================================== */
+
+  function clearSearch() {
+
+    var cards =
+      document.querySelectorAll(
+        ".live-card, .media-card, .movie-card"
+      );
+
+
+    for (
+      var i = 0;
+      i < cards.length;
+      i++
+    ) {
+
+      cards[i].style.display =
+        "";
+
+    }
+
+
+    if (searchStatus) {
+
+      searchStatus.textContent =
+        "";
+
+    }
+
+
+    if (noResults) {
+
+      noResults.style.display =
+        "none";
+
+    }
 
   }
 
