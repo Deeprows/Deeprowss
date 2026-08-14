@@ -492,9 +492,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  ```javascript
   /* =====================================
      VIDEO BUTTONS
+     OPEN VIDEO ON SEPARATE PAGE
   ===================================== */
 
   function attachVideoButtons() {
@@ -527,13 +527,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           if (!url) {
+
+            console.error(
+              "No embed URL found for this post."
+            );
+
             return;
+
           }
 
 
           /*
-           * Open a new page containing
-           * the iframe.
+           * Open a new browser tab.
            */
 
           var videoPage =
@@ -544,15 +549,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           if (!videoPage) {
+
+            alert(
+              "Please allow pop-ups for this site to watch the video."
+            );
+
             return;
+
           }
 
+
+          /*
+           * Build the separate video page.
+           */
 
           videoPage.document.open();
 
 
           videoPage.document.write(
             '<!DOCTYPE html>' +
+
             '<html lang="en">' +
 
             '<head>' +
@@ -563,7 +579,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 'content="width=device-width, initial-scale=1.0">' +
 
               '<title>' +
-                (title || "Deeprowss Video") +
+                escapeHtml(
+                  title || "Deeprowss Video"
+                ) +
               '</title>' +
 
               '<style>' +
@@ -593,14 +611,25 @@ document.addEventListener("DOMContentLoaded", function () {
             '<body>' +
 
               '<iframe ' +
-                'src="' + url + '" ' +
+
+                'src="' +
+                  escapeAttribute(url) +
+                '" ' +
+
                 'allowfullscreen ' +
+
                 'allow="autoplay; fullscreen; encrypted-media" ' +
+
                 'frameborder="0" ' +
+
                 'scrolling="no" ' +
+
                 'title="' +
-                  (title || "Deeprowss Video") +
+                  escapeAttribute(
+                    title || "Deeprowss Video"
+                  ) +
                 '">' +
+
               '</iframe>' +
 
             '</body>' +
@@ -616,598 +645,39 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
   }
-```
-
 
 
 
   /* =====================================
-     VIDEO MODAL
+     ESCAPE HTML
   ===================================== */
 
-  window.openEmbed =
-    function (title, url) {
-
-      var modal =
-        document.getElementById(
-          "embedModal"
-        );
-
-
-      var modalTitle =
-        document.getElementById(
-          "modalTitle"
-        );
-
-
-      var embedArea =
-        document.getElementById(
-          "embedArea"
-        );
-
-
-      if (!modal || !embedArea) {
-        return;
-      }
-
-
-      /* Set title */
-
-      if (modalTitle) {
-
-        modalTitle.textContent =
-          title || "Video";
-
-      }
-
-
-      /* Remove previous player */
-
-      embedArea.innerHTML = "";
-
-
-      /* Remove previous fullscreen controls */
-
-      var oldControls =
-        modal.querySelector(
-          ".video-controls"
-        );
-
-
-      if (oldControls) {
-        oldControls.remove();
-      }
-
-
-      /* =================================
-         CREATE VIDEO IFRAME
-      ================================= */
-
-      if (url) {
-
-        var iframe =
-          document.createElement(
-            "iframe"
-          );
-
-
-        iframe.src =
-          url;
-
-
-        iframe.setAttribute(
-          "allowfullscreen",
-          ""
-        );
-
-
-        iframe.setAttribute(
-          "allow",
-          "autoplay; fullscreen; encrypted-media"
-        );
-
-
-        iframe.setAttribute(
-          "loading",
-          "lazy"
-        );
-
-
-        iframe.setAttribute(
-          "frameborder",
-          "0"
-        );
-
-
-        iframe.setAttribute(
-          "scrolling",
-          "no"
-        );
-
-
-        iframe.setAttribute(
-          "title",
-          title || "Video"
-        );
-
-
-        embedArea.appendChild(
-          iframe
-        );
-
-      }
-
-
-      /* =================================
-         FULLSCREEN CONTROLS
-      ================================= */
-
-      var controls =
-        document.createElement(
-          "div"
-        );
-
-
-      controls.className =
-        "video-controls";
-
-
-      var fullscreenButton =
-        document.createElement(
-          "button"
-        );
-
-
-      fullscreenButton.type =
-        "button";
-
-
-      fullscreenButton.className =
-        "fullscreen-btn";
-
-
-      fullscreenButton.setAttribute(
-        "aria-label",
-        "Tap to watch in Fullscreen"
-      );
-
-
-      fullscreenButton.setAttribute(
-        "title",
-        "Tap to watch in Fullscreen"
-      );
-
-
-      fullscreenButton.textContent =
-        "Tap to watch in Fullscreen";
-
-
-      controls.appendChild(
-        fullscreenButton
-      );
-
-
-      /*
-       * Place button directly
-       * underneath the player.
-       */
-
-      embedArea.insertAdjacentElement(
-        "afterend",
-        controls
-      );
-
-
-      /* =================================
-         OPEN MODAL
-      ================================= */
-
-      modal.classList.add(
-        "open"
-      );
-
-
-      modal.setAttribute(
-        "aria-hidden",
-        "false"
-      );
-
-
-      document.body.style.overflow =
-        "hidden";
-
-    };
-
-
-
-  /* =====================================
-     FULLSCREEN
-  ===================================== */
-
-  document.addEventListener(
-    "click",
-    async function (event) {
-
-      var button =
-        event.target.closest(
-          ".fullscreen-btn"
-        );
-
-
-      if (!button) {
-        return;
-      }
-
-
-      var modalBox =
-        document.querySelector(
-          ".modal-box"
-        );
-
-
-      if (!modalBox) {
-        return;
-      }
-
-
-      try {
-
-        /* ===============================
-           ENTER FULLSCREEN
-        =============================== */
-
-        if (!document.fullscreenElement) {
-
-          if (
-            modalBox.requestFullscreen
-          ) {
-
-            await modalBox.requestFullscreen();
-
-          } else {
-
-            /*
-             * Fullscreen API not supported.
-             */
-
-            console.log(
-              "Fullscreen API is not supported."
-            );
-
-            return;
-
-          }
-
-
-          /*
-           * Try to rotate the device
-           * into landscape.
-           */
-
-          if (
-            screen.orientation &&
-            screen.orientation.lock
-          ) {
-
-            try {
-
-              await screen.orientation.lock(
-                "landscape"
-              );
-
-            } catch (orientationError) {
-
-              console.log(
-                "Landscape orientation lock unavailable:",
-                orientationError
-              );
-
-            }
-
-          }
-
-        }
-
-
-        /* ===============================
-           EXIT FULLSCREEN
-        =============================== */
-
-        else {
-
-          if (
-            document.exitFullscreen
-          ) {
-
-            await document.exitFullscreen();
-
-          }
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Fullscreen error:",
-          error
-        );
-
-      }
-
-    }
-  );
-
-
-
-  /* =====================================
-     FULLSCREEN CHANGE
-  ===================================== */
-
-  document.addEventListener(
-    "fullscreenchange",
-    function () {
-
-      var button =
-        document.querySelector(
-          ".fullscreen-btn"
-        );
-
-
-      if (document.fullscreenElement) {
-
-        if (button) {
-
-          button.textContent =
-            "Exit Fullscreen";
-
-
-          button.setAttribute(
-            "aria-label",
-            "Exit Fullscreen"
-          );
-
-
-          button.setAttribute(
-            "title",
-            "Exit Fullscreen"
-          );
-
-        }
-
-      } else {
-
-        if (button) {
-
-          button.textContent =
-            "Tap to watch in Fullscreen";
-
-
-          button.setAttribute(
-            "aria-label",
-            "Tap to watch in Fullscreen"
-          );
-
-
-          button.setAttribute(
-            "title",
-            "Tap to watch in Fullscreen"
-          );
-
-        }
-
-
-        /*
-         * Unlock device orientation.
-         */
-
-        if (
-          screen.orientation &&
-          screen.orientation.unlock
-        ) {
-
-          try {
-
-            screen.orientation.unlock();
-
-          } catch (error) {
-
-            console.log(
-              "Orientation unlock unavailable:",
-              error
-            );
-
-          }
-
-        }
-
-      }
-
-    }
-  );
-
-
-
-  /* =====================================
-     CLOSE VIDEO
-  ===================================== */
-
-  window.closeEmbed =
-    async function () {
-
-      var modal =
-        document.getElementById(
-          "embedModal"
-        );
-
-
-      var embedArea =
-        document.getElementById(
-          "embedArea"
-        );
-
-
-      if (!modal) {
-        return;
-      }
-
-
-      /* Exit fullscreen */
-
-      if (
-        document.fullscreenElement
-      ) {
-
-        try {
-
-          await document.exitFullscreen();
-
-        } catch (error) {
-
-          console.log(
-            "Could not exit fullscreen:",
-            error
-          );
-
-        }
-
-      }
-
-
-      /* Unlock orientation */
-
-      if (
-        screen.orientation &&
-        screen.orientation.unlock
-      ) {
-
-        try {
-
-          screen.orientation.unlock();
-
-        } catch (error) {
-
-          console.log(
-            "Could not unlock orientation:",
-            error
-          );
-
-        }
-
-      }
-
-
-      /* Remove video */
-
-      if (embedArea) {
-
-        embedArea.innerHTML =
-          "";
-
-      }
-
-
-      /* Remove fullscreen controls */
-
-      var controls =
-        modal.querySelector(
-          ".video-controls"
-        );
-
-
-      if (controls) {
-        controls.remove();
-      }
-
-
-      /* Close modal */
-
-      modal.classList.remove(
-        "open"
-      );
-
-
-      modal.setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-
-      /* Restore page scrolling */
-
-      document.body.style.overflow =
-        "";
-
-    };
-
-
-
-  /* =====================================
-     CLOSE MODAL WITH BACKDROP
-  ===================================== */
-
-  var modal =
-    document.getElementById(
-      "embedModal"
-    );
-
-
-  if (modal) {
-
-    modal.addEventListener(
-      "click",
-      function (event) {
-
-        if (
-          event.target === modal ||
-          event.target.classList.contains(
-            "modal-backdrop"
-          )
-        ) {
-
-          closeEmbed();
-
-        }
-
-      }
-    );
+  function escapeHtml(value) {
+
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
 
   }
 
 
 
   /* =====================================
-     ESC KEY
+     ESCAPE URL / ATTRIBUTE
   ===================================== */
 
-  document.addEventListener(
-    "keydown",
-    function (event) {
+  function escapeAttribute(value) {
 
-      if (
-        event.key === "Escape"
-      ) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
 
-        var modal =
-          document.getElementById(
-            "embedModal"
-          );
-
-
-        if (
-          modal &&
-          modal.classList.contains(
-            "open"
-          )
-        ) {
-
-          closeEmbed();
-
-        }
-
-      }
-
-    }
-  );
+  }
 
 
 
@@ -1263,3 +733,4 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 });
+```
