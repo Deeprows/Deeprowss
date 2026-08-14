@@ -1,122 +1,277 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
 
   const liveContainer = document.getElementById("livePosts");
   const highlightContainer = document.getElementById("highlightPosts");
   const movieContainer = document.getElementById("moviePosts");
 
-  console.log("Deeprowss script loaded");
+  console.log("Deeprowss: script loaded");
 
-  fetch("posts.json?v=" + Date.now())
-    .then(function (response) {
+  try {
 
-      if (!response.ok) {
-        throw new Error("posts.json could not be loaded");
-      }
+    const response = await fetch("posts.json?v=" + Date.now());
 
-      return response.json();
+    if (!response.ok) {
+      throw new Error("Could not load posts.json");
+    }
 
-    })
-    .then(function (posts) {
+    const posts = await response.json();
 
-      console.log("Posts loaded:", posts);
+    console.log("Deeprowss posts:", posts);
 
-      displayPosts(posts);
+    /*
+     * FOOTBALL LIVE
+     */
 
-    })
-    .catch(function (error) {
-
-      console.error("Deeprowss error:", error);
-
-      if (liveContainer) {
-        liveContainer.innerHTML =
-          '<div class="empty-posts"><p>Unable to load posts.</p></div>';
-      }
-
-    });
-
-
-  function displayPosts(posts) {
-
-    const livePosts =
-      posts.filter(function (post) {
-        return post.type === "live";
-      });
-
+    const livePosts = posts.filter(post => post.type === "live");
 
     if (liveContainer) {
 
       if (livePosts.length === 0) {
 
-        liveContainer.innerHTML =
-          '<div class="empty-posts"><p>No football posts yet.</p></div>';
+        liveContainer.innerHTML = `
+          <div class="empty-posts">
+            No football posts yet.
+          </div>
+        `;
 
       } else {
 
-        liveContainer.innerHTML =
-          livePosts.map(function (post) {
+        liveContainer.innerHTML = livePosts.map(post => `
 
-            return `
-              <article class="live-card post-card">
+          <article class="live-card">
 
-                <div class="match-top">
+            <div class="match-top">
 
-                  <span class="${
-                    post.status === "LIVE"
-                      ? "live-badge"
-                      : "upcoming-badge"
-                  }">
-                    ${post.status || "UPCOMING"}
-                  </span>
+              <span class="${
+                post.status === "LIVE"
+                  ? "live-badge"
+                  : "upcoming-badge"
+              }">
 
-                  <span>
-                    ${post.category || "Football"}
-                  </span>
+                ${post.status || "UPCOMING"}
 
-                </div>
+              </span>
 
-                <div class="teams">
+              <span>
+                ${post.category || "Football"}
+              </span>
 
-                  <strong>
-                    ${post.home || "Team 1"}
-                  </strong>
+            </div>
 
-                  <span>vs</span>
 
-                  <strong>
-                    ${post.away || "Team 2"}
-                  </strong>
+            <div class="teams">
 
-                </div>
+              <strong>
+                ${post.home || "Team 1"}
+              </strong>
 
-                <div class="match-meta">
-                  ${post.description || ""}
-                </div>
+              <span>vs</span>
 
-                <button
-                  class="watch-btn"
-                  onclick="openEmbed(
-                    '${post.title || "Video"}',
-                    '${post.embedUrl || ""}'
-                  )"
-                >
-                  Watch
-                </button>
+              <strong>
+                ${post.away || "Team 2"}
+              </strong>
 
-              </article>
-            `;
+            </div>
 
-          }).join("");
+
+            <div class="match-meta">
+
+              ${post.description || ""}
+
+            </div>
+
+
+            <button
+              class="watch-btn"
+              data-url="${post.embedUrl || ""}"
+              data-title="${post.title || "Video"}">
+
+              Watch
+
+            </button>
+
+          </article>
+
+        `).join("");
 
       }
+
+    }
+
+
+    /*
+     * HIGHLIGHTS
+     */
+
+    const highlights = posts.filter(
+      post => post.type === "highlight"
+    );
+
+    if (highlightContainer) {
+
+      if (highlights.length === 0) {
+
+        highlightContainer.innerHTML = `
+          <div class="empty-posts">
+            No highlights yet.
+          </div>
+        `;
+
+      } else {
+
+        highlightContainer.innerHTML = highlights.map(post => `
+
+          <article class="media-card">
+
+            <div class="media-thumb football-thumb">
+
+              <span class="play">▶</span>
+
+            </div>
+
+            <div class="media-info">
+
+              <span class="tag">
+                HIGHLIGHT
+              </span>
+
+              <h3>
+                ${post.title || "Football Highlight"}
+              </h3>
+
+              <p>
+                ${post.description || ""}
+              </p>
+
+              <button
+                data-url="${post.embedUrl || ""}"
+                data-title="${post.title || "Highlight"}">
+
+                Watch highlight
+
+              </button>
+
+            </div>
+
+          </article>
+
+        `).join("");
+
+      }
+
+    }
+
+
+    /*
+     * MOVIES
+     */
+
+    const movies = posts.filter(
+      post => post.type === "movie"
+    );
+
+    if (movieContainer) {
+
+      if (movies.length === 0) {
+
+        movieContainer.innerHTML = `
+          <div class="empty-posts">
+            No movies yet.
+          </div>
+        `;
+
+      } else {
+
+        movieContainer.innerHTML = movies.map(post => `
+
+          <article class="movie-card">
+
+            <div class="poster poster-one">
+
+              <span>
+                ${post.category || "MOVIE"}
+              </span>
+
+            </div>
+
+            <div class="movie-info">
+
+              <h3>
+                ${post.title || "Movie"}
+              </h3>
+
+              <p>
+                ${post.date || ""}
+              </p>
+
+              <button
+                data-url="${post.embedUrl || ""}"
+                data-title="${post.title || "Movie"}">
+
+                View
+
+              </button>
+
+            </div>
+
+          </article>
+
+        `).join("");
+
+      }
+
+    }
+
+
+    /*
+     * VIDEO BUTTONS
+     */
+
+    document.querySelectorAll(
+      "[data-url]"
+    ).forEach(button => {
+
+      button.addEventListener(
+        "click",
+        function () {
+
+          const url =
+            this.getAttribute("data-url");
+
+          const title =
+            this.getAttribute("data-title");
+
+          openEmbed(title, url);
+
+        }
+      );
+
+    });
+
+
+  } catch (error) {
+
+    console.error(
+      "Deeprowss error:",
+      error
+    );
+
+    if (liveContainer) {
+
+      liveContainer.innerHTML = `
+        <div class="empty-posts">
+          Error loading posts.
+        </div>
+      `;
 
     }
 
   }
 
 
-  /* ==============================
-     VIDEO MODAL
-     ============================== */
+  /*
+   * VIDEO MODAL
+   */
 
   window.openEmbed = function (title, url) {
 
@@ -140,16 +295,19 @@ document.addEventListener("DOMContentLoaded", function () {
     if (url) {
 
       embedArea.innerHTML = `
+
         <iframe
           src="${url}"
           allowfullscreen
           loading="lazy">
         </iframe>
+
       `;
 
     } else {
 
       embedArea.innerHTML = `
+
         <div class="embed-placeholder">
 
           <strong>
@@ -157,11 +315,12 @@ document.addEventListener("DOMContentLoaded", function () {
           </strong>
 
           <p>
-            Add an authorized external embed URL
-            to this post.
+            Add an authorized external
+            embed URL to this post.
           </p>
 
         </div>
+
       `;
 
     }
@@ -198,15 +357,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     if (embedArea) {
+
       embedArea.innerHTML = "";
+
     }
 
   };
 
 
-  /* ==============================
-     MOBILE MENU
-     ============================== */
+  /*
+   * MOBILE MENU
+   */
 
   const menuToggle =
     document.getElementById("menuToggle");
@@ -229,16 +390,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-  /* ==============================
-     YEAR
-     ============================== */
+  /*
+   * COPYRIGHT YEAR
+   */
 
   const year =
     document.getElementById("year");
 
   if (year) {
+
     year.textContent =
       new Date().getFullYear();
+
   }
 
 });
