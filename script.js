@@ -7,112 +7,121 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("Deeprowss script loaded");
 
 
-  /*
-   * LOAD POSTS
-   */
+  /* =====================================
+     LOAD POSTS
+  ===================================== */
 
-  fetch("posts.json?v=" + new Date().getTime())
+  var xhr = new XMLHttpRequest();
 
-    .then(function (response) {
+  xhr.open(
+    "GET",
+    "posts.json?v=" + new Date().getTime(),
+    true
+  );
 
-      if (!response.ok) {
-        throw new Error("Could not load posts.json");
+  xhr.onreadystatechange = function () {
+
+    if (xhr.readyState !== 4) {
+      return;
+    }
+
+
+    if (xhr.status >= 200 && xhr.status < 300) {
+
+      try {
+
+        var posts = JSON.parse(xhr.responseText);
+
+        console.log("Deeprowss posts loaded:", posts);
+
+
+        /* Newest posts first */
+
+        posts.sort(function (a, b) {
+
+          return new Date(b.publishedAt).getTime() -
+                 new Date(a.publishedAt).getTime();
+
+        });
+
+
+        displayLivePosts(posts);
+
+        displayHighlightPosts(posts);
+
+        displayMoviePosts(posts);
+
+
+      } catch (error) {
+
+        console.error(
+          "Could not read posts.json:",
+          error
+        );
+
+        showError();
+
       }
 
-      return response.json();
-
-    })
-
-    .then(function (posts) {
-
-      console.log("Posts loaded:", posts);
-
-
-      /*
-       * NEWEST POSTS FIRST
-       */
-
-      posts.sort(function (a, b) {
-
-        return new Date(b.publishedAt) -
-               new Date(a.publishedAt);
-
-      });
-
-
-      displayLivePosts(posts);
-
-      displayHighlightPosts(posts);
-
-      displayMoviePosts(posts);
-
-    })
-
-    .catch(function (error) {
+    } else {
 
       console.error(
-        "Deeprowss error:",
-        error
+        "Could not load posts.json. Status:",
+        xhr.status
       );
 
+      showError();
 
-      if (liveContainer) {
-
-        liveContainer.innerHTML =
-          '<div class="empty-posts">Unable to load football posts.</div>';
-
-      }
-
-
-      if (highlightContainer) {
-
-        highlightContainer.innerHTML =
-          '<div class="empty-posts">Unable to load highlights.</div>';
-
-      }
-
-
-      if (movieContainer) {
-
-        movieContainer.innerHTML =
-          '<div class="empty-posts">Unable to load movies.</div>';
-
-      }
-
-    });
-
-
-
-  /*
-   * FORMAT VISITOR LOCAL TIME
-   */
-
-  function formatPostDate(dateString) {
-
-    if (!dateString) {
-      return "";
     }
 
-    var date = new Date(dateString);
+  };
 
-    if (isNaN(date.getTime())) {
-      return "";
+
+  xhr.onerror = function () {
+
+    console.error("Network error loading posts.json");
+
+    showError();
+
+  };
+
+
+  xhr.send();
+
+
+
+  /* =====================================
+     ERROR
+  ===================================== */
+
+  function showError() {
+
+    if (liveContainer) {
+
+      liveContainer.innerHTML =
+        '<div class="empty-posts">' +
+        'Unable to load football posts.' +
+        '</div>';
+
     }
 
 
-    try {
+    if (highlightContainer) {
 
-      return date.toLocaleString(
-        undefined,
-        {
-          dateStyle: "medium",
-          timeStyle: "short"
-        }
-      );
+      highlightContainer.innerHTML =
+        '<div class="empty-posts">' +
+        'Unable to load highlights.' +
+        '</div>';
 
-    } catch (error) {
+    }
 
-      return date.toLocaleString();
+
+    if (movieContainer) {
+
+      movieContainer.innerHTML =
+        '<div class="empty-posts">' +
+        'Unable to load movies.' +
+        '</div>';
 
     }
 
@@ -120,9 +129,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  /*
-   * FOOTBALL LIVE
-   */
+  /* =====================================
+     FORMAT VISITOR LOCAL TIME
+  ===================================== */
+
+  function formatPostDate(dateString) {
+
+    if (!dateString) {
+      return "";
+    }
+
+
+    var date = new Date(dateString);
+
+
+    if (isNaN(date.getTime())) {
+      return "";
+    }
+
+
+    /*
+     * Try visitor's local timezone.
+     */
+
+    try {
+
+      return date.toLocaleString();
+
+    } catch (error) {
+
+      return date.toString();
+
+    }
+
+  }
+
+
+
+  /* =====================================
+     FOOTBALL LIVE
+  ===================================== */
 
   function displayLivePosts(posts) {
 
@@ -141,7 +187,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (livePosts.length === 0) {
 
       liveContainer.innerHTML =
-        '<div class="empty-posts">No football posts yet.</div>';
+        '<div class="empty-posts">' +
+        'No football posts yet.' +
+        '</div>';
 
       return;
 
@@ -160,6 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       html +=
+
         '<article class="live-card">' +
 
           '<div class="match-top">' +
@@ -195,25 +244,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           '<div class="match-meta">' +
-
             (post.description || "") +
-
           '</div>' +
 
 
           '<div class="post-date">' +
-
             formatPostDate(post.publishedAt) +
-
           '</div>' +
 
 
-          '<button class="watch-btn" ' +
-
+          '<button ' +
+            'class="watch-btn" ' +
             'data-url="' +
               (post.embedUrl || "") +
             '" ' +
-
             'data-title="' +
               (post.title || "Video") +
             '">' +
@@ -236,9 +280,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  /*
-   * HIGHLIGHTS
-   */
+  /* =====================================
+     HIGHLIGHTS
+  ===================================== */
 
   function displayHighlightPosts(posts) {
 
@@ -257,7 +301,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (highlights.length === 0) {
 
       highlightContainer.innerHTML =
-        '<div class="empty-posts">No highlights yet.</div>';
+        '<div class="empty-posts">' +
+        'No highlights yet.' +
+        '</div>';
 
       return;
 
@@ -275,14 +321,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '<div class="media-thumb football-thumb">' +
 
-            '<span class="play">▶</span>' +
+            '<span class="play">' +
+              '▶' +
+            '</span>' +
 
           '</div>' +
 
 
           '<div class="media-info">' +
 
-            '<span class="tag">HIGHLIGHT</span>' +
+            '<span class="tag">' +
+              'HIGHLIGHT' +
+            '</span>' +
 
             '<h3>' +
               (post.title || "Football Highlight") +
@@ -297,11 +347,9 @@ document.addEventListener("DOMContentLoaded", function () {
             '</div>' +
 
             '<button ' +
-
               'data-url="' +
                 (post.embedUrl || "") +
               '" ' +
-
               'data-title="' +
                 (post.title || "Highlight") +
               '">' +
@@ -326,9 +374,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  /*
-   * MOVIES
-   */
+  /* =====================================
+     MOVIES
+  ===================================== */
 
   function displayMoviePosts(posts) {
 
@@ -347,7 +395,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (movies.length === 0) {
 
       movieContainer.innerHTML =
-        '<div class="empty-posts">No movies yet.</div>';
+        '<div class="empty-posts">' +
+        'No movies yet.' +
+        '</div>';
 
       return;
 
@@ -383,11 +433,9 @@ document.addEventListener("DOMContentLoaded", function () {
             '</p>' +
 
             '<button ' +
-
               'data-url="' +
                 (post.embedUrl || "") +
               '" ' +
-
               'data-title="' +
                 (post.title || "Movie") +
               '">' +
@@ -412,9 +460,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  /*
-   * VIDEO BUTTONS
-   */
+  /* =====================================
+     VIDEO BUTTONS
+  ===================================== */
 
   function attachVideoButtons() {
 
@@ -447,9 +495,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  /*
-   * OPEN VIDEO
-   */
+  /* =====================================
+     VIDEO MODAL
+  ===================================== */
 
   window.openEmbed = function (title, url) {
 
@@ -475,23 +523,15 @@ document.addEventListener("DOMContentLoaded", function () {
     if (url) {
 
       embedArea.innerHTML =
-
         '<iframe ' +
-
-          'src="' +
-            url +
-          '" ' +
-
+          'src="' + url + '" ' +
           'allowfullscreen ' +
-
           'loading="lazy">' +
-
         '</iframe>';
 
     } else {
 
       embedArea.innerHTML =
-
         '<div class="embed-placeholder">' +
 
           '<strong>' +
@@ -499,7 +539,8 @@ document.addEventListener("DOMContentLoaded", function () {
           '</strong>' +
 
           '<p>' +
-            'Add an authorized external embed URL to this post.' +
+            'Add an authorized external embed URL ' +
+            'to this post.' +
           '</p>' +
 
         '</div>';
@@ -518,9 +559,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  /*
-   * CLOSE VIDEO
-   */
+  /* =====================================
+     CLOSE VIDEO
+  ===================================== */
 
   window.closeEmbed = function () {
 
@@ -545,18 +586,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     if (embedArea) {
-
       embedArea.innerHTML = "";
-
     }
 
   };
 
 
 
-  /*
-   * MOBILE MENU
-   */
+  /* =====================================
+     MOBILE MENU
+  ===================================== */
 
   var menuToggle =
     document.getElementById("menuToggle");
@@ -577,9 +616,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  /*
-   * COPYRIGHT YEAR
-   */
+  /* =====================================
+     COPYRIGHT YEAR
+  ===================================== */
 
   var year =
     document.getElementById("year");
