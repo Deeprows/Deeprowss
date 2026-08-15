@@ -88,8 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
         : " no-thumbnail");
 
 
-    /* No thumbnail */
-
     if (!safeThumbnail) {
 
       return (
@@ -110,8 +108,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* Real thumbnail */
 
     return (
 
@@ -192,7 +188,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         'title="Download">' +
 
-
         '<svg ' +
 
           'viewBox="0 0 24 24" ' +
@@ -201,16 +196,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
           'focusable="false">' +
 
-
           '<path d="M12 3v11"></path>' +
 
           '<path d="m7 10 5 5 5-5"></path>' +
 
           '<path d="M5 21h14"></path>' +
 
-
         '</svg>' +
-
 
       '</a>'
 
@@ -439,7 +431,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '<article class="live-card">' +
 
-
             createThumbnail(
               post.thumbnail,
               post.title ||
@@ -451,9 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
               "live-thumbnail"
             ) +
 
-
             '<div class="live-card-content">' +
-
 
               '<div class="match-top">' +
 
@@ -464,7 +453,6 @@ document.addEventListener("DOMContentLoaded", function () {
                   escapeHTML(status) +
 
                 '</span>' +
-
 
                 '<span>' +
 
@@ -477,7 +465,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</div>' +
 
-
               '<div class="teams">' +
 
                 '<strong>' +
@@ -489,9 +476,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 '</strong>' +
 
-
                 '<span>vs</span>' +
-
 
                 '<strong>' +
 
@@ -504,7 +489,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</div>' +
 
-
               '<div class="match-meta">' +
 
                 escapeHTML(
@@ -514,7 +498,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</div>' +
 
-
               '<div class="post-date">' +
 
                 formatPostDate(
@@ -523,7 +506,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</div>' +
 
-
               '<button ' +
 
                 'type="button" ' +
@@ -531,19 +513,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 'class="watch-btn" ' +
 
                 'data-url="' +
-
                   escapeHTML(
-                    post.embedUrl ||
-                    ""
+                    post.embedUrl || ""
                   ) +
 
                 '" ' +
 
                 'data-alt-url="' +
-
                   escapeHTML(
-                    post.embedUrlAlt ||
-                    ""
+                    post.alternativeEmbedUrl || ""
                   ) +
 
                 '" ' +
@@ -561,9 +539,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</button>' +
 
-
             '</div>' +
-
 
           '</article>';
 
@@ -623,7 +599,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '<article class="media-card">' +
 
-
             createThumbnail(
               post.thumbnail,
               post.title ||
@@ -631,14 +606,11 @@ document.addEventListener("DOMContentLoaded", function () {
               "highlight-thumbnail"
             ) +
 
-
             '<div class="media-info">' +
-
 
               '<span class="tag">' +
                 'HIGHLIGHT' +
               '</span>' +
-
 
               '<h3>' +
 
@@ -649,7 +621,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</h3>' +
 
-
               '<p>' +
 
                 escapeHTML(
@@ -659,7 +630,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</p>' +
 
-
               '<div class="post-date">' +
 
                 formatPostDate(
@@ -667,7 +637,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 ) +
 
               '</div>' +
-
 
               '<button ' +
 
@@ -697,9 +666,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</button>' +
 
-
             '</div>' +
-
 
           '</article>';
 
@@ -759,7 +726,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '<article class="movie-card">' +
 
-
             createThumbnail(
               post.thumbnail,
               post.title ||
@@ -767,9 +733,7 @@ document.addEventListener("DOMContentLoaded", function () {
               "movie-thumbnail"
             ) +
 
-
             '<div class="movie-info">' +
-
 
               '<span class="tag">' +
 
@@ -780,7 +744,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</span>' +
 
-
               '<h3>' +
 
                 escapeHTML(
@@ -790,7 +753,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</h3>' +
 
-
               '<p>' +
 
                 formatPostDate(
@@ -799,9 +761,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</p>' +
 
-
               '<div class="movie-actions">' +
-
 
                 '<button ' +
 
@@ -831,17 +791,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 '</button>' +
 
-
                 createMovieDownloadButton(
                   post
                 ) +
 
-
               '</div>' +
 
-
             '</div>' +
-
 
           '</article>';
 
@@ -1005,7 +961,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       '<article class="live-card">' +
 
-
         createThumbnail(
           post.thumbnail,
           post.title ||
@@ -1013,9 +968,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "live-thumbnail"
         ) +
 
-
         '<div class="live-card-content">' +
-
 
           '<div class="match-top">' +
 
@@ -1026,7 +979,6 @@ document.addEventListener("DOMContentLoaded", function () {
               escapeHTML(status) +
 
             '</span>' +
-
 
             '<span>' +
 
@@ -1039,7 +991,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</div>' +
 
-
           '<div class="teams">' +
 
             '<strong>' +
@@ -1051,9 +1002,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             '</strong>' +
 
-
             '<span>vs</span>' +
-
 
             '<strong>' +
 
@@ -1066,7 +1015,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</div>' +
 
-
           '<p class="match-meta">' +
 
             escapeHTML(
@@ -1076,7 +1024,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</p>' +
 
-
           '<div class="post-date">' +
 
             formatPostDate(
@@ -1084,7 +1031,6 @@ document.addEventListener("DOMContentLoaded", function () {
             ) +
 
           '</div>' +
-
 
           '<button ' +
 
@@ -1104,7 +1050,7 @@ document.addEventListener("DOMContentLoaded", function () {
             'data-alt-url="' +
 
               escapeHTML(
-                post.embedUrlAlt ||
+                post.alternativeEmbedUrl ||
                 ""
               ) +
 
@@ -1123,9 +1069,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</button>' +
 
-
         '</div>' +
-
 
       '</article>'
 
@@ -1144,7 +1088,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       '<article class="media-card">' +
 
-
         createThumbnail(
           post.thumbnail,
           post.title ||
@@ -1152,14 +1095,11 @@ document.addEventListener("DOMContentLoaded", function () {
           "highlight-thumbnail"
         ) +
 
-
         '<div class="media-info">' +
-
 
           '<span class="tag">' +
             'HIGHLIGHT' +
           '</span>' +
-
 
           '<h3>' +
 
@@ -1170,7 +1110,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</h3>' +
 
-
           '<p>' +
 
             escapeHTML(
@@ -1180,7 +1119,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</p>' +
 
-
           '<div class="post-date">' +
 
             formatPostDate(
@@ -1188,7 +1126,6 @@ document.addEventListener("DOMContentLoaded", function () {
             ) +
 
           '</div>' +
-
 
           '<button ' +
 
@@ -1218,9 +1155,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</button>' +
 
-
         '</div>' +
-
 
       '</article>'
 
@@ -1239,7 +1174,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       '<article class="movie-card">' +
 
-
         createThumbnail(
           post.thumbnail,
           post.title ||
@@ -1247,9 +1181,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "movie-thumbnail"
         ) +
 
-
         '<div class="movie-info">' +
-
 
           '<span class="tag">' +
 
@@ -1260,7 +1192,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</span>' +
 
-
           '<h3>' +
 
             escapeHTML(
@@ -1270,7 +1201,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</h3>' +
 
-
           '<p>' +
 
             formatPostDate(
@@ -1279,9 +1209,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</p>' +
 
-
           '<div class="movie-actions">' +
-
 
             '<button ' +
 
@@ -1311,17 +1239,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             '</button>' +
 
-
             createMovieDownloadButton(
               post
             ) +
 
-
           '</div>' +
 
-
         '</div>' +
-
 
       '</article>'
 
@@ -1369,10 +1293,18 @@ document.addEventListener("DOMContentLoaded", function () {
               ) || "Video";
 
 
+            var isLiveButton =
+              this.classList.contains(
+                "watch-btn"
+              );
+
+
             openEmbed(
               title,
               url,
-              altUrl
+              isLiveButton
+                ? altUrl
+                : ""
             );
 
           };
@@ -1384,11 +1316,201 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
+     CREATE IFRAME
+  ===================================== */
+
+  function createVideoIframe(
+    url,
+    title
+  ) {
+
+    var iframe =
+      document.createElement(
+        "iframe"
+      );
+
+
+    iframe.src =
+      String(url || "").trim();
+
+
+    iframe.setAttribute(
+      "allowfullscreen",
+      ""
+    );
+
+
+    iframe.setAttribute(
+      "allow",
+      "autoplay; fullscreen; encrypted-media; picture-in-picture; orientation-lock"
+    );
+
+
+    iframe.setAttribute(
+      "frameborder",
+      "0"
+    );
+
+
+    iframe.setAttribute(
+      "scrolling",
+      "no"
+    );
+
+
+    iframe.setAttribute(
+      "title",
+      title || "Video"
+    );
+
+
+    iframe.setAttribute(
+      "webkitallowfullscreen",
+      ""
+    );
+
+
+    return iframe;
+
+  }
+
+
+  /* =====================================
+     SWITCH LIVE SCREEN
+  ===================================== */
+
+  function switchLiveScreen(
+    useAlternative
+  ) {
+
+    var modal =
+      document.getElementById(
+        "embedModal"
+      );
+
+
+    var embedArea =
+      document.getElementById(
+        "embedArea"
+      );
+
+
+    if (!modal || !embedArea) {
+      return;
+    }
+
+
+    var mainUrl =
+      modal.getAttribute(
+        "data-main-url"
+      ) || "";
+
+
+    var alternativeUrl =
+      modal.getAttribute(
+        "data-alternative-url"
+      ) || "";
+
+
+    var title =
+      modal.getAttribute(
+        "data-video-title"
+      ) || "Football";
+
+
+    var selectedUrl =
+      useAlternative
+        ? alternativeUrl
+        : mainUrl;
+
+
+    if (!selectedUrl) {
+
+      console.warn(
+        "The requested screen URL is missing."
+      );
+
+      return;
+
+    }
+
+
+    /* Destroy current iframe */
+
+    embedArea.innerHTML = "";
+
+
+    /* Create new iframe */
+
+    var iframe =
+      createVideoIframe(
+        selectedUrl,
+        title
+      );
+
+
+    embedArea.appendChild(
+      iframe
+    );
+
+
+    /* Save active screen */
+
+    modal.setAttribute(
+      "data-active-screen",
+      useAlternative
+        ? "alternative"
+        : "main"
+    );
+
+
+    /* Update button */
+
+    var switchButton =
+      modal.querySelector(
+        ".screen-switch-btn"
+      );
+
+
+    if (switchButton) {
+
+      if (useAlternative) {
+
+        switchButton.textContent =
+          "Main Screen";
+
+        switchButton.setAttribute(
+          "aria-label",
+          "Switch to Main Screen"
+        );
+
+      } else {
+
+        switchButton.textContent =
+          "Alt Screen";
+
+        switchButton.setAttribute(
+          "aria-label",
+          "Switch to Alternative Screen"
+        );
+
+      }
+
+    }
+
+  }
+
+
+  /* =====================================
      OPEN VIDEO
   ===================================== */
 
   window.openEmbed =
-    function (title, url, altUrl) {
+    function (
+      title,
+      url,
+      alternativeUrl
+    ) {
 
       var modal =
         document.getElementById(
@@ -1427,9 +1549,33 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* =================================
-         DESTROY PREVIOUS IFRAME
-      ================================= */
+      /* Store URLs for the current video */
+
+      modal.setAttribute(
+        "data-main-url",
+        url || ""
+      );
+
+
+      modal.setAttribute(
+        "data-alternative-url",
+        alternativeUrl || ""
+      );
+
+
+      modal.setAttribute(
+        "data-video-title",
+        title || "Video"
+      );
+
+
+      modal.setAttribute(
+        "data-active-screen",
+        "main"
+      );
+
+
+      /* Destroy previous iframe */
 
       embedArea.innerHTML = "";
 
@@ -1448,65 +1594,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       /* =================================
-         CREATE IFRAME
+         CREATE MAIN IFRAME
       ================================= */
 
       if (url) {
 
         var iframe =
-          document.createElement(
-            "iframe"
+          createVideoIframe(
+            url,
+            title
           );
-
-
-        iframe.src =
-          String(url).trim();
-
-
-        iframe.setAttribute(
-          "allowfullscreen",
-          ""
-        );
-
-
-        iframe.setAttribute(
-          "allow",
-          "autoplay; fullscreen; encrypted-media; picture-in-picture; orientation-lock"
-        );
-
-
-        iframe.setAttribute(
-          "frameborder",
-          "0"
-        );
-
-
-        iframe.setAttribute(
-          "scrolling",
-          "no"
-        );
-
-
-        iframe.setAttribute(
-          "title",
-          title || "Video"
-        );
-
-
-        iframe.setAttribute(
-          "webkitallowfullscreen",
-          ""
-        );
 
 
         embedArea.appendChild(
           iframe
         );
 
-      }
-
-
-      else {
+      } else {
 
         embedArea.innerHTML =
 
@@ -1526,7 +1630,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       /* =================================
-         STREAM CONTROLS
+         VIDEO CONTROLS
       ================================= */
 
       var controls =
@@ -1539,167 +1643,90 @@ document.addEventListener("DOMContentLoaded", function () {
         "video-controls";
 
 
-      /*
-       * MAIN SCREEN BUTTON
-       */
+      /* =================================
+         ALTERNATIVE / MAIN BUTTON
+      ================================= */
 
-      var mainButton =
-        document.createElement(
-          "button"
+      if (
+        alternativeUrl &&
+        url
+      ) {
+
+        var screenSwitchButton =
+          document.createElement(
+            "button"
+          );
+
+
+        screenSwitchButton.type =
+          "button";
+
+
+        screenSwitchButton.className =
+          "screen-switch-btn";
+
+
+        /*
+         * Main screen is loaded first,
+         * therefore the button must offer
+         * the alternative screen.
+         */
+
+        screenSwitchButton.textContent =
+          "Alt Screen";
+
+
+        screenSwitchButton.setAttribute(
+          "aria-label",
+          "Switch to Alternative Screen"
         );
 
 
-      mainButton.type =
-        "button";
+        screenSwitchButton.addEventListener(
+          "click",
+          function (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
 
 
-      mainButton.className =
-        "stream-button active";
+            var activeScreen =
+              modal.getAttribute(
+                "data-active-screen"
+              );
 
 
-      mainButton.textContent =
-        "Main Screen";
+            if (
+              activeScreen ===
+              "alternative"
+            ) {
 
+              switchLiveScreen(
+                false
+              );
 
-      mainButton.setAttribute(
-        "aria-label",
-        "Switch to main screen"
-      );
+            } else {
 
+              switchLiveScreen(
+                true
+              );
 
-      /*
-       * ALTERNATIVE BUTTON
-       */
+            }
 
-      var alternativeButton =
-        document.createElement(
-          "button"
+          }
         );
 
-
-      alternativeButton.type =
-        "button";
-
-
-      alternativeButton.className =
-        "stream-button";
-
-
-      alternativeButton.textContent =
-        "Alternative";
-
-
-      alternativeButton.setAttribute(
-        "aria-label",
-        "Switch to alternative screen"
-      );
-
-
-      /*
-       * MAIN SCREEN
-       */
-
-      mainButton.onclick =
-        function () {
-
-          if (!url) {
-            return;
-          }
-
-
-          var currentIframe =
-            embedArea.querySelector(
-              "iframe"
-            );
-
-
-          if (!currentIframe) {
-            return;
-          }
-
-
-          currentIframe.src =
-            String(url).trim();
-
-
-          mainButton.classList.add(
-            "active"
-          );
-
-
-          alternativeButton.classList.remove(
-            "active"
-          );
-
-        };
-
-
-      /*
-       * ALTERNATIVE SCREEN
-       */
-
-      alternativeButton.onclick =
-        function () {
-
-          if (!altUrl) {
-            return;
-          }
-
-
-          var currentIframe =
-            embedArea.querySelector(
-              "iframe"
-            );
-
-
-          if (!currentIframe) {
-            return;
-          }
-
-
-          currentIframe.src =
-            String(altUrl).trim();
-
-
-          alternativeButton.classList.add(
-            "active"
-          );
-
-
-          mainButton.classList.remove(
-            "active"
-          );
-
-        };
-
-
-      controls.appendChild(
-        mainButton
-      );
-
-
-      /*
-       * Only show Alternative when
-       * an alternative URL exists.
-       */
-
-      if (altUrl) {
 
         controls.appendChild(
-          alternativeButton
+          screenSwitchButton
         );
 
       }
 
 
-      embedArea.insertAdjacentElement(
-        "afterend",
-        controls
-      );
-
-
       /* =================================
-         FULLSCREEN CONTROL
+         FULLSCREEN BUTTON
       ================================= */
 
       var fullscreenButton =
@@ -1728,6 +1755,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       controls.appendChild(
         fullscreenButton
+      );
+
+
+      embedArea.insertAdjacentElement(
+        "afterend",
+        controls
       );
 
 
@@ -1775,9 +1808,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =================================
-       EXIT FULLSCREEN
-    ================================= */
+    /* EXIT FULLSCREEN */
 
     if (
       document.fullscreenElement &&
@@ -1800,9 +1831,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =================================
-       UNLOCK ORIENTATION
-    ================================= */
+    /* UNLOCK ORIENTATION */
 
     if (
       screen.orientation &&
@@ -1826,9 +1855,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =================================
-       DESTROY IFRAME
-    ================================= */
+    /* DESTROY IFRAME */
 
     if (embedArea) {
 
@@ -1854,9 +1881,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =================================
-       REMOVE FULLSCREEN / STREAM CONTROLS
-    ================================= */
+    /* REMOVE CONTROLS */
 
     var controls =
       modal.querySelector(
@@ -1871,9 +1896,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =================================
-       CLOSE MODAL
-    ================================= */
+    /* RESET MODAL DATA */
+
+    modal.removeAttribute(
+      "data-main-url"
+    );
+
+
+    modal.removeAttribute(
+      "data-alternative-url"
+    );
+
+
+    modal.removeAttribute(
+      "data-active-screen"
+    );
+
+
+    modal.removeAttribute(
+      "data-video-title"
+    );
+
+
+    /* CLOSE MODAL */
 
     modal.classList.remove(
       "open"
@@ -1890,9 +1935,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "";
 
 
-    /* =================================
-       RESET TITLE
-    ================================= */
+    /* RESET TITLE */
 
     var modalTitle =
       document.getElementById(
@@ -2046,9 +2089,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* =================================
-         EXIT FULLSCREEN
-      ================================= */
+      /* EXIT FULLSCREEN */
 
       if (document.fullscreenElement) {
 
@@ -2070,9 +2111,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* =================================
-         ENTER IFRAME FULLSCREEN
-      ================================= */
+      /* ENTER IFRAME FULLSCREEN */
 
       try {
 
@@ -2090,16 +2129,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-         * The iframe itself becomes fullscreen.
-         */
-
         await iframe.requestFullscreen();
 
 
-        /* =================================
-           REQUEST LANDSCAPE
-        ================================= */
+        /* REQUEST LANDSCAPE */
 
         if (
           screen.orientation &&
@@ -2144,10 +2177,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      FULLSCREEN CHANGE
-
-     Unlock orientation when the user
-     exits fullscreen using Android/browser
-     controls.
   ===================================== */
 
   document.addEventListener(
@@ -2165,10 +2194,6 @@ document.addEventListener("DOMContentLoaded", function () {
           try {
 
             screen.orientation.unlock();
-
-            console.log(
-              "Screen orientation unlocked."
-            );
 
           } catch (error) {
 
