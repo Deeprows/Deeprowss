@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      DATE
+     
      Used by Highlights + Movies only
   ===================================== */
 
@@ -46,7 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return "";
     }
 
-    var date = new Date(dateString);
+    var date =
+      new Date(dateString);
 
     if (isNaN(date.getTime())) {
       return "";
@@ -86,14 +88,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
     var matchDate =
       new Date(post.matchTime);
 
-
     var timestamp =
       matchDate.getTime();
-
 
     if (isNaN(timestamp)) {
 
@@ -103,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
     }
-
 
     return {
       valid: true,
@@ -116,8 +114,9 @@ document.addEventListener("DOMContentLoaded", function () {
   /* =====================================
      LOCAL MATCH TIME
      
-     The browser automatically uses the
-     visitor's local timezone.
+     The browser automatically converts
+     the Nigeria match time to the visitor's
+     local timezone.
   ===================================== */
 
   function formatLocalMatchTime(matchTime) {
@@ -126,15 +125,12 @@ document.addEventListener("DOMContentLoaded", function () {
       return "";
     }
 
-
     var date =
       new Date(matchTime);
-
 
     if (isNaN(date.getTime())) {
       return "";
     }
-
 
     try {
 
@@ -168,36 +164,29 @@ document.addEventListener("DOMContentLoaded", function () {
       return "LIVE NOW";
     }
 
-
     var totalSeconds =
       Math.floor(
         milliseconds / 1000
       );
-
 
     var days =
       Math.floor(
         totalSeconds / 86400
       );
 
-
     totalSeconds %= 86400;
-
 
     var hours =
       Math.floor(
         totalSeconds / 3600
       );
 
-
     totalSeconds %= 3600;
-
 
     var minutes =
       Math.floor(
         totalSeconds / 60
       );
-
 
     var seconds =
       totalSeconds % 60;
@@ -241,7 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(
         ".match-countdown[data-match-time]"
       );
-
 
     var now =
       Date.now();
@@ -290,10 +278,6 @@ document.addEventListener("DOMContentLoaded", function () {
             : null;
 
 
-        /* =================================
-           MATCH HAS STARTED
-        ================================= */
-
         if (difference <= 0) {
 
           element.textContent =
@@ -323,11 +307,6 @@ document.addEventListener("DOMContentLoaded", function () {
           }
 
         }
-
-
-        /* =================================
-           MATCH HAS NOT STARTED
-        ================================= */
 
         else {
 
@@ -392,12 +371,10 @@ document.addEventListener("DOMContentLoaded", function () {
         altText || "Thumbnail"
       );
 
-
     var safeThumbnail =
       thumbnail
         ? String(thumbnail).trim()
         : "";
-
 
     var classes =
       "post-thumb " +
@@ -410,7 +387,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!safeThumbnail) {
 
       return (
-
         '<div class="' +
           classes +
         '">' +
@@ -424,7 +400,6 @@ document.addEventListener("DOMContentLoaded", function () {
           '</div>' +
 
         '</div>'
-
       );
 
     }
@@ -577,29 +552,15 @@ document.addEventListener("DOMContentLoaded", function () {
           }
 
 
-          /* =================================
-             SORT POSTS
-
-             Football:
-             matchTime
-
-             Highlights:
-             publishedAt
-
-             Movies:
-             publishedAt
-          ================================= */
-
           posts.sort(
             function (a, b) {
 
-              var aTime =
+              var aDate =
                 a.type === "live"
                   ? a.matchTime
                   : a.publishedAt;
 
-
-              var bTime =
+              var bDate =
                 b.type === "live"
                   ? b.matchTime
                   : b.publishedAt;
@@ -607,11 +568,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
               return (
                 new Date(
-                  bTime || 0
+                  bDate || 0
                 ).getTime() -
 
                 new Date(
-                  aTime || 0
+                  aDate || 0
                 ).getTime()
               );
 
@@ -634,9 +595,7 @@ document.addEventListener("DOMContentLoaded", function () {
           displayAllPosts(posts);
 
 
-          /* Run immediately instead of waiting
-             for the first 1-second interval. */
-
+          /* Immediately update countdown */
           updateFootballCountdowns();
 
 
@@ -646,7 +605,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "Could not read posts.json:",
             error
           );
-
 
           showError();
 
@@ -658,7 +616,6 @@ document.addEventListener("DOMContentLoaded", function () {
           "Could not load posts.json. Status:",
           xhr.status
         );
-
 
         showError();
 
@@ -673,7 +630,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error(
         "Network error loading posts.json"
       );
-
 
       showError();
 
@@ -770,31 +726,10 @@ document.addEventListener("DOMContentLoaded", function () {
     livePosts.forEach(
       function (post) {
 
-        var matchInfo =
-          getMatchTimeInfo(post);
-
-
         var status =
           String(
             post.status || "UPCOMING"
           ).toUpperCase();
-
-
-        /* Automatically determine status
-           from matchTime. */
-
-        if (
-          matchInfo.valid &&
-          matchInfo.timestamp <= Date.now()
-        ) {
-
-          status = "LIVE";
-
-        } else {
-
-          status = "UPCOMING";
-
-        }
 
 
         var statusClass =
@@ -803,30 +738,16 @@ document.addEventListener("DOMContentLoaded", function () {
             : "upcoming-badge";
 
 
-        var initialCountdown =
-          "Match time unavailable";
+        var matchInfo =
+          getMatchTimeInfo(post);
 
 
-        if (matchInfo.valid) {
-
-          if (
-            matchInfo.timestamp <= Date.now()
-          ) {
-
-            initialCountdown =
-              "LIVE NOW";
-
-          } else {
-
-            initialCountdown =
-              formatCountdown(
-                matchInfo.timestamp -
-                Date.now()
-              );
-
-          }
-
-        }
+        var localMatchTime =
+          matchInfo.valid
+            ? formatLocalMatchTime(
+                post.matchTime
+              )
+            : "";
 
 
         html +=
@@ -891,6 +812,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</div>' +
 
+
               '<div class="match-meta">' +
 
                 escapeHTML(
@@ -900,37 +822,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</div>' +
 
-              '<div class="match-time-info">' +
 
-                '<div class="match-local-time">' +
+              (
+                matchInfo.valid
 
-                  escapeHTML(
-                    formatLocalMatchTime(
-                      post.matchTime
-                    )
-                  ) +
+                  ?
 
-                '</div>' +
+                    '<div class="match-time">' +
 
-                '<div ' +
+                      '<span>Match time:</span> ' +
 
-                  'class="match-countdown" ' +
+                      escapeHTML(
+                        localMatchTime
+                      ) +
 
-                  'data-match-time="' +
+                    '</div>'
 
-                    escapeHTML(
-                      post.matchTime || ""
-                    ) +
+                  :
 
-                  '">' +
+                    ''
 
-                  escapeHTML(
-                    initialCountdown
-                  ) +
+              ) +
 
-                '</div>' +
 
-              '</div>' +
+              (
+                matchInfo.valid
+
+                  ?
+
+                    '<div ' +
+
+                      'class="match-countdown" ' +
+
+                      'data-match-time="' +
+
+                        escapeHTML(
+                          post.matchTime
+                        ) +
+
+                      '">' +
+
+                      'Loading...' +
+
+                    '</div>'
+
+                  :
+
+                    ''
+
+              ) +
+
 
               '<button ' +
 
@@ -977,10 +918,9 @@ document.addEventListener("DOMContentLoaded", function () {
       html;
 
 
-    attachVideoButtons();
-
-
     updateFootballCountdowns();
+
+    attachVideoButtons();
 
   }
 
@@ -1362,10 +1302,9 @@ document.addEventListener("DOMContentLoaded", function () {
       html;
 
 
-    attachVideoButtons();
-
-
     updateFootballCountdowns();
+
+    attachVideoButtons();
 
   }
 
@@ -1376,29 +1315,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function createLiveGridCard(post) {
 
-    var matchInfo =
-      getMatchTimeInfo(post);
-
-
     var status =
       String(
         post.status ||
         "UPCOMING"
       ).toUpperCase();
-
-
-    if (
-      matchInfo.valid &&
-      matchInfo.timestamp <= Date.now()
-    ) {
-
-      status = "LIVE";
-
-    } else {
-
-      status = "UPCOMING";
-
-    }
 
 
     var statusClass =
@@ -1407,30 +1328,16 @@ document.addEventListener("DOMContentLoaded", function () {
         : "upcoming-badge";
 
 
-    var initialCountdown =
-      "Match time unavailable";
+    var matchInfo =
+      getMatchTimeInfo(post);
 
 
-    if (matchInfo.valid) {
-
-      if (
-        matchInfo.timestamp <= Date.now()
-      ) {
-
-        initialCountdown =
-          "LIVE NOW";
-
-      } else {
-
-        initialCountdown =
-          formatCountdown(
-            matchInfo.timestamp -
-            Date.now()
-          );
-
-      }
-
-    }
+    var localMatchTime =
+      matchInfo.valid
+        ? formatLocalMatchTime(
+            post.matchTime
+          )
+        : "";
 
 
     return (
@@ -1467,6 +1374,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</div>' +
 
+
           '<div class="teams">' +
 
             '<strong>' +
@@ -1491,6 +1399,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</div>' +
 
+
           '<p class="match-meta">' +
 
             escapeHTML(
@@ -1500,37 +1409,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</p>' +
 
-          '<div class="match-time-info">' +
 
-            '<div class="match-local-time">' +
+          (
+            matchInfo.valid
 
-              escapeHTML(
-                formatLocalMatchTime(
-                  post.matchTime
-                )
-              ) +
+              ?
 
-            '</div>' +
+                '<div class="match-time">' +
 
-            '<div ' +
+                  '<span>Match time:</span> ' +
 
-              'class="match-countdown" ' +
+                  escapeHTML(
+                    localMatchTime
+                  ) +
 
-              'data-match-time="' +
+                '</div>'
 
-                escapeHTML(
-                  post.matchTime || ""
-                ) +
+              :
 
-              '">' +
+                ''
 
-              escapeHTML(
-                initialCountdown
-              ) +
+          ) +
 
-            '</div>' +
 
-          '</div>' +
+          (
+            matchInfo.valid
+
+              ?
+
+                '<div ' +
+
+                  'class="match-countdown" ' +
+
+                  'data-match-time="' +
+
+                    escapeHTML(
+                      post.matchTime
+                    ) +
+
+                  '">' +
+
+                  'Loading...' +
+
+                '</div>'
+
+              :
+
+                ''
+
+          ) +
+
 
           '<button ' +
 
@@ -2861,7 +2789,6 @@ document.addEventListener("DOMContentLoaded", function () {
         installAppBtn.hidden =
           false;
 
-
         installAppBtn.style.display =
           "inline-flex";
 
@@ -2935,7 +2862,6 @@ document.addEventListener("DOMContentLoaded", function () {
         installAppBtn.hidden =
           true;
 
-
         installAppBtn.style.display =
           "none";
 
@@ -2966,7 +2892,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         installAppBtn.hidden =
           true;
-
 
         installAppBtn.style.display =
           "none";
@@ -3002,7 +2927,6 @@ document.addEventListener("DOMContentLoaded", function () {
       installAppBtn.hidden =
         true;
 
-
       installAppBtn.style.display =
         "none";
 
@@ -3012,4 +2936,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 });
-```
