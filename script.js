@@ -2283,16 +2283,20 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-     /* =====================================
+         /* =====================================
      COPYRIGHT
   ===================================== */
 
   var year =
-    document.getElementById("year");
+    document.getElementById(
+      "year"
+    );
 
   if (year) {
+
     year.textContent =
       new Date().getFullYear();
+
   }
 
 
@@ -2302,28 +2306,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if ("serviceWorker" in navigator) {
 
-    window.addEventListener("load", function () {
+    window.addEventListener(
+      "load",
+      function () {
 
-      navigator.serviceWorker
-        .register("./service-worker.js")
-        .then(function (registration) {
+        navigator.serviceWorker
+          .register(
+            "./service-worker.js"
+          )
+          .then(
+            function (registration) {
 
-          console.log(
-            "Deeprowss PWA service worker registered:",
-            registration.scope
+              console.log(
+                "Deeprowss PWA service worker registered:",
+                registration.scope
+              );
+
+            }
+          )
+          .catch(
+            function (error) {
+
+              console.error(
+                "Deeprowss PWA service worker registration failed:",
+                error
+              );
+
+            }
           );
 
-        })
-        .catch(function (error) {
-
-          console.error(
-            "Deeprowss PWA service worker registration failed:",
-            error
-          );
-
-        });
-
-    });
+      }
+    );
 
   }
 
