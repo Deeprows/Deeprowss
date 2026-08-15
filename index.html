@@ -15,26 +15,72 @@
     content="Deeprowss - football live, football highlights and entertainment."
   >
 
+  <meta
+    name="theme-color"
+    content="#07090d"
+  >
+
   <title>
     Deeprowss — Football Live, Highlights & Movies
   </title>
+
+
+  <!-- =========================
+       MAIN STYLESHEET
+  ========================= -->
 
   <link
     rel="stylesheet"
     href="style.css"
   >
-  
-<!-- Deeprowss PWA -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#07090d">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="Deeprowss">
 
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-  
+
+  <!-- =========================
+       DEEPROWSS PWA
+  ========================= -->
+
+  <link
+    rel="manifest"
+    href="manifest.json"
+  >
+
+  <meta
+    name="mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black"
+  >
+
+  <meta
+    name="apple-mobile-web-app-title"
+    content="Deeprowss"
+  >
+
+
+  <!-- =========================
+       PWA ICONS
+  ========================= -->
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="192x192"
+    href="icons/icon-192.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="icons/icon-192.png"
+  >
+
 </head>
 
 
@@ -50,7 +96,9 @@
     <div class="container nav-wrap">
 
 
-      <!-- LOGO -->
+      <!-- =========================
+           LOGO
+      ========================= -->
 
       <a
         class="brand"
@@ -69,7 +117,9 @@
       </a>
 
 
-      <!-- MOBILE MENU -->
+      <!-- =========================
+           MOBILE MENU
+      ========================= -->
 
       <button
         type="button"
@@ -85,7 +135,9 @@
       </button>
 
 
-      <!-- NAVIGATION -->
+      <!-- =========================
+           NAVIGATION
+      ========================= -->
 
       <nav
         class="main-nav"
@@ -111,19 +163,9 @@
       </nav>
 
 
-      <!-- INSTALL APP -->
-      <button
-        type="button"
-        class="install-app-btn"
-        id="installAppBtn"
-        hidden
-        aria-label="Install Deeprowss app"
-      >
-        📲 Install App
-      </button>
-
-
-      <!-- SEARCH -->
+      <!-- =========================
+           SEARCH
+      ========================= -->
 
       <div class="nav-search">
 
@@ -147,6 +189,23 @@
         </span>
 
       </div>
+
+
+      <!-- =========================
+           PWA INSTALL
+      ========================= -->
+
+      <button
+        type="button"
+        class="install-app-btn"
+        id="installAppBtn"
+        hidden
+        aria-label="Install Deeprowss app"
+      >
+
+        📲 Install App
+
+      </button>
 
 
     </div>
