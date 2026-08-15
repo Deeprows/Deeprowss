@@ -69,8 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
      - Highlights page
      - Movies page
      
-     Uses .post-thumb instead of the old
-     .poster/.media-thumb dependency.
+     Uses .post-thumb.
   ===================================== */
 
   function createThumbnail(
@@ -86,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var safeThumbnail =
       thumbnail
-        ? escapeHTML(String(thumbnail).trim())
+        ? String(thumbnail).trim()
         : "";
 
     var classes =
@@ -133,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'class="post-thumbnail" ' +
 
           'src="' +
-            safeThumbnail +
+            escapeHTML(safeThumbnail) +
           '" ' +
 
           'alt="' +
@@ -144,16 +143,90 @@ document.addEventListener("DOMContentLoaded", function () {
 
           'decoding="async" ' +
 
-          'referrerpolicy="no-referrer" ' +
-
           'onerror="' +
-            "this.style.display='none';" +
             "this.parentElement.classList.add('image-error');" +
+            "this.parentElement.classList.remove('has-thumbnail');" +
+            "this.remove();" +
           '"' +
 
         '>' +
 
       '</div>'
+
+    );
+
+  }
+
+
+  /* =====================================
+     MOVIE DOWNLOAD BUTTON
+     
+     Uses:
+       post.downloadUrl
+
+     If downloadUrl is missing or empty,
+     nothing is displayed.
+  ===================================== */
+
+  function createMovieDownloadButton(post) {
+
+    var downloadUrl =
+      post.downloadUrl
+        ? String(post.downloadUrl).trim()
+        : "";
+
+
+    if (!downloadUrl) {
+      return "";
+    }
+
+
+    var title =
+      post.title ||
+      "Movie";
+
+
+    return (
+
+      '<a ' +
+
+        'class="movie-download-btn" ' +
+
+        'href="' +
+          escapeHTML(downloadUrl) +
+        '" ' +
+
+        'target="_blank" ' +
+
+        'rel="noopener noreferrer" ' +
+
+        'aria-label="Download ' +
+          escapeHTML(title) +
+        '" ' +
+
+        'title="Download">' +
+
+
+        '<svg ' +
+
+          'viewBox="0 0 24 24" ' +
+
+          'aria-hidden="true" ' +
+
+          'focusable="false">' +
+
+
+          '<path d="M12 3v11"></path>' +
+
+          '<path d="m7 10 5 5 5-5"></path>' +
+
+          '<path d="M5 21h14"></path>' +
+
+
+        '</svg>' +
+
+
+      '</a>'
 
     );
 
@@ -732,33 +805,44 @@ document.addEventListener("DOMContentLoaded", function () {
               '</p>' +
 
 
-              '<button ' +
+              '<div class="movie-actions">' +
 
-                'type="button" ' +
 
-                'class="movie-watch-btn" ' +
+                '<button ' +
 
-                'data-url="' +
+                  'type="button" ' +
 
-                  escapeHTML(
-                    post.embedUrl ||
-                    ""
-                  ) +
+                  'class="movie-watch-btn" ' +
 
-                '" ' +
+                  'data-url="' +
 
-                'data-title="' +
+                    escapeHTML(
+                      post.embedUrl ||
+                      ""
+                    ) +
 
-                  escapeHTML(
-                    post.title ||
-                    "Movie"
-                  ) +
+                  '" ' +
 
-                '">' +
+                  'data-title="' +
 
-                'Watch' +
+                    escapeHTML(
+                      post.title ||
+                      "Movie"
+                    ) +
 
-              '</button>' +
+                  '">' +
+
+                  'Watch' +
+
+                '</button>' +
+
+
+                createMovieDownloadButton(
+                  post
+                ) +
+
+
+              '</div>' +
 
 
             '</div>' +
@@ -1148,10 +1232,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      MOVIE GRID CARD
-     
-     IMPORTANT:
-     Movies now use the same reliable
-     .post-thumb thumbnail system.
   ===================================== */
 
   function createMovieGridCard(post) {
@@ -1201,33 +1281,44 @@ document.addEventListener("DOMContentLoaded", function () {
           '</p>' +
 
 
-          '<button ' +
+          '<div class="movie-actions">' +
 
-            'type="button" ' +
 
-            'class="movie-watch-btn" ' +
+            '<button ' +
 
-            'data-url="' +
+              'type="button" ' +
 
-              escapeHTML(
-                post.embedUrl ||
-                ""
-              ) +
+              'class="movie-watch-btn" ' +
 
-            '" ' +
+              'data-url="' +
 
-            'data-title="' +
+                escapeHTML(
+                  post.embedUrl ||
+                  ""
+                ) +
 
-              escapeHTML(
-                post.title ||
-                "Movie"
-              ) +
+              '" ' +
 
-            '">' +
+              'data-title="' +
 
-            'Watch' +
+                escapeHTML(
+                  post.title ||
+                  "Movie"
+                ) +
 
-          '</button>' +
+              '">' +
+
+              'Watch' +
+
+            '</button>' +
+
+
+            createMovieDownloadButton(
+              post
+            ) +
+
+
+          '</div>' +
 
 
         '</div>' +
@@ -1248,7 +1339,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var buttons =
       document.querySelectorAll(
-        "[data-url]"
+        ".watch-btn, .media-watch-btn, .movie-watch-btn"
       );
 
 
@@ -1264,13 +1355,13 @@ document.addEventListener("DOMContentLoaded", function () {
             var url =
               this.getAttribute(
                 "data-url"
-              );
+              ) || "";
 
 
             var title =
               this.getAttribute(
                 "data-title"
-              );
+              ) || "Video";
 
 
             openEmbed(
@@ -1314,23 +1405,10 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!modal || !embedArea) {
 
         console.warn(
-          "Video modal not found."
+          "Video modal not found on this page."
         );
 
         return;
-
-      }
-
-
-      /* Exit any existing fullscreen */
-
-      if (
-        document.fullscreenElement &&
-        document.exitFullscreen
-      ) {
-
-        document.exitFullscreen()
-          .catch(function () {});
 
       }
 
@@ -1343,7 +1421,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* Remove old iframe */
+      /* Destroy previous iframe */
 
       embedArea.innerHTML = "";
 
@@ -1405,22 +1483,6 @@ document.addEventListener("DOMContentLoaded", function () {
           "title",
           title || "Video"
         );
-
-
-        iframe.style.width =
-          "100%";
-
-
-        iframe.style.height =
-          "100%";
-
-
-        iframe.style.border =
-          "0";
-
-
-        iframe.style.display =
-          "block";
 
 
         embedArea.appendChild(
@@ -1520,6 +1582,214 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
+     CLOSE VIDEO MODAL
+  ===================================== */
+
+  async function closeVideoModal() {
+
+    var modal =
+      document.getElementById(
+        "embedModal"
+      );
+
+
+    var embedArea =
+      document.getElementById(
+        "embedArea"
+      );
+
+
+    if (!modal) {
+      return;
+    }
+
+
+    /* Exit fullscreen */
+
+    if (
+      document.fullscreenElement &&
+      document.exitFullscreen
+    ) {
+
+      try {
+
+        await document.exitFullscreen();
+
+      } catch (error) {
+
+        console.warn(
+          "Could not exit fullscreen:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* Destroy iframe */
+
+    if (embedArea) {
+
+      var iframe =
+        embedArea.querySelector(
+          "iframe"
+        );
+
+
+      if (iframe) {
+
+        iframe.src =
+          "about:blank";
+
+        iframe.remove();
+
+      }
+
+
+      embedArea.innerHTML =
+        "";
+
+    }
+
+
+    /* Remove fullscreen controls */
+
+    var controls =
+      modal.querySelector(
+        ".video-controls"
+      );
+
+
+    if (controls) {
+
+      controls.remove();
+
+    }
+
+
+    /* Close */
+
+    modal.classList.remove(
+      "open"
+    );
+
+
+    modal.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+
+    document.body.style.overflow =
+      "";
+
+
+    /* Reset title */
+
+    var modalTitle =
+      document.getElementById(
+        "modalTitle"
+      );
+
+
+    if (modalTitle) {
+
+      modalTitle.textContent =
+        "Video";
+
+    }
+
+  }
+
+
+  window.closeEmbed =
+    closeVideoModal;
+
+
+  /* =====================================
+     CLOSE BUTTON + BACKDROP
+  ===================================== */
+
+  document.addEventListener(
+    "click",
+    function (event) {
+
+      var closeButton =
+        event.target.closest(
+          ".modal-close"
+        );
+
+
+      if (closeButton) {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+        closeVideoModal();
+
+        return;
+
+      }
+
+
+      if (
+        event.target.classList &&
+        event.target.classList.contains(
+          "modal-backdrop"
+        )
+      ) {
+
+        event.preventDefault();
+
+        closeVideoModal();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================
+     ESC KEY
+  ===================================== */
+
+  document.addEventListener(
+    "keydown",
+    function (event) {
+
+      if (
+        event.key === "Escape" ||
+        event.key === "Esc"
+      ) {
+
+        var modal =
+          document.getElementById(
+            "embedModal"
+          );
+
+
+        if (
+          modal &&
+          modal.classList.contains(
+            "open"
+          )
+        ) {
+
+          event.preventDefault();
+
+          closeVideoModal();
+
+        }
+
+      }
+
+    }
+  );
+
+
+  /* =====================================
      FULLSCREEN
   ===================================== */
 
@@ -1536,9 +1806,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!button) {
         return;
       }
-
-
-      event.preventDefault();
 
 
       var modalBox =
@@ -1598,224 +1865,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     CLOSE MODAL
-     
-     Delegated event handler makes the
-     X work even after dynamic changes.
-  ===================================== */
-
-  document.addEventListener(
-    "click",
-    function (event) {
-
-      var closeButton =
-        event.target.closest(
-          ".modal-close"
-        );
-
-
-      if (closeButton) {
-
-        event.preventDefault();
-
-        event.stopPropagation();
-
-        closeEmbed();
-
-        return;
-
-      }
-
-
-      if (
-        event.target.classList &&
-        event.target.classList.contains(
-          "modal-backdrop"
-        )
-      ) {
-
-        event.preventDefault();
-
-        closeEmbed();
-
-      }
-
-    }
-  );
-
-
-  /* =====================================
-     CLOSE FUNCTION
-  ===================================== */
-
-  window.closeEmbed =
-    async function () {
-
-      var modal =
-        document.getElementById(
-          "embedModal"
-        );
-
-
-      var embedArea =
-        document.getElementById(
-          "embedArea"
-        );
-
-
-      if (!modal) {
-        return;
-      }
-
-
-      /* =================================
-         EXIT FULLSCREEN FIRST
-      ================================= */
-
-      if (
-        document.fullscreenElement &&
-        document.exitFullscreen
-      ) {
-
-        try {
-
-          await document.exitFullscreen();
-
-        } catch (error) {
-
-          console.warn(
-            "Could not exit fullscreen:",
-            error
-          );
-
-        }
-
-      }
-
-
-      /* =================================
-         DESTROY IFRAME
-      ================================= */
-
-      if (embedArea) {
-
-        var iframe =
-          embedArea.querySelector(
-            "iframe"
-          );
-
-
-        if (iframe) {
-
-          iframe.src =
-            "about:blank";
-
-
-          iframe.remove();
-
-        }
-
-
-        embedArea.innerHTML = "";
-
-      }
-
-
-      /* =================================
-         REMOVE CONTROLS
-      ================================= */
-
-      var controls =
-        modal.querySelector(
-          ".video-controls"
-        );
-
-
-      if (controls) {
-
-        controls.remove();
-
-      }
-
-
-      /* =================================
-         CLOSE MODAL
-      ================================= */
-
-      modal.classList.remove(
-        "open"
-      );
-
-
-      modal.setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-
-      document.body.style.overflow =
-        "";
-
-
-      /* =================================
-         RESET TITLE
-      ================================= */
-
-      var modalTitle =
-        document.getElementById(
-          "modalTitle"
-        );
-
-
-      if (modalTitle) {
-
-        modalTitle.textContent =
-          "Video";
-
-      }
-
-    };
-
-
-  /* =====================================
-     ESC KEY
-  ===================================== */
-
-  document.addEventListener(
-    "keydown",
-    function (event) {
-
-      if (
-        event.key === "Escape" ||
-        event.key === "Esc"
-      ) {
-
-        var modal =
-          document.getElementById(
-            "embedModal"
-          );
-
-
-        if (
-          modal &&
-          modal.classList.contains(
-            "open"
-          )
-        ) {
-
-          event.preventDefault();
-
-          closeEmbed();
-
-        }
-
-      }
-
-    }
-  );
-
-
-  /* =====================================
      MOBILE MENU
   ===================================== */
 
@@ -1857,14 +1906,6 @@ document.addEventListener("DOMContentLoaded", function () {
             : "false"
         );
 
-
-        menuToggle.setAttribute(
-          "aria-label",
-          isOpen
-            ? "Close navigation"
-            : "Open navigation"
-        );
-
       };
 
 
@@ -1886,12 +1927,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "false"
           );
 
-
-          menuToggle.setAttribute(
-            "aria-label",
-            "Open navigation"
-          );
-
         }
 
       }
@@ -1901,7 +1936,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     COPYRIGHT YEAR
+     COPYRIGHT
   ===================================== */
 
   var year =
