@@ -58,7 +58,6 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-
   background: var(--bg);
   color: var(--text);
 
@@ -72,7 +71,6 @@ body {
     sans-serif;
 
   line-height: 1.55;
-
   overflow-x: hidden;
 
   -webkit-font-smoothing: antialiased;
@@ -206,9 +204,7 @@ input:focus-visible {
 .main-nav {
   display: flex;
   align-items: center;
-
   gap: 24px;
-
   margin-left: auto;
 }
 
@@ -239,7 +235,6 @@ input:focus-visible {
   content: "";
 
   position: absolute;
-
   left: 0;
   right: 0;
   bottom: -8px;
@@ -258,9 +253,7 @@ input:focus-visible {
 
 .nav-search {
   position: relative;
-
   width: 190px;
-
   flex-shrink: 0;
 }
 
@@ -376,7 +369,7 @@ input:focus-visible {
 
 
 /* =========================================================
-   HERO CINEMATIC GLOW
+   CINEMATIC GLOW
    ========================================================= */
 
 .hero::before {
@@ -404,7 +397,7 @@ input:focus-visible {
 
 
 /* =========================================================
-   HERO OVERLAY
+   ADDITIONAL OVERLAY
    ========================================================= */
 
 .hero-overlay {
@@ -431,7 +424,7 @@ input:focus-visible {
 
 
 /* =========================================================
-   HERO BOTTOM FADE
+   BOTTOM FADE
    ========================================================= */
 
 .hero::after {
@@ -489,7 +482,6 @@ input:focus-visible {
   margin: 0;
 
   font-size: clamp(42px, 7vw, 78px);
-
   line-height: 1.02;
 
   letter-spacing: -3px;
@@ -521,9 +513,7 @@ input:focus-visible {
 
 .hero-actions {
   display: flex;
-
   gap: 12px;
-
   flex-wrap: wrap;
 }
 
@@ -534,7 +524,6 @@ input:focus-visible {
 
 .btn {
   display: inline-flex;
-
   align-items: center;
   justify-content: center;
 
@@ -588,19 +577,16 @@ input:focus-visible {
 }
 
 .btn-ghost {
-  border-color:
-    rgba(255, 255, 255, .18);
+  border-color: rgba(255, 255, 255, .18);
 
-  background:
-    rgba(255, 255, 255, .06);
+  background: rgba(255, 255, 255, .06);
 
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
 .btn-ghost:hover {
-  background:
-    rgba(255, 255, 255, .11);
+  background: rgba(255, 255, 255, .11);
 
   border-color:
     rgba(255, 255, 255, .25);
@@ -608,17 +594,163 @@ input:focus-visible {
 
 
 /* =========================================================
-   SEARCH SECTION
+   MARQUEE / SPACE BETWEEN HERO AND FOOTBALL
    ========================================================= */
 
+/*
+   IMPORTANT:
+   This uses your existing .search-section.
+
+   No HTML or JavaScript is required.
+
+   It removes the large empty space and turns that
+   space into a scrolling announcement strip.
+*/
+
 .search-section {
-  min-height: 0;
+  position: relative;
+
+  width: 100%;
+
+  height: 58px;
+  min-height: 58px;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+
+  background:
+    linear-gradient(
+      90deg,
+      #090b10,
+      #11151d 50%,
+      #090b10
+    );
+
+  border-top: 1px solid rgba(255, 255, 255, .05);
+  border-bottom: 1px solid rgba(255, 255, 255, .07);
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, .18);
 }
 
-#searchStatus {
-  color: var(--muted);
 
-  font-size: 14px;
+/*
+   Left/right fade effect
+*/
+
+.search-section::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 3;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--bg) 0%,
+      transparent 9%,
+      transparent 91%,
+      var(--bg) 100%
+    );
+}
+
+
+/*
+   Scrolling announcement
+*/
+
+.search-section::after {
+  content:
+    "✦  THIS SITE USES ADS: ONCLICK +2 💌   •   "
+    "WELCOME TO DEEPROWSS   •   "
+    "⚽ LIVE FOOTBALL   •   "
+    "🎬 MOVIES & ENTERTAINMENT   •   "
+    "✦  THIS SITE USES ADS: ONCLICK +2 💌   •   "
+    "WELCOME TO DEEPROWSS   •   "
+    "⚽ LIVE FOOTBALL   •   "
+    "🎬 MOVIES & ENTERTAINMENT   •   ";
+
+  position: absolute;
+
+  left: 0;
+  top: 50%;
+
+  width: max-content;
+
+  transform:
+    translate3d(0, -50%, 0);
+
+  z-index: 2;
+
+  color: #cbd2dd;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+
+  white-space: nowrap;
+
+  animation:
+    deeprows-marquee
+    28s
+    linear
+    infinite;
+
+  will-change: transform;
+}
+
+
+/*
+   Actual marquee animation
+*/
+
+@keyframes deeprows-marquee {
+
+  0% {
+    transform:
+      translate3d(0, -50%, 0);
+  }
+
+  100% {
+    transform:
+      translate3d(-50%, -50%, 0);
+  }
+
+}
+
+
+/*
+   Hide old search-status text if it exists inside
+   the search section so it does not interfere with
+   the marquee.
+*/
+
+.search-section #searchStatus {
+  display: none;
+}
+
+
+/*
+   If the search section contains an old search
+   element, hide it on the first page so the marquee
+   remains clean.
+*/
+
+.search-section .search-box,
+.search-section .search-form,
+.search-section form {
+  display: none;
 }
 
 
@@ -630,9 +762,20 @@ input:focus-visible {
   padding: 68px 0 0;
 }
 
+
+/*
+   IMPORTANT:
+   The first section after the marquee gets reduced
+   top spacing so the Football heading does not sit
+   too far away.
+*/
+
+.search-section + .section {
+  padding-top: 48px;
+}
+
 .section-heading {
   display: flex;
-
   justify-content: space-between;
   align-items: end;
 
@@ -645,7 +788,6 @@ input:focus-visible {
   margin: 0;
 
   font-size: 30px;
-
   line-height: 1.15;
 
   letter-spacing: -.8px;
@@ -659,166 +801,11 @@ input:focus-visible {
 
   white-space: nowrap;
 
-  transition:
-    color var(--transition);
+  transition: color var(--transition);
 }
 
 .section-link:hover {
   color: var(--accent-2);
-}
-
-
-/* =========================================================
-   FIRST PAGE — SITE MARQUEE
-   ========================================================= */
-
-.site-marquee {
-  position: relative;
-
-  width: 100%;
-
-  overflow: hidden;
-
-  margin-top: -10px;
-  margin-bottom: 0;
-
-  padding: 13px 0;
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255, 23, 68, .08),
-      rgba(255, 255, 255, .025),
-      rgba(255, 23, 68, .08)
-    );
-
-  border-top:
-    1px solid rgba(255, 23, 68, .12);
-
-  border-bottom:
-    1px solid rgba(255, 23, 68, .12);
-
-  box-shadow:
-    0 0 35px rgba(255, 23, 68, .04);
-
-  white-space: nowrap;
-}
-
-
-/* Fade edges */
-
-.site-marquee::before,
-.site-marquee::after {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  bottom: 0;
-
-  width: 70px;
-
-  z-index: 2;
-
-  pointer-events: none;
-}
-
-.site-marquee::before {
-  left: 0;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--bg),
-      transparent
-    );
-}
-
-.site-marquee::after {
-  right: 0;
-
-  background:
-    linear-gradient(
-      270deg,
-      var(--bg),
-      transparent
-    );
-}
-
-
-/* Moving track */
-
-.site-marquee-track {
-  display: flex;
-
-  align-items: center;
-
-  width: max-content;
-
-  will-change: transform;
-
-  animation:
-    site-marquee-scroll 28s linear infinite;
-}
-
-
-/* Individual messages */
-
-.site-marquee-track span {
-  display: inline-flex;
-
-  align-items: center;
-
-  padding: 0 30px;
-
-  color: #cbd2dd;
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  letter-spacing: 1px;
-
-  text-transform: uppercase;
-}
-
-
-/* Alternating accent colors */
-
-.site-marquee-track span:nth-child(4n + 1) {
-  color: var(--accent-2);
-}
-
-.site-marquee-track span:nth-child(4n + 2) {
-  color: #d8dee8;
-}
-
-.site-marquee-track span:nth-child(4n + 3) {
-  color: #ff7d94;
-}
-
-.site-marquee-track span:nth-child(4n + 4) {
-  color: #b7c0ce;
-}
-
-
-/* Continuous scrolling */
-
-@keyframes site-marquee-scroll {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-
-/* Pause on desktop hover */
-
-.site-marquee:hover .site-marquee-track {
-  animation-play-state: paused;
 }
 
 
@@ -927,7 +914,6 @@ input:focus-visible {
 
 .live-card {
   padding: 20px;
-
   min-width: 0;
 }
 
@@ -984,7 +970,6 @@ input:focus-visible {
   content: "";
 
   position: absolute;
-
   inset: 0;
 
   z-index: 2;
@@ -1001,7 +986,6 @@ input:focus-visible {
 
 .post-thumb.no-thumbnail {
   display: grid;
-
   place-items: center;
 
   min-height: 180px;
@@ -1011,7 +995,6 @@ input:focus-visible {
   color: var(--muted);
 
   font-size: 13px;
-
   font-weight: 900;
 
   letter-spacing: 1px;
@@ -1054,7 +1037,6 @@ input:focus-visible {
 
 .match-top {
   display: flex;
-
   justify-content: space-between;
 
   gap: 10px;
@@ -1100,7 +1082,6 @@ input:focus-visible {
 
 .teams span {
   color: var(--muted);
-
   font-size: 12px;
 }
 
@@ -1147,7 +1128,6 @@ input:focus-visible {
 
 .watch-btn {
   width: 100%;
-
   margin-top: 16px;
 }
 
@@ -1176,7 +1156,6 @@ input:focus-visible {
   height: 180px;
 
   display: grid;
-
   place-items: center;
 
   position: relative;
@@ -1242,7 +1221,6 @@ input:focus-visible {
   margin: 7px 0 5px;
 
   font-size: 18px;
-
   line-height: 1.3;
 }
 
@@ -1274,7 +1252,6 @@ input:focus-visible {
   min-height: 280px;
 
   display: flex;
-
   align-items: flex-end;
 
   padding: 16px;
@@ -1387,7 +1364,6 @@ input:focus-visible {
 
 .poster-category {
   position: relative;
-
   z-index: 3;
 }
 
@@ -1452,7 +1428,6 @@ input:focus-visible {
 .all-posts-grid .media-card,
 .all-posts-grid .movie-card {
   width: auto;
-
   min-width: 0;
 }
 
@@ -1622,7 +1597,6 @@ input:focus-visible {
   height: 42px;
 
   display: grid;
-
   place-items: center;
 
   background: rgba(0, 0, 0, .30);
@@ -1634,7 +1608,6 @@ input:focus-visible {
   color: #fff;
 
   font-size: 32px;
-
   line-height: 1;
 
   cursor: pointer;
@@ -1674,7 +1647,6 @@ input:focus-visible {
   border-radius: 10px;
 
   display: grid;
-
   place-items: center;
 
   overflow: hidden;
@@ -2048,6 +2020,19 @@ code {
   .hero-content {
     padding: 85px 0;
   }
+
+  /*
+     Tablet marquee spacing
+  */
+
+  .search-section {
+    height: 56px;
+    min-height: 56px;
+  }
+
+  .search-section + .section {
+    padding-top: 45px;
+  }
 }
 
 
@@ -2064,9 +2049,7 @@ code {
   }
 
 
-  /* =======================================================
-     HEADER
-     ======================================================= */
+  /* HEADER */
 
   .nav-wrap {
     min-height: 70px;
@@ -2104,12 +2087,10 @@ code {
   }
 
 
-  /* =======================================================
-     HERO — REDUCED HEIGHT
-     ======================================================= */
+  /* HERO */
 
   .hero {
-    min-height: 570px;
+    min-height: 640px;
 
     background-position:
       58% center;
@@ -2170,37 +2151,53 @@ code {
   }
 
 
-  /* =======================================================
-     MARQUEE
-     ======================================================= */
+  /* =====================================================
+     MOBILE MARQUEE
+     ===================================================== */
 
-  .site-marquee {
-    margin-top: -4px;
+  .search-section {
+    height: 52px;
+    min-height: 52px;
 
-    padding: 12px 0;
+    margin: 0;
+    padding: 0;
+
+    border-top:
+      1px solid rgba(255, 255, 255, .05);
+
+    border-bottom:
+      1px solid rgba(255, 255, 255, .07);
   }
 
-  .site-marquee-track {
+  .search-section::before {
+    background:
+      linear-gradient(
+        90deg,
+        var(--bg) 0%,
+        transparent 12%,
+        transparent 88%,
+        var(--bg) 100%
+      );
+  }
+
+  .search-section::after {
+    font-size: 10px;
+
+    letter-spacing: .9px;
+
     animation-duration: 22s;
   }
 
-  .site-marquee-track span {
-    padding: 0 22px;
+  /*
+     Smaller gap before Football
+  */
 
-    font-size: 10px;
-
-    letter-spacing: .8px;
-  }
-
-  .site-marquee::before,
-  .site-marquee::after {
-    width: 35px;
+  .search-section + .section {
+    padding-top: 42px;
   }
 
 
-  /* =======================================================
-     SECTIONS
-     ======================================================= */
+  /* SECTIONS */
 
   .section {
     padding-top: 50px;
@@ -2217,9 +2214,7 @@ code {
   }
 
 
-  /* =======================================================
-     CAROUSELS
-     ======================================================= */
+  /* CAROUSELS */
 
   .horizontal-posts {
     width: 100%;
@@ -2247,9 +2242,7 @@ code {
   }
 
 
-  /* =======================================================
-     THUMBNAILS
-     ======================================================= */
+  /* THUMBNAILS */
 
   .horizontal-posts .post-thumb {
     height: 165px;
@@ -2266,9 +2259,7 @@ code {
   }
 
 
-  /* =======================================================
-     ABOUT
-     ======================================================= */
+  /* ABOUT */
 
   .about {
     display: grid;
@@ -2303,9 +2294,7 @@ code {
   }
 
 
-  /* =======================================================
-     ALL POSTS
-     ======================================================= */
+  /* ALL POSTS */
 
   .all-posts-grid {
     grid-template-columns: 1fr;
@@ -2322,9 +2311,7 @@ code {
   }
 
 
-  /* =======================================================
-     PAGE HERO
-     ======================================================= */
+  /* PAGE HERO */
 
   .page-hero {
     padding: 60px 0 45px;
@@ -2340,9 +2327,7 @@ code {
   }
 
 
-  /* =======================================================
-     FOOTER
-     ======================================================= */
+  /* FOOTER */
 
   .footer-wrap {
     grid-template-columns: 1fr;
@@ -2359,9 +2344,7 @@ code {
   }
 
 
-  /* =======================================================
-     MODAL
-     ======================================================= */
+  /* MODAL */
 
   .modal {
     align-items: center;
@@ -2629,12 +2612,10 @@ code {
   }
 
 
-  /* =======================================================
-     HERO — REDUCED HEIGHT
-     ======================================================= */
+  /* HERO */
 
   .hero {
-    min-height: 580px;
+    min-height: 650px;
 
     background-position:
       60% center;
@@ -2655,29 +2636,29 @@ code {
   }
 
 
-  /* =======================================================
-     MARQUEE
-     ======================================================= */
+  /* =====================================================
+     VERY SMALL PHONE MARQUEE
+     ===================================================== */
 
-  .site-marquee-track {
+  .search-section {
+    height: 48px;
+    min-height: 48px;
+  }
+
+  .search-section::after {
+    font-size: 9px;
+
+    letter-spacing: .7px;
+
     animation-duration: 19s;
   }
 
-  .site-marquee-track span {
-    padding: 0 18px;
-
-    font-size: 9px;
-  }
-
-  .site-marquee::before,
-  .site-marquee::after {
-    width: 25px;
+  .search-section + .section {
+    padding-top: 38px;
   }
 
 
-  /* =======================================================
-     BUTTONS
-     ======================================================= */
+  /* BUTTONS */
 
   .hero-actions {
     flex-direction: column;
@@ -2690,9 +2671,7 @@ code {
   }
 
 
-  /* =======================================================
-     CARDS
-     ======================================================= */
+  /* CARDS */
 
   .horizontal-posts .live-card {
     width: 82vw;
@@ -2713,9 +2692,7 @@ code {
   }
 
 
-  /* =======================================================
-     FULLSCREEN
-     ======================================================= */
+  /* FULLSCREEN */
 
   .fullscreen-btn {
     padding: 4px 8px;
@@ -2753,17 +2730,14 @@ code {
   *::before,
   *::after {
     animation-duration: .01ms !important;
-
     animation-iteration-count: 1 !important;
-
     transition-duration: .01ms !important;
-
     scroll-behavior: auto !important;
   }
 
-  .site-marquee-track {
+  .search-section::after {
     animation: none;
-
-    transform: none;
+    transform:
+      translate3d(0, -50%, 0);
   }
 }
