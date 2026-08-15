@@ -251,23 +251,31 @@ img {
 
   overflow: hidden;
 
+  /*
+    HERO BACKGROUND IMAGE
+
+    Place your image inside your GitHub repository:
+
+    /images/football-hero.jpg
+
+    Then this path will work on your website.
+  */
+
   background:
-    radial-gradient(
-      circle at 75% 35%,
-      rgba(255, 23, 68, .28),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 20% 70%,
-      rgba(65, 90, 255, .18),
-      transparent 30%
-    ),
     linear-gradient(
-      120deg,
-      #080b11,
-      #10141d 55%,
-      #090b10
-    );
+      90deg,
+      rgba(7, 9, 13, .84) 0%,
+      rgba(7, 9, 13, .68) 38%,
+      rgba(7, 9, 13, .45) 68%,
+      rgba(7, 9, 13, .32) 100%
+    ),
+    url("/images/football-hero.jpg");
+
+  background-size: cover;
+
+  background-position: center;
+
+  background-repeat: no-repeat;
 }
 
 .hero-overlay {
@@ -1917,6 +1925,8 @@ code {
 
   .hero {
     min-height: 500px;
+
+    background-position: center center;
   }
 
   .hero-content {
@@ -2377,6 +2387,12 @@ code {
 
   .nav-search span {
     right: 9px;
+  }
+
+  .hero {
+    min-height: 500px;
+
+    background-position: center center;
   }
 
   .hero h1 {
