@@ -2298,6 +2298,23 @@ document.addEventListener("DOMContentLoaded", function () {
     year.textContent =
       new Date().getFullYear();
 
+    // =========================
+// DEEPROWSS PWA
+// =========================
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("service-worker.js")
+      .then(() => {
+        console.log("Deeprowss PWA service worker registered.");
+      })
+      .catch(error => {
+        console.error("Deeprowss PWA registration failed:", error);
+      });
+  });
+}
+
   }
 
 });
