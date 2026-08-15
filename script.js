@@ -62,14 +62,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      THUMBNAIL
-     
-     Works for:
-     - Homepage
-     - Football page
-     - Highlights page
-     - Movies page
-     
-     Uses .post-thumb.
   ===================================== */
 
   function createThumbnail(
@@ -160,12 +152,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      MOVIE DOWNLOAD BUTTON
-     
-     Uses:
-       post.downloadUrl
-
-     If downloadUrl is missing or empty,
-     nothing is displayed.
   ===================================== */
 
   function createMovieDownloadButton(post) {
@@ -865,11 +851,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      ALL POSTS
-     
-     Used by:
-     football.html
-     highlights.html
-     movies.html
   ===================================== */
 
   function displayAllPosts(posts) {
@@ -1421,7 +1402,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* Destroy previous iframe */
+      /* =================================
+         DESTROY PREVIOUS IFRAME
+      ================================= */
 
       embedArea.innerHTML = "";
 
@@ -1455,15 +1438,19 @@ document.addEventListener("DOMContentLoaded", function () {
           String(url).trim();
 
 
+        /* Allow fullscreen */
+
         iframe.setAttribute(
           "allowfullscreen",
           ""
         );
 
 
+        /* Allow fullscreen + orientation */
+
         iframe.setAttribute(
           "allow",
-          "autoplay; fullscreen; encrypted-media; picture-in-picture"
+          "autoplay; fullscreen; encrypted-media; picture-in-picture; orientation-lock"
         );
 
 
@@ -1482,6 +1469,17 @@ document.addEventListener("DOMContentLoaded", function () {
         iframe.setAttribute(
           "title",
           title || "Video"
+        );
+
+
+        /*
+         * Important:
+         * Make the iframe itself fullscreen-capable.
+         */
+
+        iframe.setAttribute(
+          "webkitallowfullscreen",
+          ""
         );
 
 
@@ -1540,12 +1538,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       fullscreenButton.textContent =
-        "Tap to watch in Fullscreen";
+        "Tap to watch in Landscape Fullscreen";
 
 
       fullscreenButton.setAttribute(
         "aria-label",
-        "Tap to watch in Fullscreen"
+        "Tap to watch in Landscape Fullscreen"
       );
 
 
@@ -1604,7 +1602,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* Exit fullscreen */
+    /* =================================
+       EXIT FULLSCREEN
+    ================================= */
 
     if (
       document.fullscreenElement &&
@@ -1627,7 +1627,35 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* Destroy iframe */
+    /* =================================
+       UNLOCK ORIENTATION
+    ================================= */
+
+    if (
+      screen.orientation &&
+      typeof screen.orientation.unlock ===
+      "function"
+    ) {
+
+      try {
+
+        screen.orientation.unlock();
+
+      } catch (error) {
+
+        console.warn(
+          "Could not unlock orientation:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =================================
+       DESTROY IFRAME
+    ================================= */
 
     if (embedArea) {
 
@@ -1653,7 +1681,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* Remove fullscreen controls */
+    /* =================================
+       REMOVE FULLSCREEN CONTROLS
+    ================================= */
 
     var controls =
       modal.querySelector(
@@ -1668,7 +1698,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* Close */
+    /* =================================
+       CLOSE MODAL
+    ================================= */
 
     modal.classList.remove(
       "open"
@@ -1685,7 +1717,9 @@ document.addEventListener("DOMContentLoaded", function () {
       "";
 
 
-    /* Reset title */
+    /* =================================
+       RESET TITLE
+    ================================= */
 
     var modalTitle =
       document.getElementById(
@@ -1790,12 +1824,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     FULLSCREEN
+     FULLSCREEN + LANDSCAPE
   ===================================== */
 
   document.addEventListener(
     "click",
-    function (event) {
+    async function (event) {
 
       var button =
         event.target.closest(
@@ -1808,53 +1842,172 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      var modalBox =
-        document.querySelector(
-          ".modal-box"
+      event.preventDefault();
+
+
+      var embedArea =
+        document.getElementById(
+          "embedArea"
         );
 
 
-      if (!modalBox) {
+      if (!embedArea) {
         return;
       }
 
 
-      if (
-        !document.fullscreenElement
-      ) {
+      var iframe =
+        embedArea.querySelector(
+          "iframe"
+        );
 
-        if (
-          modalBox.requestFullscreen
-        ) {
 
-          modalBox
-            .requestFullscreen()
-            .catch(
-              function (error) {
+      if (!iframe) {
 
-                console.error(
-                  "Fullscreen error:",
-                  error
-                );
+        console.warn(
+          "Fullscreen iframe not found."
+        );
 
-              }
-            );
-
-        }
+        return;
 
       }
 
-      else {
+
+      /* =================================
+         EXIT FULLSCREEN
+      ================================= */
+
+      if (document.fullscreenElement) {
+
+        try {
+
+          await document.exitFullscreen();
+
+        } catch (error) {
+
+          console.warn(
+            "Could not exit fullscreen:",
+            error
+          );
+
+        }
+
+        return;
+
+      }
+
+
+      /* =================================
+         ENTER IFRAME FULLSCREEN
+      ================================= */
+
+      try {
 
         if (
-          document.exitFullscreen
+          typeof iframe.requestFullscreen !==
+          "function"
         ) {
 
-          document
-            .exitFullscreen()
-            .catch(
-              function () {}
+          console.warn(
+            "Fullscreen is not supported by this browser."
+          );
+
+          return;
+
+        }
+
+
+        /*
+         * The iframe itself becomes fullscreen.
+         * This is the key difference from
+         * the previous version, which fullscreened
+         * .modal-box.
+         */
+
+        await iframe.requestFullscreen();
+
+
+        /* =================================
+           REQUEST LANDSCAPE
+        ================================= */
+
+        if (
+          screen.orientation &&
+          typeof screen.orientation.lock ===
+          "function"
+        ) {
+
+          try {
+
+            await screen.orientation.lock(
+              "landscape"
             );
+
+
+            console.log(
+              "Landscape orientation locked."
+            );
+
+          } catch (orientationError) {
+
+            console.warn(
+              "Landscape orientation could not be locked:",
+              orientationError
+            );
+
+          }
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Fullscreen error:",
+          error
+        );
+
+      }
+
+    }
+  );
+
+
+  /* =====================================
+     FULLSCREEN CHANGE
+     
+     Unlock orientation when the user
+     exits fullscreen using Android/browser
+     controls.
+  ===================================== */
+
+  document.addEventListener(
+    "fullscreenchange",
+    function () {
+
+      if (!document.fullscreenElement) {
+
+        if (
+          screen.orientation &&
+          typeof screen.orientation.unlock ===
+          "function"
+        ) {
+
+          try {
+
+            screen.orientation.unlock();
+
+            console.log(
+              "Screen orientation unlocked."
+            );
+
+          } catch (error) {
+
+            console.warn(
+              "Could not unlock orientation:",
+              error
+            );
+
+          }
 
         }
 
