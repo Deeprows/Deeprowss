@@ -2300,11 +2300,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-    /* =====================================
+      /* =====================================
      DEEPROWSS PWA
   ===================================== */
 
   if ("serviceWorker" in navigator) {
+
     window.addEventListener("load", function () {
 
       navigator.serviceWorker
@@ -2327,6 +2328,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     });
+
   }
 
 
@@ -2335,31 +2337,47 @@ document.addEventListener("DOMContentLoaded", function () {
   ===================================== */
 
   var installAppBtn =
-    document.getElementById(
-      "installAppBtn"
-    );
+    document.getElementById("installAppBtn");
 
-  var deferredInstallPrompt =
-    null;
+  var deferredInstallPrompt = null;
 
+
+  /* =====================================
+     SHOW INSTALL BUTTON WHEN AVAILABLE
+  ===================================== */
 
   window.addEventListener(
     "beforeinstallprompt",
     function (event) {
 
+      console.log(
+        "Deeprowss install prompt is available."
+      );
+
+      /* Prevent the browser from showing
+         its automatic install prompt */
       event.preventDefault();
 
-      deferredInstallPrompt =
-        event;
+      /* Save the event so we can trigger
+         the installation later */
+      deferredInstallPrompt = event;
 
+      /* Show our custom install button */
       if (installAppBtn) {
-        installAppBtn.hidden =
-          false;
+
+        installAppBtn.hidden = false;
+
+        installAppBtn.style.display = "inline-flex";
+
       }
 
     }
   );
 
+
+  /* =====================================
+     INSTALL APP BUTTON
+  ===================================== */
 
   if (installAppBtn) {
 
@@ -2367,37 +2385,63 @@ document.addEventListener("DOMContentLoaded", function () {
       "click",
       async function () {
 
+        /* No install prompt available */
         if (!deferredInstallPrompt) {
+
+          console.log(
+            "Deeprowss install prompt is not available yet."
+          );
+
           return;
+
         }
 
+
+        /* Show browser installation dialog */
         deferredInstallPrompt.prompt();
 
-        var choice =
-          await deferredInstallPrompt.userChoice;
 
-        if (
-          choice.outcome ===
-          "accepted"
-        ) {
+        try {
 
-          console.log(
-            "Deeprowss app installation accepted."
-          );
+          var choice =
+            await deferredInstallPrompt.userChoice;
 
-        } else {
 
-          console.log(
-            "Deeprowss app installation dismissed."
+          if (
+            choice &&
+            choice.outcome === "accepted"
+          ) {
+
+            console.log(
+              "Deeprowss app installation accepted."
+            );
+
+          } else {
+
+            console.log(
+              "Deeprowss app installation dismissed."
+            );
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            "Deeprowss app installation error:",
+            error
           );
 
         }
 
-        deferredInstallPrompt =
-          null;
 
-        installAppBtn.hidden =
-          true;
+        /* The prompt can only be used once */
+        deferredInstallPrompt = null;
+
+
+        /* Hide install button after prompt */
+        installAppBtn.hidden = true;
+
+        installAppBtn.style.display = "none";
 
       }
     );
@@ -2405,23 +2449,65 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
+  /* =====================================
+     APP INSTALLED
+  ===================================== */
+
   window.addEventListener(
     "appinstalled",
     function () {
 
       console.log(
-        "Deeprowss has been installed."
+        "Deeprowss has been installed successfully."
       );
 
-      deferredInstallPrompt =
-        null;
 
+      /* Clear saved prompt */
+      deferredInstallPrompt = null;
+
+
+      /* Hide install button */
       if (installAppBtn) {
-        installAppBtn.hidden =
-          true;
+
+        installAppBtn.hidden = true;
+
+        installAppBtn.style.display = "none";
+
       }
 
     }
   );
+
+
+  /* =====================================
+     CHECK IF APP IS ALREADY INSTALLED
+  ===================================== */
+
+  var isStandalone =
+    window.matchMedia &&
+    window.matchMedia(
+      "(display-mode: standalone)"
+    ).matches;
+
+
+  var isIOSStandalone =
+    window.navigator.standalone === true;
+
+
+  if (
+    isStandalone ||
+    isIOSStandalone
+  ) {
+
+    if (installAppBtn) {
+
+      installAppBtn.hidden = true;
+
+      installAppBtn.style.display = "none";
+
+    }
+
+  }
+
 
 });
