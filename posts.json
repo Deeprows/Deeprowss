@@ -1,16 +1,16 @@
 [
   {
-    "type": "live",
-    "title": "Arsenal vs Chelsea",
-    "home": "Arsenal",
-    "away": "Manchester City",
-    "status": "UPCOMING",
-    "category": "Community Shield",
-    "description": "Arsenal vs Manchester City football coverage.",
-    "publishedAt": "2026-08-16T19:00:00Z",
-    "thumbnail": "https://www.mancity.com/meta/media/mv1fcweb/arsenal-a-wide.jpeg?width=1024&height=576&mode=crop",
-    "embedUrl": "https://filemoon.org/en/LJlGnPwv315w/embed",
-    "alternativeEmbedUrl": "https://playmogo.com/e/onevc4ujy6tf"
+     "type": "live",
+  "title": "Arsenal vs Manchester City",
+  "home": "Arsenal",
+  "away": "Manchester City",
+  "status": "UPCOMING",
+  "category": "Community Shield",
+  "description": "Arsenal vs Manchester City football coverage.",
+  "matchTime": "2026-08-16T14:00:00Z",
+  "thumbnail": "https://www.mancity.com/meta/media/mv1fcweb/arsenal-a-wide.jpeg?width=1024&height=576&mode=crop",
+  "embedUrl": "https://filemoon.org/en/LJlGnPwv315w/embed",
+  "alternativeEmbedUrl": "https://playmogo.com/e/onevc4ujy6tf"
   },
   {
     
