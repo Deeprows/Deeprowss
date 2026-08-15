@@ -539,6 +539,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 '" ' +
 
+                'data-alt-url="' +
+
+                  escapeHTML(
+                    post.embedUrlAlt ||
+                    ""
+                  ) +
+
+                '" ' +
+
                 'data-title="' +
 
                   escapeHTML(
@@ -1092,6 +1101,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
             '" ' +
 
+            'data-alt-url="' +
+
+              escapeHTML(
+                post.embedUrlAlt ||
+                ""
+              ) +
+
+            '" ' +
+
             'data-title="' +
 
               escapeHTML(
@@ -1339,6 +1357,12 @@ document.addEventListener("DOMContentLoaded", function () {
               ) || "";
 
 
+            var altUrl =
+              this.getAttribute(
+                "data-alt-url"
+              ) || "";
+
+
             var title =
               this.getAttribute(
                 "data-title"
@@ -1347,7 +1371,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             openEmbed(
               title,
-              url
+              url,
+              altUrl
             );
 
           };
@@ -1363,7 +1388,7 @@ document.addEventListener("DOMContentLoaded", function () {
   ===================================== */
 
   window.openEmbed =
-    function (title, url) {
+    function (title, url, altUrl) {
 
       var modal =
         document.getElementById(
@@ -1438,15 +1463,11 @@ document.addEventListener("DOMContentLoaded", function () {
           String(url).trim();
 
 
-        /* Allow fullscreen */
-
         iframe.setAttribute(
           "allowfullscreen",
           ""
         );
 
-
-        /* Allow fullscreen + orientation */
 
         iframe.setAttribute(
           "allow",
@@ -1471,11 +1492,6 @@ document.addEventListener("DOMContentLoaded", function () {
           title || "Video"
         );
 
-
-        /*
-         * Important:
-         * Make the iframe itself fullscreen-capable.
-         */
 
         iframe.setAttribute(
           "webkitallowfullscreen",
@@ -1510,7 +1526,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       /* =================================
-         FULLSCREEN CONTROL
+         STREAM CONTROLS
       ================================= */
 
       var controls =
@@ -1522,6 +1538,169 @@ document.addEventListener("DOMContentLoaded", function () {
       controls.className =
         "video-controls";
 
+
+      /*
+       * MAIN SCREEN BUTTON
+       */
+
+      var mainButton =
+        document.createElement(
+          "button"
+        );
+
+
+      mainButton.type =
+        "button";
+
+
+      mainButton.className =
+        "stream-button active";
+
+
+      mainButton.textContent =
+        "Main Screen";
+
+
+      mainButton.setAttribute(
+        "aria-label",
+        "Switch to main screen"
+      );
+
+
+      /*
+       * ALTERNATIVE BUTTON
+       */
+
+      var alternativeButton =
+        document.createElement(
+          "button"
+        );
+
+
+      alternativeButton.type =
+        "button";
+
+
+      alternativeButton.className =
+        "stream-button";
+
+
+      alternativeButton.textContent =
+        "Alternative";
+
+
+      alternativeButton.setAttribute(
+        "aria-label",
+        "Switch to alternative screen"
+      );
+
+
+      /*
+       * MAIN SCREEN
+       */
+
+      mainButton.onclick =
+        function () {
+
+          if (!url) {
+            return;
+          }
+
+
+          var currentIframe =
+            embedArea.querySelector(
+              "iframe"
+            );
+
+
+          if (!currentIframe) {
+            return;
+          }
+
+
+          currentIframe.src =
+            String(url).trim();
+
+
+          mainButton.classList.add(
+            "active"
+          );
+
+
+          alternativeButton.classList.remove(
+            "active"
+          );
+
+        };
+
+
+      /*
+       * ALTERNATIVE SCREEN
+       */
+
+      alternativeButton.onclick =
+        function () {
+
+          if (!altUrl) {
+            return;
+          }
+
+
+          var currentIframe =
+            embedArea.querySelector(
+              "iframe"
+            );
+
+
+          if (!currentIframe) {
+            return;
+          }
+
+
+          currentIframe.src =
+            String(altUrl).trim();
+
+
+          alternativeButton.classList.add(
+            "active"
+          );
+
+
+          mainButton.classList.remove(
+            "active"
+          );
+
+        };
+
+
+      controls.appendChild(
+        mainButton
+      );
+
+
+      /*
+       * Only show Alternative when
+       * an alternative URL exists.
+       */
+
+      if (altUrl) {
+
+        controls.appendChild(
+          alternativeButton
+        );
+
+      }
+
+
+      embedArea.insertAdjacentElement(
+        "afterend",
+        controls
+      );
+
+
+      /* =================================
+         FULLSCREEN CONTROL
+      ================================= */
 
       var fullscreenButton =
         document.createElement(
@@ -1549,12 +1728,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       controls.appendChild(
         fullscreenButton
-      );
-
-
-      embedArea.insertAdjacentElement(
-        "afterend",
-        controls
       );
 
 
@@ -1682,7 +1855,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =================================
-       REMOVE FULLSCREEN CONTROLS
+       REMOVE FULLSCREEN / STREAM CONTROLS
     ================================= */
 
     var controls =
@@ -1919,9 +2092,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         /*
          * The iframe itself becomes fullscreen.
-         * This is the key difference from
-         * the previous version, which fullscreened
-         * .modal-box.
          */
 
         await iframe.requestFullscreen();
@@ -1974,7 +2144,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      FULLSCREEN CHANGE
-     
+
      Unlock orientation when the user
      exits fullscreen using Android/browser
      controls.
