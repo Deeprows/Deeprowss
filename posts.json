@@ -45,7 +45,8 @@
     "category": "MOVIE",
     "publishedAt": "2026-08-14T12:00:00Z",
     "thumbnail": "https://m.media-amazon.com/images/M/MV5BZTkyYWVjOTMtMzRkYS00MTAwLWE4NDItNzQ2ZjJhOWE1MjQ4XkEyXkFqcGc@._V1_.jpg",
-    "embedUrl": "https://vsembed.su/embed/movie/tt27419466"
+    "embedUrl": "https://vsembed.su/embed/movie/tt27419466",
+    "downloadUrl": "YOUR_MOANA_DOWNLOAD_URL"
   },
   {
     "type": "movie",
@@ -53,6 +54,7 @@
     "category": "MOVIE",
     "publishedAt": "2026-08-14T10:00:00Z",
     "thumbnail": "https://m.media-amazon.com/images/M/MV5BZTkyYWVjOTMtMzRkYS00MTAwLWE4NDItNzQ2ZjJhOWE1MjQ4XkEyXkFqcGc@._V1_.jpg",
-    "embedUrl": "YOUR_SECOND_MOVIE_EMBED_URL"
+    "embedUrl": "YOUR_SECOND_MOVIE_EMBED_URL",
+    "downloadUrl": "YOUR_SECOND_MOVIE_DOWNLOAD_URL"
   }
 ]
