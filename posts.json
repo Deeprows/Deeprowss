@@ -9,9 +9,8 @@
     "description": "Arsenal vs Chelsea football coverage.",
     "publishedAt": "2026-08-14T18:00:00Z",
     "thumbnail": "https://m.media-amazon.com/images/M/MV5BZTkyYWVjOTMtMzRkYS00MTAwLWE4NDItNzQ2ZjJhOWE1MjQ4XkEyXkFqcGc@._V1_.jpg",
-
     "embedUrl": "https://filemoon.org/en/LJlGnPwv315w/embed",
-    "alternativeEmbedUrl": "https://playmogo.com/e/onevc4ujy6tf"
+    "alternativeEmbedUrl": "YOUR_ARSENAL_CHELSEA_ALTERNATIVE_IFRAME_URL"
   },
   {
     "type": "live",
@@ -23,9 +22,8 @@
     "description": "Barcelona vs Real Madrid football coverage.",
     "publishedAt": "2026-08-15T18:00:00Z",
     "thumbnail": "https://m.media-amazon.com/images/M/MV5BZTkyYWVjOTMtMzRkYS00MTAwLWE4NDItNzQ2ZjJhOWE1MjQ4XkEyXkFqcGc@._V1_.jpg",
-
     "embedUrl": "https://streamtp-golden1.click/global1.php?stream=dsports2",
-    "alternativeEmbedUrl": "YOUR_ALTERNATIVE_IFRAME_URL"
+    "alternativeEmbedUrl": "YOUR_BARCELONA_REAL_MADRID_ALTERNATIVE_IFRAME_URL"
   },
   {
     "type": "highlight",
