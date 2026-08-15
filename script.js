@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      DATE
+     Used by Highlights + Movies only
   ===================================== */
 
   function formatPostDate(dateString) {
@@ -52,12 +53,328 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     try {
+
       return date.toLocaleString();
+
     } catch (error) {
+
       return date.toString();
+
     }
 
   }
+
+
+  /* =====================================
+     FOOTBALL MATCH TIME
+     
+     Football Live posts use:
+     post.matchTime
+
+     They DO NOT use:
+     post.publishedAt
+  ===================================== */
+
+  function getMatchTimeInfo(post) {
+
+    if (!post || !post.matchTime) {
+
+      return {
+        valid: false,
+        timestamp: 0
+      };
+
+    }
+
+
+    var matchDate =
+      new Date(post.matchTime);
+
+
+    var timestamp =
+      matchDate.getTime();
+
+
+    if (isNaN(timestamp)) {
+
+      return {
+        valid: false,
+        timestamp: 0
+      };
+
+    }
+
+
+    return {
+      valid: true,
+      timestamp: timestamp
+    };
+
+  }
+
+
+  /* =====================================
+     LOCAL MATCH TIME
+     
+     The browser automatically uses the
+     visitor's local timezone.
+  ===================================== */
+
+  function formatLocalMatchTime(matchTime) {
+
+    if (!matchTime) {
+      return "";
+    }
+
+
+    var date =
+      new Date(matchTime);
+
+
+    if (isNaN(date.getTime())) {
+      return "";
+    }
+
+
+    try {
+
+      return date.toLocaleString(
+        undefined,
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+
+    } catch (error) {
+
+      return date.toLocaleString();
+
+    }
+
+  }
+
+
+  /* =====================================
+     COUNTDOWN FORMAT
+  ===================================== */
+
+  function formatCountdown(milliseconds) {
+
+    if (milliseconds <= 0) {
+      return "LIVE NOW";
+    }
+
+
+    var totalSeconds =
+      Math.floor(
+        milliseconds / 1000
+      );
+
+
+    var days =
+      Math.floor(
+        totalSeconds / 86400
+      );
+
+
+    totalSeconds %= 86400;
+
+
+    var hours =
+      Math.floor(
+        totalSeconds / 3600
+      );
+
+
+    totalSeconds %= 3600;
+
+
+    var minutes =
+      Math.floor(
+        totalSeconds / 60
+      );
+
+
+    var seconds =
+      totalSeconds % 60;
+
+
+    if (days > 0) {
+
+      return (
+        days +
+        "d " +
+        String(hours).padStart(2, "0") +
+        "h " +
+        String(minutes).padStart(2, "0") +
+        "m " +
+        String(seconds).padStart(2, "0") +
+        "s"
+      );
+
+    }
+
+
+    return (
+      String(hours).padStart(2, "0") +
+      "h " +
+      String(minutes).padStart(2, "0") +
+      "m " +
+      String(seconds).padStart(2, "0") +
+      "s"
+    );
+
+  }
+
+
+  /* =====================================
+     UPDATE FOOTBALL COUNTDOWNS
+  ===================================== */
+
+  function updateFootballCountdowns() {
+
+    var countdowns =
+      document.querySelectorAll(
+        ".match-countdown[data-match-time]"
+      );
+
+
+    var now =
+      Date.now();
+
+
+    countdowns.forEach(
+      function (element) {
+
+        var matchTime =
+          element.getAttribute(
+            "data-match-time"
+          );
+
+
+        if (!matchTime) {
+          return;
+        }
+
+
+        var matchTimestamp =
+          new Date(
+            matchTime
+          ).getTime();
+
+
+        if (isNaN(matchTimestamp)) {
+          return;
+        }
+
+
+        var difference =
+          matchTimestamp - now;
+
+
+        var card =
+          element.closest(
+            ".live-card"
+          );
+
+
+        var badge =
+          card
+            ? card.querySelector(
+                ".live-status-badge"
+              )
+            : null;
+
+
+        /* =================================
+           MATCH HAS STARTED
+        ================================= */
+
+        if (difference <= 0) {
+
+          element.textContent =
+            "LIVE NOW";
+
+
+          element.classList.add(
+            "match-live"
+          );
+
+
+          if (badge) {
+
+            badge.textContent =
+              "LIVE";
+
+
+            badge.classList.remove(
+              "upcoming-badge"
+            );
+
+
+            badge.classList.add(
+              "live-badge"
+            );
+
+          }
+
+        }
+
+
+        /* =================================
+           MATCH HAS NOT STARTED
+        ================================= */
+
+        else {
+
+          element.textContent =
+            formatCountdown(
+              difference
+            );
+
+
+          element.classList.remove(
+            "match-live"
+          );
+
+
+          if (badge) {
+
+            badge.textContent =
+              "UPCOMING";
+
+
+            badge.classList.remove(
+              "live-badge"
+            );
+
+
+            badge.classList.add(
+              "upcoming-badge"
+            );
+
+          }
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* =====================================
+     START COUNTDOWN
+  ===================================== */
+
+  setInterval(
+    updateFootballCountdowns,
+    1000
+  );
 
 
   /* =====================================
@@ -75,10 +392,12 @@ document.addEventListener("DOMContentLoaded", function () {
         altText || "Thumbnail"
       );
 
+
     var safeThumbnail =
       thumbnail
         ? String(thumbnail).trim()
         : "";
+
 
     var classes =
       "post-thumb " +
@@ -91,6 +410,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!safeThumbnail) {
 
       return (
+
         '<div class="' +
           classes +
         '">' +
@@ -104,6 +424,7 @@ document.addEventListener("DOMContentLoaded", function () {
           '</div>' +
 
         '</div>'
+
       );
 
     }
@@ -256,16 +577,41 @@ document.addEventListener("DOMContentLoaded", function () {
           }
 
 
+          /* =================================
+             SORT POSTS
+
+             Football:
+             matchTime
+
+             Highlights:
+             publishedAt
+
+             Movies:
+             publishedAt
+          ================================= */
+
           posts.sort(
             function (a, b) {
 
+              var aTime =
+                a.type === "live"
+                  ? a.matchTime
+                  : a.publishedAt;
+
+
+              var bTime =
+                b.type === "live"
+                  ? b.matchTime
+                  : b.publishedAt;
+
+
               return (
                 new Date(
-                  b.publishedAt || 0
+                  bTime || 0
                 ).getTime() -
 
                 new Date(
-                  a.publishedAt || 0
+                  aTime || 0
                 ).getTime()
               );
 
@@ -288,12 +634,19 @@ document.addEventListener("DOMContentLoaded", function () {
           displayAllPosts(posts);
 
 
+          /* Run immediately instead of waiting
+             for the first 1-second interval. */
+
+          updateFootballCountdowns();
+
+
         } catch (error) {
 
           console.error(
             "Could not read posts.json:",
             error
           );
+
 
           showError();
 
@@ -305,6 +658,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "Could not load posts.json. Status:",
           xhr.status
         );
+
 
         showError();
 
@@ -319,6 +673,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error(
         "Network error loading posts.json"
       );
+
 
       showError();
 
@@ -415,16 +770,63 @@ document.addEventListener("DOMContentLoaded", function () {
     livePosts.forEach(
       function (post) {
 
+        var matchInfo =
+          getMatchTimeInfo(post);
+
+
         var status =
           String(
             post.status || "UPCOMING"
           ).toUpperCase();
 
 
+        /* Automatically determine status
+           from matchTime. */
+
+        if (
+          matchInfo.valid &&
+          matchInfo.timestamp <= Date.now()
+        ) {
+
+          status = "LIVE";
+
+        } else {
+
+          status = "UPCOMING";
+
+        }
+
+
         var statusClass =
           status === "LIVE"
             ? "live-badge"
             : "upcoming-badge";
+
+
+        var initialCountdown =
+          "Match time unavailable";
+
+
+        if (matchInfo.valid) {
+
+          if (
+            matchInfo.timestamp <= Date.now()
+          ) {
+
+            initialCountdown =
+              "LIVE NOW";
+
+          } else {
+
+            initialCountdown =
+              formatCountdown(
+                matchInfo.timestamp -
+                Date.now()
+              );
+
+          }
+
+        }
 
 
         html +=
@@ -448,7 +850,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 '<span class="' +
                   statusClass +
-                '">' +
+                  ' live-status-badge">' +
 
                   escapeHTML(status) +
 
@@ -498,11 +900,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</div>' +
 
-              '<div class="post-date">' +
+              '<div class="match-time-info">' +
 
-                formatPostDate(
-                  post.publishedAt
-                ) +
+                '<div class="match-local-time">' +
+
+                  escapeHTML(
+                    formatLocalMatchTime(
+                      post.matchTime
+                    )
+                  ) +
+
+                '</div>' +
+
+                '<div ' +
+
+                  'class="match-countdown" ' +
+
+                  'data-match-time="' +
+
+                    escapeHTML(
+                      post.matchTime || ""
+                    ) +
+
+                  '">' +
+
+                  escapeHTML(
+                    initialCountdown
+                  ) +
+
+                '</div>' +
 
               '</div>' +
 
@@ -552,6 +978,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     attachVideoButtons();
+
+
+    updateFootballCountdowns();
 
   }
 
@@ -935,6 +1364,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     attachVideoButtons();
 
+
+    updateFootballCountdowns();
+
   }
 
 
@@ -944,6 +1376,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function createLiveGridCard(post) {
 
+    var matchInfo =
+      getMatchTimeInfo(post);
+
+
     var status =
       String(
         post.status ||
@@ -951,10 +1387,50 @@ document.addEventListener("DOMContentLoaded", function () {
       ).toUpperCase();
 
 
+    if (
+      matchInfo.valid &&
+      matchInfo.timestamp <= Date.now()
+    ) {
+
+      status = "LIVE";
+
+    } else {
+
+      status = "UPCOMING";
+
+    }
+
+
     var statusClass =
       status === "LIVE"
         ? "live-badge"
         : "upcoming-badge";
+
+
+    var initialCountdown =
+      "Match time unavailable";
+
+
+    if (matchInfo.valid) {
+
+      if (
+        matchInfo.timestamp <= Date.now()
+      ) {
+
+        initialCountdown =
+          "LIVE NOW";
+
+      } else {
+
+        initialCountdown =
+          formatCountdown(
+            matchInfo.timestamp -
+            Date.now()
+          );
+
+      }
+
+    }
 
 
     return (
@@ -974,7 +1450,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             '<span class="' +
               statusClass +
-            '">' +
+              ' live-status-badge">' +
 
               escapeHTML(status) +
 
@@ -1024,11 +1500,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</p>' +
 
-          '<div class="post-date">' +
+          '<div class="match-time-info">' +
 
-            formatPostDate(
-              post.publishedAt
-            ) +
+            '<div class="match-local-time">' +
+
+              escapeHTML(
+                formatLocalMatchTime(
+                  post.matchTime
+                )
+              ) +
+
+            '</div>' +
+
+            '<div ' +
+
+              'class="match-countdown" ' +
+
+              'data-match-time="' +
+
+                escapeHTML(
+                  post.matchTime || ""
+                ) +
+
+              '">' +
+
+              escapeHTML(
+                initialCountdown
+              ) +
+
+            '</div>' +
 
           '</div>' +
 
@@ -1435,12 +1935,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* Destroy current iframe */
-
     embedArea.innerHTML = "";
 
-
-    /* Create new iframe */
 
     var iframe =
       createVideoIframe(
@@ -1454,8 +1950,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-    /* Save active screen */
-
     modal.setAttribute(
       "data-active-screen",
       useAlternative
@@ -1463,8 +1957,6 @@ document.addEventListener("DOMContentLoaded", function () {
         : "main"
     );
 
-
-    /* Update button */
 
     var switchButton =
       modal.querySelector(
@@ -1479,6 +1971,7 @@ document.addEventListener("DOMContentLoaded", function () {
         switchButton.textContent =
           "Main Screen";
 
+
         switchButton.setAttribute(
           "aria-label",
           "Switch to Main Screen"
@@ -1488,6 +1981,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         switchButton.textContent =
           "Alt Screen";
+
 
         switchButton.setAttribute(
           "aria-label",
@@ -1549,8 +2043,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* Store URLs for the current video */
-
       modal.setAttribute(
         "data-main-url",
         url || ""
@@ -1575,12 +2067,8 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
 
-      /* Destroy previous iframe */
-
       embedArea.innerHTML = "";
 
-
-      /* Remove old controls */
 
       var oldControls =
         modal.querySelector(
@@ -1665,12 +2153,6 @@ document.addEventListener("DOMContentLoaded", function () {
         screenSwitchButton.className =
           "screen-switch-btn";
 
-
-        /*
-         * Main screen is loaded first,
-         * therefore the button must offer
-         * the alternative screen.
-         */
 
         screenSwitchButton.textContent =
           "Alt Screen";
@@ -2283,7 +2765,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-         /* =====================================
+  /* =====================================
      COPYRIGHT
   ===================================== */
 
@@ -2291,6 +2773,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById(
       "year"
     );
+
 
   if (year) {
 
@@ -2300,34 +2783,41 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-      /* =====================================
+  /* =====================================
      DEEPROWSS PWA
   ===================================== */
 
   if ("serviceWorker" in navigator) {
 
-    window.addEventListener("load", function () {
+    window.addEventListener(
+      "load",
+      function () {
 
-      navigator.serviceWorker
-        .register("./service-worker.js")
-        .then(function (registration) {
+        navigator.serviceWorker
+          .register("./service-worker.js")
+          .then(
+            function (registration) {
 
-          console.log(
-            "Deeprowss PWA service worker registered:",
-            registration.scope
+              console.log(
+                "Deeprowss PWA service worker registered:",
+                registration.scope
+              );
+
+            }
+          )
+          .catch(
+            function (error) {
+
+              console.error(
+                "Deeprowss PWA service worker registration failed:",
+                error
+              );
+
+            }
           );
 
-        })
-        .catch(function (error) {
-
-          console.error(
-            "Deeprowss PWA service worker registration failed:",
-            error
-          );
-
-        });
-
-    });
+      }
+    );
 
   }
 
@@ -2337,9 +2827,13 @@ document.addEventListener("DOMContentLoaded", function () {
   ===================================== */
 
   var installAppBtn =
-    document.getElementById("installAppBtn");
+    document.getElementById(
+      "installAppBtn"
+    );
 
-  var deferredInstallPrompt = null;
+
+  var deferredInstallPrompt =
+    null;
 
 
   /* =====================================
@@ -2354,20 +2848,22 @@ document.addEventListener("DOMContentLoaded", function () {
         "Deeprowss install prompt is available."
       );
 
-      /* Prevent the browser from showing
-         its automatic install prompt */
+
       event.preventDefault();
 
-      /* Save the event so we can trigger
-         the installation later */
-      deferredInstallPrompt = event;
 
-      /* Show our custom install button */
+      deferredInstallPrompt =
+        event;
+
+
       if (installAppBtn) {
 
-        installAppBtn.hidden = false;
+        installAppBtn.hidden =
+          false;
 
-        installAppBtn.style.display = "inline-flex";
+
+        installAppBtn.style.display =
+          "inline-flex";
 
       }
 
@@ -2385,7 +2881,6 @@ document.addEventListener("DOMContentLoaded", function () {
       "click",
       async function () {
 
-        /* No install prompt available */
         if (!deferredInstallPrompt) {
 
           console.log(
@@ -2397,7 +2892,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* Show browser installation dialog */
         deferredInstallPrompt.prompt();
 
 
@@ -2434,14 +2928,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* The prompt can only be used once */
-        deferredInstallPrompt = null;
+        deferredInstallPrompt =
+          null;
 
 
-        /* Hide install button after prompt */
-        installAppBtn.hidden = true;
+        installAppBtn.hidden =
+          true;
 
-        installAppBtn.style.display = "none";
+
+        installAppBtn.style.display =
+          "none";
 
       }
     );
@@ -2462,16 +2958,18 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
 
-      /* Clear saved prompt */
-      deferredInstallPrompt = null;
+      deferredInstallPrompt =
+        null;
 
 
-      /* Hide install button */
       if (installAppBtn) {
 
-        installAppBtn.hidden = true;
+        installAppBtn.hidden =
+          true;
 
-        installAppBtn.style.display = "none";
+
+        installAppBtn.style.display =
+          "none";
 
       }
 
@@ -2501,9 +2999,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (installAppBtn) {
 
-      installAppBtn.hidden = true;
+      installAppBtn.hidden =
+        true;
 
-      installAppBtn.style.display = "none";
+
+      installAppBtn.style.display =
+        "none";
 
     }
 
@@ -2511,3 +3012,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 });
+```
