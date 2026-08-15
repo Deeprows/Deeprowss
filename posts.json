@@ -46,5 +46,16 @@
     "thumbnail": "https://m.media-amazon.com/images/M/MV5BZTkyYWVjOTMtMzRkYS00MTAwLWE4NDItNzQ2ZjJhOWE1MjQ4XkEyXkFqcGc@._V1_.jpg",
     "embedUrl": "YOUR_SECOND_MOVIE_EMBED_URL",
     "downloadUrl": "YOUR_SECOND_MOVIE_DOWNLOAD_URL"
+   },
+  {
+    "type": "movie",
+    "title": "Disclosure Day 2026 6.4/10 IMDb | Action, Drama, Scifi ",
+    "category": "MOVIE",
+    "publishedAt": "2026-08-15T10:00:00Z",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLhmAPwRryN9Lcr-RlV0Y4jY7q-1Zgs9Trd0Ni5zT9QBO8VNRCIpTuMExko19KAbMGX97T&s=10",
+    "embedUrl": "https://filemoon.org/en/Z9dzB7EMGk1b/embed",
+    "downloadUrl": "https://filemoon.org/en/user/files/download/Z9dzB7EMGk1b/Disclosure_Day_2026_33295.mkv"
+
+
   }
 ]
