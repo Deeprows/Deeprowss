@@ -19,39 +19,10 @@
     Deeprowss — Football Live, Highlights & Movies
   </title>
 
-  <!-- =========================
-       STYLESHEET
-       Automatic cache busting
-  ========================= -->
-
   <link
     rel="stylesheet"
     href="style.css"
-    id="mainStylesheet"
   >
-
-  <script>
-    /*
-      Automatic cache busting.
-
-      A fresh timestamp is added to CSS and JS files
-      so the browser does not keep using an old copy.
-    */
-
-    (function () {
-
-      var version = Date.now();
-
-      var stylesheet =
-        document.getElementById("mainStylesheet");
-
-      if (stylesheet) {
-        stylesheet.href =
-          "style.css?v=" + version;
-      }
-
-    })();
-  </script>
 
 </head>
 
@@ -646,34 +617,9 @@
 
   <!-- =========================
        JAVASCRIPT
-       Automatic cache busting
   ========================= -->
 
-  <script>
-
-    /*
-      Load script.js with a fresh timestamp
-      on every page load.
-
-      This means you do NOT need to manually
-      change ?v=20260815 after every update.
-    */
-
-    (function () {
-
-      var script =
-        document.createElement("script");
-
-      script.src =
-        "script.js?v=" + Date.now();
-
-      script.defer = true;
-
-      document.body.appendChild(script);
-
-    })();
-
-  </script>
+  <script src="script.js?v=20260815"></script>
 
 
 </body>
