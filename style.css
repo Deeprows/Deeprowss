@@ -611,7 +611,12 @@ input:focus-visible {
 
 
 /* =========================================================
-   HOME MARQUEE
+   HOME AD MARQUEE
+   =========================================================
+   Replaces the large empty space between:
+   Browse Movies / hero area
+   and
+   Football Live
    ========================================================= */
 
 .home-marquee {
@@ -634,19 +639,19 @@ input:focus-visible {
   background:
     linear-gradient(
       90deg,
-      #090b10,
+      #080a0f 0%,
       #11151d 50%,
-      #090b10
+      #080a0f 100%
     );
 
   border-top:
-    1px solid rgba(255, 255, 255, .06);
+    1px solid rgba(255, 255, 255, .055);
 
   border-bottom:
-    1px solid rgba(255, 23, 68, .18);
+    1px solid rgba(255, 23, 68, .20);
 
   box-shadow:
-    0 8px 25px rgba(0, 0, 0, .18);
+    0 8px 28px rgba(0, 0, 0, .22);
 
   white-space: nowrap;
 
@@ -665,7 +670,7 @@ input:focus-visible {
 
   inset: 0;
 
-  z-index: 3;
+  z-index: 4;
 
   pointer-events: none;
 
@@ -673,15 +678,15 @@ input:focus-visible {
     linear-gradient(
       90deg,
       var(--bg) 0%,
-      transparent 10%,
-      transparent 90%,
+      transparent 12%,
+      transparent 88%,
       var(--bg) 100%
     );
 }
 
 
 /* =========================================================
-   MARQUEE TEXT
+   MARQUEE MOVING TEXT
    ========================================================= */
 
 .home-marquee span {
@@ -697,15 +702,11 @@ input:focus-visible {
   margin: 0;
   padding: 0;
 
-  color: var(--accent-2);
+  color: transparent;
 
-  font-size: 13px;
-
-  font-weight: 800;
+  font-size: 0;
 
   line-height: 1;
-
-  letter-spacing: 1px;
 
   white-space: nowrap;
 
@@ -713,8 +714,8 @@ input:focus-visible {
     translate3d(100vw, -50%, 0);
 
   animation:
-    home-marquee-scroll
-    12s
+    home-ad-marquee
+    14s
     linear
     infinite;
 
@@ -725,10 +726,37 @@ input:focus-visible {
 
 
 /* =========================================================
+   BEAUTIFUL AD TEXT
+   ========================================================= */
+
+.home-marquee span::after {
+  content:
+    "THIS SITE USES ADS  •  ONCLICK +2  •  PLEASE SUPPORT THE SITE  •  THIS SITE USES ADS  •  ONCLICK +2  •  PLEASE SUPPORT THE SITE  •  ";
+
+  display: block;
+
+  color: #edf1f7;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  line-height: 1;
+
+  letter-spacing: 1.25px;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 0 12px rgba(255, 23, 68, .20);
+}
+
+
+/* =========================================================
    MARQUEE ANIMATION
    ========================================================= */
 
-@keyframes home-marquee-scroll {
+@keyframes home-ad-marquee {
 
   0% {
     transform:
@@ -751,8 +779,19 @@ input:focus-visible {
   padding: 68px 0 0;
 }
 
+
+/*
+   IMPORTANT:
+   Football Live now starts immediately after the marquee.
+   This removes the previous large empty gap.
+*/
+
 .home-marquee + .section {
-  padding-top: 48px;
+  padding-top: 0 !important;
+}
+
+.home-marquee + .section .section-heading {
+  margin-top: 0;
 }
 
 .section-heading {
@@ -2026,21 +2065,24 @@ code {
     padding: 85px 0;
   }
 
-  /* TABLET MARQUEE */
+
+  /* =====================================================
+     TABLET MARQUEE
+     ===================================================== */
 
   .home-marquee {
-    height: 56px;
-    min-height: 56px;
+    height: 54px;
+    min-height: 54px;
   }
 
-  .home-marquee span {
+  .home-marquee span::after {
     font-size: 12px;
 
-    letter-spacing: .9px;
+    letter-spacing: 1px;
   }
 
   .home-marquee + .section {
-    padding-top: 45px;
+    padding-top: 0 !important;
   }
 }
 
@@ -2058,7 +2100,9 @@ code {
   }
 
 
-  /* HEADER */
+  /* =====================================================
+     HEADER
+     ===================================================== */
 
   .nav-wrap {
     min-height: 70px;
@@ -2096,7 +2140,9 @@ code {
   }
 
 
-  /* HERO */
+  /* =====================================================
+     HERO
+     ===================================================== */
 
   .hero {
     min-height: 640px;
@@ -2161,7 +2207,7 @@ code {
 
 
   /* =====================================================
-     MOBILE MARQUEE
+     MOBILE AD MARQUEE
      ===================================================== */
 
   .home-marquee {
@@ -2171,8 +2217,8 @@ code {
 
     width: 100% !important;
 
-    height: 52px !important;
-    min-height: 52px !important;
+    height: 50px !important;
+    min-height: 50px !important;
 
     margin: 0 !important;
     padding: 0 !important;
@@ -2184,16 +2230,16 @@ code {
     background:
       linear-gradient(
         90deg,
-        #090b10,
+        #080a0f,
         #11151d 50%,
-        #090b10
+        #080a0f
       ) !important;
 
     border-top:
-      1px solid rgba(255, 255, 255, .06) !important;
+      1px solid rgba(255, 255, 255, .055) !important;
 
     border-bottom:
-      1px solid rgba(255, 23, 68, .18) !important;
+      1px solid rgba(255, 23, 68, .20) !important;
 
     white-space: nowrap !important;
 
@@ -2211,7 +2257,7 @@ code {
 
     inset: 0;
 
-    z-index: 3;
+    z-index: 4;
 
     pointer-events: none;
 
@@ -2219,8 +2265,8 @@ code {
       linear-gradient(
         90deg,
         var(--bg) 0%,
-        transparent 12%,
-        transparent 88%,
+        transparent 14%,
+        transparent 86%,
         var(--bg) 100%
       );
   }
@@ -2231,6 +2277,7 @@ code {
     position: absolute !important;
 
     left: 0 !important;
+
     top: 50% !important;
 
     width: max-content !important;
@@ -2238,15 +2285,11 @@ code {
     margin: 0 !important;
     padding: 0 !important;
 
-    color: var(--accent-2) !important;
+    color: transparent !important;
 
-    font-size: 11px !important;
-
-    font-weight: 800 !important;
+    font-size: 0 !important;
 
     line-height: 1 !important;
-
-    letter-spacing: .8px !important;
 
     white-space: nowrap !important;
 
@@ -2254,8 +2297,8 @@ code {
       translate3d(100vw, -50%, 0) !important;
 
     animation:
-      home-marquee-scroll
-      12s
+      home-ad-marquee
+      13s
       linear
       infinite !important;
 
@@ -2264,12 +2307,42 @@ code {
     z-index: 2;
   }
 
+  .home-marquee span::after {
+    content:
+      "THIS SITE USES ADS  •  ONCLICK +2  •  PLEASE SUPPORT THE SITE  •  THIS SITE USES ADS  •  ONCLICK +2  •  PLEASE SUPPORT THE SITE  •  ";
+
+    display: block;
+
+    color: #edf1f7;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: .9px;
+
+    white-space: nowrap;
+
+    text-transform: uppercase;
+
+    text-shadow:
+      0 0 12px rgba(255, 23, 68, .22);
+  }
+
+  /*
+     No gap between marquee and Football Live.
+  */
+
   .home-marquee + .section {
-    padding-top: 42px;
+    padding-top: 0 !important;
   }
 
 
-  /* SECTIONS */
+  /* =====================================================
+     SECTIONS
+     ===================================================== */
 
   .section {
     padding-top: 50px;
@@ -2286,7 +2359,9 @@ code {
   }
 
 
-  /* CAROUSELS */
+  /* =====================================================
+     CAROUSELS
+     ===================================================== */
 
   .horizontal-posts {
     width: 100%;
@@ -2314,7 +2389,9 @@ code {
   }
 
 
-  /* THUMBNAILS */
+  /* =====================================================
+     THUMBNAILS
+     ===================================================== */
 
   .horizontal-posts .post-thumb {
     height: 165px;
@@ -2331,7 +2408,9 @@ code {
   }
 
 
-  /* ABOUT */
+  /* =====================================================
+     ABOUT
+     ===================================================== */
 
   .about {
     display: grid;
@@ -2366,7 +2445,9 @@ code {
   }
 
 
-  /* ALL POSTS */
+  /* =====================================================
+     ALL POSTS
+     ===================================================== */
 
   .all-posts-grid {
     grid-template-columns: 1fr;
@@ -2383,7 +2464,9 @@ code {
   }
 
 
-  /* PAGE HERO */
+  /* =====================================================
+     PAGE HERO
+     ===================================================== */
 
   .page-hero {
     padding: 60px 0 45px;
@@ -2399,7 +2482,9 @@ code {
   }
 
 
-  /* FOOTER */
+  /* =====================================================
+     FOOTER
+     ===================================================== */
 
   .footer-wrap {
     grid-template-columns: 1fr;
@@ -2416,7 +2501,9 @@ code {
   }
 
 
-  /* MODAL */
+  /* =====================================================
+     MODAL
+     ===================================================== */
 
   .modal {
     align-items: center;
@@ -2684,7 +2771,9 @@ code {
   }
 
 
-  /* HERO */
+  /* =====================================================
+     HERO
+     ===================================================== */
 
   .hero {
     min-height: 650px;
@@ -2708,28 +2797,34 @@ code {
   }
 
 
-  /* VERY SMALL PHONE MARQUEE */
+  /* =====================================================
+     VERY SMALL PHONE MARQUEE
+     ===================================================== */
 
   .home-marquee {
-    height: 48px !important;
+    height: 46px !important;
 
-    min-height: 48px !important;
+    min-height: 46px !important;
   }
 
-  .home-marquee span {
+  .home-marquee span::after {
     font-size: 9px !important;
 
     letter-spacing: .7px !important;
+  }
 
-    animation-duration: 10s !important;
+  .home-marquee span {
+    animation-duration: 11s !important;
   }
 
   .home-marquee + .section {
-    padding-top: 38px;
+    padding-top: 0 !important;
   }
 
 
-  /* BUTTONS */
+  /* =====================================================
+     BUTTONS
+     ===================================================== */
 
   .hero-actions {
     flex-direction: column;
@@ -2742,7 +2837,9 @@ code {
   }
 
 
-  /* CARDS */
+  /* =====================================================
+     CARDS
+     ===================================================== */
 
   .horizontal-posts .live-card {
     width: 82vw;
@@ -2763,7 +2860,9 @@ code {
   }
 
 
-  /* FULLSCREEN */
+  /* =====================================================
+     FULLSCREEN
+     ===================================================== */
 
   .fullscreen-btn {
     padding: 4px 8px;
@@ -2815,4 +2914,5 @@ code {
     transform:
       translate3d(0, -50%, 0) !important;
   }
+
 }
