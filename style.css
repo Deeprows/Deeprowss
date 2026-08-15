@@ -344,7 +344,7 @@ input:focus-visible {
    ========================================================= */
 
 .hero {
-  min-height: 620px;
+  min-height: 520px;
 
   display: flex;
   align-items: center;
@@ -471,7 +471,7 @@ input:focus-visible {
 
   z-index: 3;
 
-  padding: 100px 0;
+  padding: 80px 0;
 }
 
 .eyebrow {
@@ -611,163 +611,14 @@ input:focus-visible {
 
 
 /* =========================================================
-   HOME AD MARQUEE
+   MARQUEE REMOVED
    =========================================================
-   Replaces the large empty space between:
-   Browse Movies / hero area
-   and
-   Football Live
+   This hides the old marquee even if its HTML is still
+   present in index.html.
    ========================================================= */
 
 .home-marquee {
-  position: relative;
-
-  display: flex;
-
-  align-items: center;
-
-  width: 100%;
-
-  height: 58px;
-  min-height: 58px;
-
-  margin: 0;
-  padding: 0;
-
-  overflow: hidden;
-
-  background:
-    linear-gradient(
-      90deg,
-      #080a0f 0%,
-      #11151d 50%,
-      #080a0f 100%
-    );
-
-  border-top:
-    1px solid rgba(255, 255, 255, .055);
-
-  border-bottom:
-    1px solid rgba(255, 23, 68, .20);
-
-  box-shadow:
-    0 8px 28px rgba(0, 0, 0, .22);
-
-  white-space: nowrap;
-
-  isolation: isolate;
-}
-
-
-/* =========================================================
-   MARQUEE SIDE FADE
-   ========================================================= */
-
-.home-marquee::before {
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  z-index: 4;
-
-  pointer-events: none;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--bg) 0%,
-      transparent 12%,
-      transparent 88%,
-      var(--bg) 100%
-    );
-}
-
-
-/* =========================================================
-   MARQUEE MOVING TEXT
-   ========================================================= */
-
-.home-marquee span {
-  display: block;
-
-  position: absolute;
-
-  left: 0;
-  top: 50%;
-
-  width: max-content;
-
-  margin: 0;
-  padding: 0;
-
-  color: transparent;
-
-  font-size: 0;
-
-  line-height: 1;
-
-  white-space: nowrap;
-
-  transform:
-    translate3d(100vw, -50%, 0);
-
-  animation:
-    home-ad-marquee
-    14s
-    linear
-    infinite;
-
-  will-change: transform;
-
-  z-index: 2;
-}
-
-
-/* =========================================================
-   BEAUTIFUL AD TEXT
-   ========================================================= */
-
-.home-marquee span::after {
-  content:
-    "THIS SITE USES ADS  •  ONCLICK +2  •  PLEASE SUPPORT THE SITE  •  THIS SITE USES ADS  •  ONCLICK +2  •  PLEASE SUPPORT THE SITE  •  ";
-
-  display: block;
-
-  color: #edf1f7;
-
-  font-size: 13px;
-
-  font-weight: 800;
-
-  line-height: 1;
-
-  letter-spacing: 1.25px;
-
-  text-transform: uppercase;
-
-  text-shadow:
-    0 0 12px rgba(255, 23, 68, .20);
-}
-
-
-/* =========================================================
-   MARQUEE ANIMATION
-   ========================================================= */
-
-@keyframes home-ad-marquee {
-
-  0% {
-    transform:
-      translate3d(100vw, -50%, 0);
-  }
-
-  100% {
-    transform:
-      translate3d(-100%, -50%, 0);
-  }
-
+  display: none !important;
 }
 
 
@@ -776,22 +627,7 @@ input:focus-visible {
    ========================================================= */
 
 .section {
-  padding: 68px 0 0;
-}
-
-
-/*
-   IMPORTANT:
-   Football Live now starts immediately after the marquee.
-   This removes the previous large empty gap.
-*/
-
-.home-marquee + .section {
-  padding-top: 0 !important;
-}
-
-.home-marquee + .section .section-heading {
-  margin-top: 0;
+  padding: 45px 0 0;
 }
 
 .section-heading {
@@ -2055,34 +1891,14 @@ code {
   }
 
   .hero {
-    min-height: 580px;
+    min-height: 500px;
 
     background-position:
       center center;
   }
 
   .hero-content {
-    padding: 85px 0;
-  }
-
-
-  /* =====================================================
-     TABLET MARQUEE
-     ===================================================== */
-
-  .home-marquee {
-    height: 54px;
-    min-height: 54px;
-  }
-
-  .home-marquee span::after {
-    font-size: 12px;
-
-    letter-spacing: 1px;
-  }
-
-  .home-marquee + .section {
-    padding-top: 0 !important;
+    padding: 75px 0;
   }
 }
 
@@ -2145,7 +1961,7 @@ code {
      ===================================================== */
 
   .hero {
-    min-height: 640px;
+    min-height: 430px;
 
     background-position:
       58% center;
@@ -2154,7 +1970,7 @@ code {
   }
 
   .hero-content {
-    padding: 75px 0 85px;
+    padding: 75px 0 40px;
   }
 
   .eyebrow {
@@ -2207,145 +2023,11 @@ code {
 
 
   /* =====================================================
-     MOBILE AD MARQUEE
-     ===================================================== */
-
-  .home-marquee {
-    display: flex !important;
-
-    position: relative !important;
-
-    width: 100% !important;
-
-    height: 50px !important;
-    min-height: 50px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    overflow: hidden !important;
-
-    align-items: center !important;
-
-    background:
-      linear-gradient(
-        90deg,
-        #080a0f,
-        #11151d 50%,
-        #080a0f
-      ) !important;
-
-    border-top:
-      1px solid rgba(255, 255, 255, .055) !important;
-
-    border-bottom:
-      1px solid rgba(255, 23, 68, .20) !important;
-
-    white-space: nowrap !important;
-
-    visibility: visible !important;
-
-    opacity: 1 !important;
-
-    isolation: isolate;
-  }
-
-  .home-marquee::before {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 4;
-
-    pointer-events: none;
-
-    background:
-      linear-gradient(
-        90deg,
-        var(--bg) 0%,
-        transparent 14%,
-        transparent 86%,
-        var(--bg) 100%
-      );
-  }
-
-  .home-marquee span {
-    display: block !important;
-
-    position: absolute !important;
-
-    left: 0 !important;
-
-    top: 50% !important;
-
-    width: max-content !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    color: transparent !important;
-
-    font-size: 0 !important;
-
-    line-height: 1 !important;
-
-    white-space: nowrap !important;
-
-    transform:
-      translate3d(100vw, -50%, 0) !important;
-
-    animation:
-      home-ad-marquee
-      13s
-      linear
-      infinite !important;
-
-    will-change: transform;
-
-    z-index: 2;
-  }
-
-  .home-marquee span::after {
-    content:
-      "THIS SITE USES ADS  •  ONCLICK +2  •  PLEASE SUPPORT THE SITE  •  THIS SITE USES ADS  •  ONCLICK +2  •  PLEASE SUPPORT THE SITE  •  ";
-
-    display: block;
-
-    color: #edf1f7;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    line-height: 1;
-
-    letter-spacing: .9px;
-
-    white-space: nowrap;
-
-    text-transform: uppercase;
-
-    text-shadow:
-      0 0 12px rgba(255, 23, 68, .22);
-  }
-
-  /*
-     No gap between marquee and Football Live.
-  */
-
-  .home-marquee + .section {
-    padding-top: 0 !important;
-  }
-
-
-  /* =====================================================
      SECTIONS
      ===================================================== */
 
   .section {
-    padding-top: 50px;
+    padding-top: 30px;
   }
 
   .section-heading {
@@ -2776,14 +2458,14 @@ code {
      ===================================================== */
 
   .hero {
-    min-height: 650px;
+    min-height: 430px;
 
     background-position:
       60% center;
   }
 
   .hero-content {
-    padding: 70px 0 80px;
+    padding: 70px 0 40px;
   }
 
   .hero h1 {
@@ -2794,31 +2476,6 @@ code {
 
   .hero-copy {
     font-size: 15px;
-  }
-
-
-  /* =====================================================
-     VERY SMALL PHONE MARQUEE
-     ===================================================== */
-
-  .home-marquee {
-    height: 46px !important;
-
-    min-height: 46px !important;
-  }
-
-  .home-marquee span::after {
-    font-size: 9px !important;
-
-    letter-spacing: .7px !important;
-  }
-
-  .home-marquee span {
-    animation-duration: 11s !important;
-  }
-
-  .home-marquee + .section {
-    padding-top: 0 !important;
   }
 
 
@@ -2908,11 +2565,8 @@ code {
     scroll-behavior: auto !important;
   }
 
-  .home-marquee span {
-    animation: none !important;
-
-    transform:
-      translate3d(0, -50%, 0) !important;
+  .home-marquee {
+    display: none !important;
   }
 
 }
