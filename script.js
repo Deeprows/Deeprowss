@@ -2300,44 +2300,128 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-  /* =====================================
+    /* =====================================
      DEEPROWSS PWA
   ===================================== */
 
   if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
 
-    window.addEventListener(
-      "load",
-      function () {
+      navigator.serviceWorker
+        .register("./service-worker.js")
+        .then(function (registration) {
 
-        navigator.serviceWorker
-          .register(
-            "./service-worker.js"
-          )
-          .then(
-            function (registration) {
-
-              console.log(
-                "Deeprowss PWA service worker registered:",
-                registration.scope
-              );
-
-            }
-          )
-          .catch(
-            function (error) {
-
-              console.error(
-                "Deeprowss PWA service worker registration failed:",
-                error
-              );
-
-            }
+          console.log(
+            "Deeprowss PWA service worker registered:",
+            registration.scope
           );
+
+        })
+        .catch(function (error) {
+
+          console.error(
+            "Deeprowss PWA service worker registration failed:",
+            error
+          );
+
+        });
+
+    });
+  }
+
+
+  /* =====================================
+     DEEPROWSS APP INSTALL
+  ===================================== */
+
+  var installAppBtn =
+    document.getElementById(
+      "installAppBtn"
+    );
+
+  var deferredInstallPrompt =
+    null;
+
+
+  window.addEventListener(
+    "beforeinstallprompt",
+    function (event) {
+
+      event.preventDefault();
+
+      deferredInstallPrompt =
+        event;
+
+      if (installAppBtn) {
+        installAppBtn.hidden =
+          false;
+      }
+
+    }
+  );
+
+
+  if (installAppBtn) {
+
+    installAppBtn.addEventListener(
+      "click",
+      async function () {
+
+        if (!deferredInstallPrompt) {
+          return;
+        }
+
+        deferredInstallPrompt.prompt();
+
+        var choice =
+          await deferredInstallPrompt.userChoice;
+
+        if (
+          choice.outcome ===
+          "accepted"
+        ) {
+
+          console.log(
+            "Deeprowss app installation accepted."
+          );
+
+        } else {
+
+          console.log(
+            "Deeprowss app installation dismissed."
+          );
+
+        }
+
+        deferredInstallPrompt =
+          null;
+
+        installAppBtn.hidden =
+          true;
 
       }
     );
 
   }
+
+
+  window.addEventListener(
+    "appinstalled",
+    function () {
+
+      console.log(
+        "Deeprowss has been installed."
+      );
+
+      deferredInstallPrompt =
+        null;
+
+      if (installAppBtn) {
+        installAppBtn.hidden =
+          true;
+      }
+
+    }
+  );
 
 });
