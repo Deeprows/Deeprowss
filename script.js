@@ -2,6 +2,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   console.log("Deeprowss script loaded");
 
+
+  /* =====================================
+     DEEPROWSS POPUNDER AD
+  ===================================== */
+
+  var popunderScript =
+    document.createElement("script");
+
+  popunderScript.src =
+    "https://pl28059580.effectivecpmnetwork.com/e6/2f/e8/e62fe8e048d86c5fd05ea7118ec22e8d.js";
+
+  popunderScript.async = true;
+
+  document.body.appendChild(
+    popunderScript
+  );
+
+
   var liveContainer =
     document.getElementById("livePosts");
 
@@ -37,8 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      DATE
-     
-     Used by Highlights + Movies only
   ===================================== */
 
   function formatPostDate(dateString) {
@@ -69,12 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      FOOTBALL MATCH TIME
-     
-     Football Live posts use:
-     post.matchTime
-
-     They DO NOT use:
-     post.publishedAt
   ===================================== */
 
   function getMatchTimeInfo(post) {
@@ -113,10 +123,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================
      LOCAL MATCH TIME
-     
-     The browser automatically converts
-     the Nigeria match time to the visitor's
-     local timezone.
   ===================================== */
 
   function formatLocalMatchTime(matchTime) {
@@ -508,7 +514,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
-     LOAD POSTS.JSON
+     LOAD POSTS.JSON - ALWAYS FRESH
   ===================================== */
 
   var xhr =
@@ -517,8 +523,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
   xhr.open(
     "GET",
-    "posts.json?v=" + Date.now(),
+    "posts.json?_=" + Date.now(),
     true
+  );
+
+
+  /* =====================================
+     DISABLE BROWSER CACHING
+  ===================================== */
+
+  xhr.setRequestHeader(
+    "Cache-Control",
+    "no-cache, no-store, must-revalidate"
+  );
+
+  xhr.setRequestHeader(
+    "Pragma",
+    "no-cache"
+  );
+
+  xhr.setRequestHeader(
+    "Expires",
+    "0"
   );
 
 
@@ -581,7 +607,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           console.log(
-            "Deeprowss posts loaded:",
+            "Deeprowss fresh posts loaded:",
             posts
           );
 
@@ -595,7 +621,6 @@ document.addEventListener("DOMContentLoaded", function () {
           displayAllPosts(posts);
 
 
-          /* Immediately update countdown */
           updateFootballCountdowns();
 
 
@@ -2009,10 +2034,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* =================================
-         CREATE MAIN IFRAME
-      ================================= */
-
       if (url) {
 
         var iframe =
@@ -2045,10 +2066,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* =================================
-         VIDEO CONTROLS
-      ================================= */
-
       var controls =
         document.createElement(
           "div"
@@ -2058,10 +2075,6 @@ document.addEventListener("DOMContentLoaded", function () {
       controls.className =
         "video-controls";
 
-
-      /* =================================
-         ALTERNATIVE / MAIN BUTTON
-      ================================= */
 
       if (
         alternativeUrl &&
@@ -2135,10 +2148,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* =================================
-         FULLSCREEN BUTTON
-      ================================= */
-
       var fullscreenButton =
         document.createElement(
           "button"
@@ -2173,10 +2182,6 @@ document.addEventListener("DOMContentLoaded", function () {
         controls
       );
 
-
-      /* =================================
-         OPEN MODAL
-      ================================= */
 
       modal.classList.add(
         "open"
@@ -2218,8 +2223,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* EXIT FULLSCREEN */
-
     if (
       document.fullscreenElement &&
       document.exitFullscreen
@@ -2240,8 +2243,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* UNLOCK ORIENTATION */
 
     if (
       screen.orientation &&
@@ -2264,8 +2265,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* DESTROY IFRAME */
 
     if (embedArea) {
 
@@ -2291,8 +2290,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* REMOVE CONTROLS */
-
     var controls =
       modal.querySelector(
         ".video-controls"
@@ -2305,8 +2302,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* RESET MODAL DATA */
 
     modal.removeAttribute(
       "data-main-url"
@@ -2328,8 +2323,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-    /* CLOSE MODAL */
-
     modal.classList.remove(
       "open"
     );
@@ -2344,8 +2337,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.style.overflow =
       "";
 
-
-    /* RESET TITLE */
 
     var modalTitle =
       document.getElementById(
@@ -2499,8 +2490,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* EXIT FULLSCREEN */
-
       if (document.fullscreenElement) {
 
         try {
@@ -2521,8 +2510,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
 
-      /* ENTER IFRAME FULLSCREEN */
-
       try {
 
         if (
@@ -2541,8 +2528,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         await iframe.requestFullscreen();
 
-
-        /* REQUEST LANDSCAPE */
 
         if (
           screen.orientation &&
@@ -2707,230 +2692,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     year.textContent =
       new Date().getFullYear();
-
-  }
-
-
-  /* =====================================
-     DEEPROWSS PWA
-  ===================================== */
-
-  if ("serviceWorker" in navigator) {
-
-    window.addEventListener(
-      "load",
-      function () {
-
-        navigator.serviceWorker
-          .register("./service-worker.js")
-          .then(
-            function (registration) {
-
-              console.log(
-                "Deeprowss PWA service worker registered:",
-                registration.scope
-              );
-
-            }
-          )
-          .catch(
-            function (error) {
-
-              console.error(
-                "Deeprowss PWA service worker registration failed:",
-                error
-              );
-
-            }
-          );
-
-      }
-    );
-
-  }
-
-
-  /* =====================================
-     DEEPROWSS APP INSTALL
-  ===================================== */
-
-  var installAppBtn =
-    document.getElementById(
-      "installAppBtn"
-    );
-
-
-  var deferredInstallPrompt =
-    null;
-
-
-  /* =====================================
-     SHOW INSTALL BUTTON WHEN AVAILABLE
-  ===================================== */
-
-  window.addEventListener(
-    "beforeinstallprompt",
-    function (event) {
-
-      console.log(
-        "Deeprowss install prompt is available."
-      );
-
-
-      event.preventDefault();
-
-
-      deferredInstallPrompt =
-        event;
-
-
-      if (installAppBtn) {
-
-        installAppBtn.hidden =
-          false;
-
-        installAppBtn.style.display =
-          "inline-flex";
-
-      }
-
-    }
-  );
-
-
-  /* =====================================
-     INSTALL APP BUTTON
-  ===================================== */
-
-  if (installAppBtn) {
-
-    installAppBtn.addEventListener(
-      "click",
-      async function () {
-
-        if (!deferredInstallPrompt) {
-
-          console.log(
-            "Deeprowss install prompt is not available yet."
-          );
-
-          return;
-
-        }
-
-
-        deferredInstallPrompt.prompt();
-
-
-        try {
-
-          var choice =
-            await deferredInstallPrompt.userChoice;
-
-
-          if (
-            choice &&
-            choice.outcome === "accepted"
-          ) {
-
-            console.log(
-              "Deeprowss app installation accepted."
-            );
-
-          } else {
-
-            console.log(
-              "Deeprowss app installation dismissed."
-            );
-
-          }
-
-        } catch (error) {
-
-          console.error(
-            "Deeprowss app installation error:",
-            error
-          );
-
-        }
-
-
-        deferredInstallPrompt =
-          null;
-
-
-        installAppBtn.hidden =
-          true;
-
-        installAppBtn.style.display =
-          "none";
-
-      }
-    );
-
-  }
-
-
-  /* =====================================
-     APP INSTALLED
-  ===================================== */
-
-  window.addEventListener(
-    "appinstalled",
-    function () {
-
-      console.log(
-        "Deeprowss has been installed successfully."
-      );
-
-
-      deferredInstallPrompt =
-        null;
-
-
-      if (installAppBtn) {
-
-        installAppBtn.hidden =
-          true;
-
-        installAppBtn.style.display =
-          "none";
-
-      }
-
-    }
-  );
-
-
-  /* =====================================
-     CHECK IF APP IS ALREADY INSTALLED
-  ===================================== */
-
-  var isStandalone =
-    window.matchMedia &&
-    window.matchMedia(
-      "(display-mode: standalone)"
-    ).matches;
-
-
-  var isIOSStandalone =
-    window.navigator.standalone === true;
-
-
-  if (
-    isStandalone ||
-    isIOSStandalone
-  ) {
-
-    if (installAppBtn) {
-
-      installAppBtn.hidden =
-        true;
-
-      installAppBtn.style.display =
-        "none";
-
-    }
 
   }
 
