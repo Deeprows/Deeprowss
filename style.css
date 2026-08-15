@@ -24,7 +24,6 @@
 
   --max: 1180px;
 
-  /* HERO BACKGROUND */
   --hero-image: url("https://t4.ftcdn.net/jpg/13/86/74/95/360_F_1386749512_3R3VZzb5rO7IZD3qwFqm6lnn3ZuoNcBs.jpg");
 
   --radius-sm: 8px;
@@ -72,6 +71,7 @@ body {
     sans-serif;
 
   line-height: 1.55;
+
   overflow-x: hidden;
 
   -webkit-font-smoothing: antialiased;
@@ -267,9 +267,11 @@ input:focus-visible {
   width: 100%;
 
   background: rgba(16, 20, 27, .92);
+
   color: #fff;
 
   border: 1px solid var(--line);
+
   border-radius: 999px;
 
   padding: 10px 38px 10px 14px;
@@ -323,6 +325,7 @@ input:focus-visible {
   display: none;
 
   background: transparent;
+
   color: #fff;
 
   border: 0;
@@ -382,6 +385,7 @@ input:focus-visible {
   content: "";
 
   position: absolute;
+
   inset: 0;
 
   z-index: 0;
@@ -408,6 +412,7 @@ input:focus-visible {
 
 .hero-overlay {
   position: absolute;
+
   inset: 0;
 
   z-index: 1;
@@ -463,6 +468,7 @@ input:focus-visible {
 
 .hero-content {
   position: relative;
+
   z-index: 3;
 
   padding: 100px 0;
@@ -605,24 +611,25 @@ input:focus-visible {
 
 
 /* =========================================================
-   HOME PAGE MARQUEE
+   HOME MARQUEE
    ========================================================= */
 
 .home-marquee {
   position: relative;
+
+  display: flex;
+
+  align-items: center;
 
   width: 100%;
 
   height: 58px;
   min-height: 58px;
 
-  overflow: hidden;
-
   margin: 0;
   padding: 0;
 
-  display: flex;
-  align-items: center;
+  overflow: hidden;
 
   background:
     linear-gradient(
@@ -633,7 +640,7 @@ input:focus-visible {
     );
 
   border-top:
-    1px solid rgba(255, 255, 255, .05);
+    1px solid rgba(255, 255, 255, .06);
 
   border-bottom:
     1px solid rgba(255, 23, 68, .18);
@@ -642,20 +649,23 @@ input:focus-visible {
     0 8px 25px rgba(0, 0, 0, .18);
 
   white-space: nowrap;
+
+  isolation: isolate;
 }
 
 
-/*
-   Left / right fade
-*/
+/* =========================================================
+   MARQUEE SIDE FADE
+   ========================================================= */
 
 .home-marquee::before {
   content: "";
 
   position: absolute;
+
   inset: 0;
 
-  z-index: 2;
+  z-index: 3;
 
   pointer-events: none;
 
@@ -670,51 +680,64 @@ input:focus-visible {
 }
 
 
-/*
-   Announcement text
-*/
+/* =========================================================
+   MARQUEE TEXT
+   ========================================================= */
 
 .home-marquee span {
-  display: inline-block;
+  display: block;
 
-  flex-shrink: 0;
+  position: absolute;
 
-  padding-left: 100%;
+  left: 0;
+  top: 50%;
+
+  width: max-content;
+
+  margin: 0;
+  padding: 0;
 
   color: var(--accent-2);
 
   font-size: 13px;
+
   font-weight: 800;
+
+  line-height: 1;
 
   letter-spacing: 1px;
 
-  text-shadow:
-    0 2px 15px rgba(255, 23, 68, .15);
+  white-space: nowrap;
+
+  transform:
+    translate3d(100vw, -50%, 0);
 
   animation:
-    marquee-scroll
+    home-marquee-scroll
     12s
     linear
     infinite;
 
   will-change: transform;
+
+  z-index: 2;
 }
 
 
-/*
-   Marquee animation
-*/
+/* =========================================================
+   MARQUEE ANIMATION
+   ========================================================= */
 
-@keyframes marquee-scroll {
+@keyframes home-marquee-scroll {
 
   0% {
     transform:
-      translate3d(0, 0, 0);
+      translate3d(100vw, -50%, 0);
   }
 
   100% {
     transform:
-      translate3d(-100%, 0, 0);
+      translate3d(-100%, -50%, 0);
   }
 
 }
@@ -727,11 +750,6 @@ input:focus-visible {
 .section {
   padding: 68px 0 0;
 }
-
-
-/*
-   First section after the marquee
-*/
 
 .home-marquee + .section {
   padding-top: 48px;
@@ -762,11 +780,13 @@ input:focus-visible {
   color: #c8cfda;
 
   font-size: 14px;
+
   font-weight: 600;
 
   white-space: nowrap;
 
-  transition: color var(--transition);
+  transition:
+    color var(--transition);
 }
 
 .section-link:hover {
@@ -920,6 +940,7 @@ input:focus-visible {
   display: block;
 
   object-fit: cover;
+
   object-position: center;
 
   z-index: 1;
@@ -963,6 +984,7 @@ input:focus-visible {
   color: var(--muted);
 
   font-size: 13px;
+
   font-weight: 900;
 
   letter-spacing: 1px;
@@ -995,6 +1017,7 @@ input:focus-visible {
 
 .movie-thumbnail img {
   object-fit: cover;
+
   object-position: center;
 }
 
@@ -1256,6 +1279,7 @@ input:focus-visible {
   max-width: none;
 
   object-fit: cover;
+
   object-position: center;
 
   z-index: 1;
@@ -1585,6 +1609,7 @@ input:focus-visible {
   color: #fff;
 
   font-size: 32px;
+
   line-height: 1;
 
   cursor: pointer;
@@ -1735,6 +1760,7 @@ input:focus-visible {
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 }
 
@@ -1787,6 +1813,7 @@ input:focus-visible {
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 }
 
@@ -1999,7 +2026,6 @@ code {
     padding: 85px 0;
   }
 
-
   /* TABLET MARQUEE */
 
   .home-marquee {
@@ -2010,9 +2036,7 @@ code {
   .home-marquee span {
     font-size: 12px;
 
-    letter-spacing: .95px;
-
-    animation-duration: 12s;
+    letter-spacing: .9px;
   }
 
   .home-marquee + .section {
@@ -2141,20 +2165,56 @@ code {
      ===================================================== */
 
   .home-marquee {
-    height: 52px;
-    min-height: 52px;
+    display: flex !important;
 
-    margin: 0;
-    padding: 0;
+    position: relative !important;
+
+    width: 100% !important;
+
+    height: 52px !important;
+    min-height: 52px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    align-items: center !important;
+
+    background:
+      linear-gradient(
+        90deg,
+        #090b10,
+        #11151d 50%,
+        #090b10
+      ) !important;
 
     border-top:
-      1px solid rgba(255, 255, 255, .05);
+      1px solid rgba(255, 255, 255, .06) !important;
 
     border-bottom:
-      1px solid rgba(255, 23, 68, .18);
+      1px solid rgba(255, 23, 68, .18) !important;
+
+    white-space: nowrap !important;
+
+    visibility: visible !important;
+
+    opacity: 1 !important;
+
+    isolation: isolate;
   }
 
   .home-marquee::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 3;
+
+    pointer-events: none;
+
     background:
       linear-gradient(
         90deg,
@@ -2166,16 +2226,43 @@ code {
   }
 
   .home-marquee span {
-    font-size: 10px;
+    display: block !important;
 
-    letter-spacing: .9px;
+    position: absolute !important;
 
-    animation-duration: 10s;
+    left: 0 !important;
+    top: 50% !important;
+
+    width: max-content !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: var(--accent-2) !important;
+
+    font-size: 11px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    letter-spacing: .8px !important;
+
+    white-space: nowrap !important;
+
+    transform:
+      translate3d(100vw, -50%, 0) !important;
+
+    animation:
+      home-marquee-scroll
+      12s
+      linear
+      infinite !important;
+
+    will-change: transform;
+
+    z-index: 2;
   }
-
-  /*
-     Smaller gap before Football
-  */
 
   .home-marquee + .section {
     padding-top: 42px;
@@ -2621,21 +2708,20 @@ code {
   }
 
 
-  /* =====================================================
-     VERY SMALL PHONE MARQUEE
-     ===================================================== */
+  /* VERY SMALL PHONE MARQUEE */
 
   .home-marquee {
-    height: 48px;
-    min-height: 48px;
+    height: 48px !important;
+
+    min-height: 48px !important;
   }
 
   .home-marquee span {
-    font-size: 9px;
+    font-size: 9px !important;
 
-    letter-spacing: .7px;
+    letter-spacing: .7px !important;
 
-    animation-duration: 9s;
+    animation-duration: 10s !important;
   }
 
   .home-marquee + .section {
@@ -2715,16 +2801,18 @@ code {
   *::before,
   *::after {
     animation-duration: .01ms !important;
+
     animation-iteration-count: 1 !important;
+
     transition-duration: .01ms !important;
+
     scroll-behavior: auto !important;
   }
 
   .home-marquee span {
-    animation: none;
+    animation: none !important;
 
-    transform: none;
-
-    padding-left: 0;
+    transform:
+      translate3d(0, -50%, 0) !important;
   }
 }
