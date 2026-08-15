@@ -2534,5 +2534,106 @@ height: 52px;
 
 .movie-actions .movie-watch-btn {
 min-height: 52px;
+
+/* =========================
+   PWA INSTALL BUTTON
+========================= */
+
+.install-app-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 9px 13px;
+
+  background: var(--accent);
+  color: #ffffff;
+
+  border: 0;
+  border-radius: 9px;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition:
+    background .2s ease,
+    transform .15s ease,
+    box-shadow .2s ease;
 }
+
+.install-app-btn:hover {
+  background: var(--accent-2);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 20px
+    rgba(255, 23, 68, .25);
+}
+
+.install-app-btn:active {
+  transform: scale(.97);
+}
+
+.install-app-btn:focus-visible {
+  outline:
+    2px solid #ffffff;
+
+  outline-offset: 3px;
+}
+
+
+/* =========================
+   PWA INSTALL - TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+  .install-app-btn {
+    padding: 8px 11px;
+
+    font-size: 11px;
+  }
+
+}
+
+
+/* =========================
+   PWA INSTALL - MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .install-app-btn {
+    padding: 8px 9px;
+
+    font-size: 10px;
+
+    border-radius: 8px;
+  }
+
+}
+
+
+/* =========================
+   PWA INSTALL - SMALL PHONES
+========================= */
+
+@media (max-width: 380px) {
+
+  .install-app-btn {
+    padding: 7px 8px;
+
+    font-size: 9px;
+  }
+
 }
