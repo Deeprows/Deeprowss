@@ -20,6 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
 
+  /* =====================================
+     CONTAINERS
+  ===================================== */
+
   var liveContainer =
     document.getElementById("livePosts");
 
@@ -34,13 +38,71 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =====================================
+     CACHE-BUSTING HELPER
+  ===================================== */
+
+  function freshUrl(url) {
+
+    if (!url) {
+      return "";
+    }
+
+    var value =
+      String(url).trim();
+
+    if (!value) {
+      return "";
+    }
+
+    /*
+      Only automatically cache-bust local
+      website files.
+
+      External URLs are left untouched because
+      some external URLs contain security tokens
+      or signed parameters.
+    */
+
+    if (
+      value.indexOf("http://") === 0 ||
+      value.indexOf("https://") === 0 ||
+      value.indexOf("//") === 0 ||
+      value.indexOf("data:") === 0 ||
+      value.indexOf("blob:") === 0
+    ) {
+
+      return value;
+
+    }
+
+    var separator =
+      value.indexOf("?") === -1
+        ? "?"
+        : "&";
+
+    return (
+      value +
+      separator +
+      "_fresh=" +
+      Date.now()
+    );
+
+  }
+
+
+  /* =====================================
      ESCAPE HTML
   ===================================== */
 
   function escapeHTML(value) {
 
-    if (value === undefined || value === null) {
+    if (
+      value === undefined ||
+      value === null
+    ) {
+
       return "";
+
     }
 
     return String(value)
@@ -89,7 +151,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function getMatchTimeInfo(post) {
 
-    if (!post || !post.matchTime) {
+    if (
+      !post ||
+      !post.matchTime
+    ) {
 
       return {
         valid: false,
@@ -411,6 +476,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    /*
+      Freshen only local images.
+      External image URLs remain unchanged.
+    */
+
+    var imageUrl =
+      freshUrl(
+        safeThumbnail
+      );
+
+
     return (
 
       '<div class="' +
@@ -422,7 +498,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'class="post-thumbnail" ' +
 
           'src="' +
-            escapeHTML(safeThumbnail) +
+            escapeHTML(imageUrl) +
           '" ' +
 
           'alt="' +
@@ -517,151 +593,218 @@ document.addEventListener("DOMContentLoaded", function () {
      LOAD POSTS.JSON - ALWAYS FRESH
   ===================================== */
 
-  var xhr =
-    new XMLHttpRequest();
+  var postsRequestUrl =
+    "posts.json?_fresh=" +
+    Date.now();
 
 
-  xhr.open(
-    "GET",
-    "posts.json?_=" + Date.now(),
-    true
-  );
+  /*
+    Use fetch with:
+    - cache: no-store
+    - unique URL
+    - no local browser cache
+  */
+
+  function loadPosts() {
+
+    console.log(
+      "Deeprowss: requesting fresh posts.json..."
+    );
 
 
-  /* =====================================
-     DISABLE BROWSER CACHING
-  ===================================== */
-
-  xhr.setRequestHeader(
-    "Cache-Control",
-    "no-cache, no-store, must-revalidate"
-  );
-
-  xhr.setRequestHeader(
-    "Pragma",
-    "no-cache"
-  );
-
-  xhr.setRequestHeader(
-    "Expires",
-    "0"
-  );
-
-
-  xhr.onreadystatechange =
-    function () {
-
-      if (xhr.readyState !== 4) {
-        return;
+    fetch(
+      postsRequestUrl +
+      "&reload=" +
+      Date.now(),
+      {
+        method: "GET",
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {
+          "Cache-Control":
+            "no-cache, no-store, must-revalidate",
+          "Pragma":
+            "no-cache",
+          "Expires":
+            "0"
+        }
       }
+    )
 
+    .then(
+      function (response) {
 
-      if (
-        xhr.status >= 200 &&
-        xhr.status < 300
-      ) {
+        if (!response.ok) {
 
-        try {
-
-          var posts =
-            JSON.parse(
-              xhr.responseText
-            );
-
-
-          if (!Array.isArray(posts)) {
-
-            throw new Error(
-              "posts.json must contain an array."
-            );
-
-          }
-
-
-          posts.sort(
-            function (a, b) {
-
-              var aDate =
-                a.type === "live"
-                  ? a.matchTime
-                  : a.publishedAt;
-
-              var bDate =
-                b.type === "live"
-                  ? b.matchTime
-                  : b.publishedAt;
-
-
-              return (
-                new Date(
-                  bDate || 0
-                ).getTime() -
-
-                new Date(
-                  aDate || 0
-                ).getTime()
-              );
-
-            }
+          throw new Error(
+            "posts.json returned HTTP " +
+            response.status
           );
-
-
-          console.log(
-            "Deeprowss fresh posts loaded:",
-            posts
-          );
-
-
-          displayLivePosts(posts);
-
-          displayHighlightPosts(posts);
-
-          displayMoviePosts(posts);
-
-          displayAllPosts(posts);
-
-
-          updateFootballCountdowns();
-
-
-        } catch (error) {
-
-          console.error(
-            "Could not read posts.json:",
-            error
-          );
-
-          showError();
 
         }
 
-      } else {
+        return response.text();
+
+      }
+    )
+
+    .then(
+      function (text) {
+
+        var posts;
+
+        try {
+
+          posts =
+            JSON.parse(text);
+
+        } catch (error) {
+
+          throw new Error(
+            "posts.json contains invalid JSON."
+          );
+
+        }
+
+
+        if (!Array.isArray(posts)) {
+
+          throw new Error(
+            "posts.json must contain an array."
+          );
+
+        }
+
+
+        posts.sort(
+          function (a, b) {
+
+            var aDate =
+              a.type === "live"
+                ? a.matchTime
+                : a.publishedAt;
+
+            var bDate =
+              b.type === "live"
+                ? b.matchTime
+                : b.publishedAt;
+
+
+            return (
+              new Date(
+                bDate || 0
+              ).getTime() -
+
+              new Date(
+                aDate || 0
+              ).getTime()
+            );
+
+          }
+        );
+
+
+        console.log(
+          "Deeprowss fresh posts loaded:",
+          posts.length,
+          "posts"
+        );
+
+
+        displayLivePosts(posts);
+
+        displayHighlightPosts(posts);
+
+        displayMoviePosts(posts);
+
+        displayAllPosts(posts);
+
+        updateFootballCountdowns();
+
+      }
+    )
+
+    .catch(
+      function (error) {
 
         console.error(
-          "Could not load posts.json. Status:",
-          xhr.status
+          "Could not load fresh posts.json:",
+          error
         );
 
         showError();
 
       }
+    );
 
-    };
+  }
 
 
-  xhr.onerror =
+  /*
+    Initial fresh load.
+  */
+
+  loadPosts();
+
+
+  /* =====================================
+     REFRESH WHEN PAGE BECOMES VISIBLE
+  ===================================== */
+
+  var lastVisibilityRefresh =
+    Date.now();
+
+
+  document.addEventListener(
+    "visibilitychange",
     function () {
 
-      console.error(
-        "Network error loading posts.json"
+      if (
+        document.visibilityState !==
+        "visible"
+      ) {
+
+        return;
+
+      }
+
+
+      var now =
+        Date.now();
+
+
+      /*
+        Prevent repeated requests when the
+        visibility event fires rapidly.
+
+        Refresh after the page has been hidden
+        for at least 30 seconds.
+      */
+
+      if (
+        now -
+        lastVisibilityRefresh <
+        30000
+      ) {
+
+        return;
+
+      }
+
+
+      lastVisibilityRefresh =
+        now;
+
+
+      console.log(
+        "Deeprowss: page visible again. Refreshing content..."
       );
 
-      showError();
 
-    };
+      loadPosts();
 
-
-  xhr.send();
+    }
+  );
 
 
   /* =====================================
@@ -837,7 +980,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               '</div>' +
 
-
               '<div class="match-meta">' +
 
                 escapeHTML(
@@ -846,7 +988,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 ) +
 
               '</div>' +
-
 
               (
                 matchInfo.valid
@@ -868,7 +1009,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     ''
 
               ) +
-
 
               (
                 matchInfo.valid
@@ -896,7 +1036,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     ''
 
               ) +
-
 
               '<button ' +
 
@@ -1399,7 +1538,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</div>' +
 
-
           '<div class="teams">' +
 
             '<strong>' +
@@ -1424,7 +1562,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           '</div>' +
 
-
           '<p class="match-meta">' +
 
             escapeHTML(
@@ -1433,7 +1570,6 @@ document.addEventListener("DOMContentLoaded", function () {
             ) +
 
           '</p>' +
-
 
           (
             matchInfo.valid
@@ -1455,7 +1591,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 ''
 
           ) +
-
 
           (
             matchInfo.valid
@@ -1483,7 +1618,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 ''
 
           ) +
-
 
           '<button ' +
 
@@ -1930,7 +2064,9 @@ document.addEventListener("DOMContentLoaded", function () {
           "Switch to Main Screen"
         );
 
-      } else {
+      }
+
+      else {
 
         switchButton.textContent =
           "Alt Screen";
@@ -2047,7 +2183,9 @@ document.addEventListener("DOMContentLoaded", function () {
           iframe
         );
 
-      } else {
+      }
+
+      else {
 
         embedArea.innerHTML =
 
@@ -2129,7 +2267,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 false
               );
 
-            } else {
+            }
+
+            else {
 
               switchLiveScreen(
                 true
@@ -2232,7 +2372,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         await document.exitFullscreen();
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.warn(
           "Could not exit fullscreen:",
@@ -2254,7 +2396,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         screen.orientation.unlock();
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.warn(
           "Could not unlock orientation:",
@@ -2496,7 +2640,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
           await document.exitFullscreen();
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
           console.warn(
             "Could not exit fullscreen:",
@@ -2546,7 +2692,9 @@ document.addEventListener("DOMContentLoaded", function () {
               "Landscape orientation locked."
             );
 
-          } catch (orientationError) {
+          }
+
+          catch (orientationError) {
 
             console.warn(
               "Landscape orientation could not be locked:",
@@ -2557,7 +2705,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(
           "Fullscreen error:",
@@ -2590,7 +2740,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             screen.orientation.unlock();
 
-          } catch (error) {
+          }
+
+          catch (error) {
 
             console.warn(
               "Could not unlock orientation:",
