@@ -1,5 +1,5 @@
 /* =========================
-   DEEPROWSS STYLE
+DEEPROWSS STYLE
 ========================= */
 
 :root {
@@ -34,13 +34,13 @@ body {
 
   background:
     linear-gradient(
-      rgba(7, 9, 13, .35),
-      rgba(7, 9, 13, .35)
+      rgba(7, 9, 13, .68),
+      rgba(7, 9, 13, .68)
     ),
-    url("icons/360_F_1318466852_n2HhQ2V5bfdKCuazzq9MYE723cGUeOnH.jpg");
+    url("icons/istockphoto-477331105-612x612.jpg");
 
   background-size: cover;
-  background-position: center top;
+  background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
 
@@ -86,9 +86,8 @@ img {
   margin: auto;
 }
 
-
 /* =========================
-   HEADER
+HEADER
 ========================= */
 
 .site-header {
@@ -115,9 +114,8 @@ img {
   min-width: 0;
 }
 
-
 /* =========================
-   LOGO
+LOGO
 ========================= */
 
 .brand {
@@ -156,9 +154,8 @@ img {
   flex-shrink: 0;
 }
 
-
 /* =========================
-   NAV
+NAV
 ========================= */
 
 .main-nav {
@@ -183,9 +180,8 @@ img {
   color: white;
 }
 
-
 /* =========================
-   SEARCH
+SEARCH
 ========================= */
 
 .nav-search {
@@ -227,9 +223,8 @@ img {
   pointer-events: none;
 }
 
-
 /* =========================
-   MOBILE MENU
+MOBILE MENU
 ========================= */
 
 .menu-toggle {
@@ -247,9 +242,8 @@ img {
   flex-shrink: 0;
 }
 
-
 /* =========================
-   HERO
+HERO
 ========================= */
 
 .hero {
@@ -264,10 +258,10 @@ img {
 
   background:
     linear-gradient(
-      rgba(7, 9, 13, .30),
-      rgba(7, 9, 13, .30)
+      rgba(7, 9, 13, .48),
+      rgba(7, 9, 13, .48)
     ),
-    url("icons/360_F_1318466852_n2HhQ2V5bfdKCuazzq9MYE723cGUeOnH.jpg");
+    url("icons/istockphoto-477331105-612x612.jpg");
 
   background-size: cover;
   background-position: center;
@@ -281,8 +275,8 @@ img {
   background:
     linear-gradient(
       90deg,
-      rgba(7, 9, 13, .15),
-      transparent
+      rgba(7, 9, 13, .38),
+      rgba(7, 9, 13, .08)
     );
 
   pointer-events: none;
@@ -397,9 +391,8 @@ img {
     rgba(255, 255, 255, .04);
 }
 
-
 /* =========================
-   SEARCH SECTION
+SEARCH SECTION
 ========================= */
 
 .search-section {
@@ -411,9 +404,8 @@ img {
   font-size: 14px;
 }
 
-
 /* =========================
-   SECTIONS
+SECTIONS
 ========================= */
 
 .section {
@@ -458,9 +450,8 @@ img {
   color: var(--accent-2);
 }
 
-
 /* =========================
-   HOMEPAGE HORIZONTAL POSTS
+HOMEPAGE HORIZONTAL POSTS
 ========================= */
 
 .horizontal-posts {
@@ -524,9 +515,8 @@ img {
   background: var(--accent);
 }
 
-
 /* =========================
-   CARDS
+CARDS
 ========================= */
 
 .live-card,
@@ -535,8 +525,8 @@ img {
   background:
     linear-gradient(
       145deg,
-      var(--surface),
-      #0c1016
+      rgba(16, 20, 27, .96),
+      rgba(12, 16, 22, .96)
     );
 
   border:
@@ -554,9 +544,8 @@ img {
   min-width: 0;
 }
 
-
 /* =========================
-   DYNAMIC THUMBNAILS
+DYNAMIC THUMBNAILS
 ========================= */
 
 .post-thumb {
@@ -664,9 +653,8 @@ img {
   object-position: center;
 }
 
-
 /* =========================
-   FOOTBALL
+FOOTBALL
 ========================= */
 
 .match-top {
@@ -732,9 +720,8 @@ img {
   min-height: 38px;
 }
 
-
 /* =========================
-   BUTTONS
+BUTTONS
 ========================= */
 
 .watch-btn,
@@ -772,9 +759,8 @@ img {
   background: var(--accent-2);
 }
 
-
 /* =========================
-   LEGACY HIGHLIGHT
+LEGACY HIGHLIGHT
 ========================= */
 
 .media-thumb {
@@ -864,9 +850,8 @@ img {
     14px;
 }
 
-
 /* =========================
-   MOVIES
+MOVIES
 ========================= */
 
 .movie-card {
@@ -993,9 +978,8 @@ img {
   z-index: 3;
 }
 
-
 /* =========================
-   MOVIE ACTIONS
+MOVIE ACTIONS
 ========================= */
 
 .movie-actions {
@@ -1028,9 +1012,8 @@ img {
   justify-content: center;
 }
 
-
 /* =========================
-   MOVIE DOWNLOAD BUTTON
+MOVIE DOWNLOAD BUTTON
 ========================= */
 
 .movie-download-btn {
@@ -1105,9 +1088,8 @@ img {
   outline-offset: 3px;
 }
 
-
 /* =========================
-   FULL POSTS
+FULL POSTS
 ========================= */
 
 .page-hero {
@@ -1117,16 +1099,15 @@ img {
     60px;
 
   background:
-    radial-gradient(
-      circle at 75% 30%,
-      rgba(255, 23, 68, .18),
-      transparent 35%
-    ),
     linear-gradient(
-      120deg,
-      #080b11,
-      #10141d
-    );
+      rgba(7, 9, 13, .55),
+      rgba(7, 9, 13, .55)
+    ),
+    url("icons/istockphoto-477331105-612x612.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   border-bottom:
     1px solid
@@ -1192,9 +1173,8 @@ img {
   padding: 14px;
 }
 
-
 /* =========================
-   DATE / STATES
+DATE / STATES
 ========================= */
 
 .post-date {
@@ -1231,9 +1211,8 @@ img {
   grid-column: 1 / -1;
 }
 
-
 /* =========================
-   VIDEO MODAL
+VIDEO MODAL
 ========================= */
 
 .modal {
@@ -1352,9 +1331,8 @@ img {
   background: var(--accent);
 }
 
-
 /* =========================
-   VIDEO
+VIDEO
 ========================= */
 
 .embed-area {
@@ -1389,9 +1367,8 @@ img {
   border: 0;
 }
 
-
 /* =========================
-   VIDEO CONTROLS
+VIDEO CONTROLS
 ========================= */
 
 .video-controls {
@@ -1410,9 +1387,8 @@ img {
   padding: 0;
 }
 
-
 /* =========================
-   ALT / MAIN SCREEN BUTTON
+ALT / MAIN SCREEN BUTTON
 ========================= */
 
 .screen-switch-btn {
@@ -1474,9 +1450,8 @@ img {
   outline-offset: 2px;
 }
 
-
 /* =========================
-   FULLSCREEN BUTTON
+FULLSCREEN BUTTON
 ========================= */
 
 .fullscreen-btn {
@@ -1527,9 +1502,8 @@ img {
   transform: scale(.97);
 }
 
-
 /* =========================
-   FULLSCREEN
+FULLSCREEN
 ========================= */
 
 .modal-box:fullscreen {
@@ -1619,9 +1593,8 @@ img {
   justify-content: center;
 }
 
-
 /* =========================
-   PLACEHOLDER
+PLACEHOLDER
 ========================= */
 
 .embed-placeholder {
@@ -1650,9 +1623,8 @@ code {
   color: #ff8ba0;
 }
 
-
 /* =========================
-   NO RESULTS
+NO RESULTS
 ========================= */
 
 .no-results {
@@ -1680,9 +1652,8 @@ code {
   color: #d7dde6;
 }
 
-
 /* =========================
-   FOOTER
+FOOTER
 ========================= */
 
 .footer {
@@ -1693,6 +1664,9 @@ code {
   padding: 30px 0;
 
   color: var(--muted);
+
+  background:
+    rgba(7, 9, 13, .45);
 }
 
 .footer-wrap {
@@ -1738,9 +1712,8 @@ code {
     var(--line);
 }
 
-
 /* =========================
-   ACCESSIBILITY
+ACCESSIBILITY
 ========================= */
 
 .sr-only {
@@ -1762,9 +1735,8 @@ code {
   border: 0;
 }
 
-
 /* =========================
-   ABOUT
+ABOUT
 ========================= */
 
 .about {
@@ -1804,9 +1776,8 @@ code {
   line-height: 1.65;
 }
 
-
 /* =========================
-   TABLET
+TABLET
 ========================= */
 
 @media (max-width: 900px) {
@@ -1868,9 +1839,8 @@ code {
   }
 }
 
-
 /* =========================
-   MOBILE
+MOBILE
 ========================= */
 
 @media (max-width: 600px) {
@@ -2016,10 +1986,7 @@ code {
     min-height: 280px;
   }
 
-
-  /* =====================
-     ABOUT
-  ===================== */
+  /* ABOUT */
 
   .about {
     grid-template-columns: 1fr;
@@ -2060,10 +2027,7 @@ code {
     overflow-wrap: break-word;
   }
 
-
-  /* =====================
-     MOVIE ACTIONS
-  ===================== */
+  /* MOVIE ACTIONS */
 
   .movie-actions {
     gap: 8px;
@@ -2080,10 +2044,7 @@ code {
     height: 54px;
   }
 
-
-  /* =====================
-     ALL POSTS
-  ===================== */
+  /* ALL POSTS */
 
   .all-posts-grid {
     grid-template-columns: 1fr;
@@ -2097,16 +2058,15 @@ code {
     min-height: 0;
   }
 
-
-  /* =====================
-     PAGE HERO
-  ===================== */
+  /* PAGE HERO */
 
   .page-hero {
     padding:
       60px
       0
       45px;
+
+    background-position: center;
   }
 
   .page-hero h1 {
@@ -2118,10 +2078,7 @@ code {
       );
   }
 
-
-  /* =====================
-     FOOTER
-  ===================== */
+  /* FOOTER */
 
   .footer-wrap {
     grid-template-columns: 1fr;
@@ -2139,10 +2096,7 @@ code {
     grid-column: auto;
   }
 
-
-  /* =====================
-     MOBILE MODAL
-  ===================== */
+  /* MOBILE MODAL */
 
   .modal {
     align-items: center;
@@ -2275,10 +2229,7 @@ code {
     flex-shrink: 0;
   }
 
-
-  /* =====================
-     ALT SCREEN
-  ===================== */
+  /* ALT SCREEN */
 
   .screen-switch-btn {
     padding:
@@ -2290,10 +2241,7 @@ code {
     font-size: 10px;
   }
 
-
-  /* =====================
-     LANDSCAPE FULLSCREEN
-  ===================== */
+  /* LANDSCAPE FULLSCREEN */
 
   .fullscreen-btn {
     padding:
@@ -2315,11 +2263,6 @@ code {
   .screen-switch-btn:active {
     transform: scale(.97);
   }
-
-
-  /* =====================
-     FULLSCREEN MODAL
-  ===================== */
 
   .modal-box:fullscreen,
   .modal-box:-webkit-full-screen {
@@ -2387,9 +2330,8 @@ code {
   }
 }
 
-
 /* =========================
-   VERY SMALL PHONES
+VERY SMALL PHONES
 ========================= */
 
 @media (max-width: 380px) {
@@ -2464,10 +2406,7 @@ code {
     gap: 7px;
   }
 
-
-  /* =====================
-     BOTH VIDEO BUTTONS
-  ===================== */
+  /* BOTH VIDEO BUTTONS */
 
   .fullscreen-btn,
   .screen-switch-btn {
