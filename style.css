@@ -4,8 +4,8 @@ DEEPROWSS STYLE
 
 :root {
   --bg: #07090d;
-  --surface: #10141b;
-  --surface-2: #171c25;
+  --surface: rgba(16, 20, 27, .88);
+  --surface-2: rgba(23, 28, 37, .90);
   --text: #f4f7fb;
   --muted: #9ca7b7;
   --line: rgba(255, 255, 255, .08);
@@ -32,7 +32,18 @@ body {
   max-width: 100%;
   overflow-x: hidden;
 
-  background: var(--bg);
+  background:
+    linear-gradient(
+      rgba(7, 9, 13, .70),
+      rgba(7, 9, 13, .84)
+    ),
+    url("icons/pngtree-soccer-player-in-action-mixed-media-created-with-generative-ai-technology-image_15990288.jpg");
+
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
   color: var(--text);
 
   font-family:
@@ -248,19 +259,19 @@ HERO
   background:
     radial-gradient(
       circle at 75% 35%,
-      rgba(255, 23, 68, .28),
+      rgba(255, 23, 68, .20),
       transparent 30%
     ),
     radial-gradient(
       circle at 20% 70%,
-      rgba(65, 90, 255, .18),
+      rgba(65, 90, 255, .12),
       transparent 30%
     ),
     linear-gradient(
       120deg,
-      #080b11,
-      #10141d 55%,
-      #090b10
+      rgba(8, 11, 17, .38),
+      rgba(16, 20, 29, .28) 55%,
+      rgba(9, 11, 16, .40)
     );
 }
 
@@ -271,7 +282,7 @@ HERO
   background:
     linear-gradient(
       90deg,
-      rgba(7, 9, 13, .15),
+      rgba(7, 9, 13, .25),
       transparent
     );
 
@@ -521,8 +532,8 @@ CARDS
   background:
     linear-gradient(
       145deg,
-      var(--surface),
-      #0c1016
+      rgba(16, 20, 27, .92),
+      rgba(12, 16, 22, .94)
     );
 
   border:
@@ -532,6 +543,9 @@ CARDS
   border-radius: 15px;
 
   overflow: hidden;
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .live-card {
@@ -1097,13 +1111,13 @@ FULL POSTS
   background:
     radial-gradient(
       circle at 75% 30%,
-      rgba(255, 23, 68, .18),
+      rgba(255, 23, 68, .14),
       transparent 35%
     ),
     linear-gradient(
       120deg,
-      #080b11,
-      #10141d
+      rgba(8, 11, 17, .70),
+      rgba(16, 20, 29, .72)
     );
 
   border-bottom:
@@ -1661,6 +1675,8 @@ FOOTER
   padding: 30px 0;
 
   color: var(--muted);
+
+  background: rgba(7, 9, 13, .45);
 }
 
 .footer-wrap {
@@ -1788,7 +1804,7 @@ TABLET
 
     padding: 16px;
 
-    background: #0b0f15;
+    background: rgba(11, 15, 21, .94);
 
     border:
       1px solid
@@ -1839,6 +1855,20 @@ MOBILE
 
 @media (max-width: 600px) {
 
+  body {
+    background:
+      linear-gradient(
+        rgba(7, 9, 13, .74),
+        rgba(7, 9, 13, .88)
+      ),
+      url("icons/pngtree-soccer-player-in-action-mixed-media-created-with-generative-ai-technology-image_15990288.jpg");
+
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
   .container {
     width:
       calc(100% - 24px);
@@ -1885,6 +1915,13 @@ MOBILE
 
   .hero {
     min-height: 500px;
+
+    background:
+      linear-gradient(
+        90deg,
+        rgba(7, 9, 13, .38),
+        rgba(7, 9, 13, .25)
+      );
   }
 
   .hero-content {
