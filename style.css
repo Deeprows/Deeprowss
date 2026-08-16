@@ -1,11 +1,11 @@
 /* =========================
-DEEPROWSS STYLE
+   DEEPROWSS STYLE
 ========================= */
 
 :root {
   --bg: #07090d;
-  --surface: rgba(16, 20, 27, .88);
-  --surface-2: rgba(23, 28, 37, .90);
+  --surface: #10141b;
+  --surface-2: #171c25;
   --text: #f4f7fb;
   --muted: #9ca7b7;
   --line: rgba(255, 255, 255, .08);
@@ -34,15 +34,15 @@ body {
 
   background:
     linear-gradient(
-      rgba(7, 9, 13, .70),
-      rgba(7, 9, 13, .84)
+      rgba(7, 9, 13, .35),
+      rgba(7, 9, 13, .35)
     ),
     url("icons/360_F_1318466852_n2HhQ2V5bfdKCuazzq9MYE723cGUeOnH.jpg");
 
   background-size: cover;
   background-position: center top;
-  background-repeat: no-repeat;
   background-attachment: fixed;
+  background-repeat: no-repeat;
 
   color: var(--text);
 
@@ -86,8 +86,9 @@ img {
   margin: auto;
 }
 
+
 /* =========================
-HEADER
+   HEADER
 ========================= */
 
 .site-header {
@@ -114,8 +115,9 @@ HEADER
   min-width: 0;
 }
 
+
 /* =========================
-LOGO
+   LOGO
 ========================= */
 
 .brand {
@@ -154,8 +156,9 @@ LOGO
   flex-shrink: 0;
 }
 
+
 /* =========================
-NAV
+   NAV
 ========================= */
 
 .main-nav {
@@ -180,8 +183,9 @@ NAV
   color: white;
 }
 
+
 /* =========================
-SEARCH
+   SEARCH
 ========================= */
 
 .nav-search {
@@ -223,8 +227,9 @@ SEARCH
   pointer-events: none;
 }
 
+
 /* =========================
-MOBILE MENU
+   MOBILE MENU
 ========================= */
 
 .menu-toggle {
@@ -242,8 +247,9 @@ MOBILE MENU
   flex-shrink: 0;
 }
 
+
 /* =========================
-HERO
+   HERO
 ========================= */
 
 .hero {
@@ -257,22 +263,15 @@ HERO
   overflow: hidden;
 
   background:
-    radial-gradient(
-      circle at 75% 35%,
-      rgba(255, 23, 68, .20),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 20% 70%,
-      rgba(65, 90, 255, .12),
-      transparent 30%
-    ),
     linear-gradient(
-      120deg,
-      rgba(8, 11, 17, .38),
-      rgba(16, 20, 29, .28) 55%,
-      rgba(9, 11, 16, .40)
-    );
+      rgba(7, 9, 13, .30),
+      rgba(7, 9, 13, .30)
+    ),
+    url("icons/360_F_1318466852_n2HhQ2V5bfdKCuazzq9MYE723cGUeOnH.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero-overlay {
@@ -282,7 +281,7 @@ HERO
   background:
     linear-gradient(
       90deg,
-      rgba(7, 9, 13, .25),
+      rgba(7, 9, 13, .15),
       transparent
     );
 
@@ -398,8 +397,9 @@ HERO
     rgba(255, 255, 255, .04);
 }
 
+
 /* =========================
-SEARCH SECTION
+   SEARCH SECTION
 ========================= */
 
 .search-section {
@@ -411,8 +411,9 @@ SEARCH SECTION
   font-size: 14px;
 }
 
+
 /* =========================
-SECTIONS
+   SECTIONS
 ========================= */
 
 .section {
@@ -457,8 +458,9 @@ SECTIONS
   color: var(--accent-2);
 }
 
+
 /* =========================
-HOMEPAGE HORIZONTAL POSTS
+   HOMEPAGE HORIZONTAL POSTS
 ========================= */
 
 .horizontal-posts {
@@ -522,8 +524,9 @@ HOMEPAGE HORIZONTAL POSTS
   background: var(--accent);
 }
 
+
 /* =========================
-CARDS
+   CARDS
 ========================= */
 
 .live-card,
@@ -532,8 +535,8 @@ CARDS
   background:
     linear-gradient(
       145deg,
-      rgba(16, 20, 27, .92),
-      rgba(12, 16, 22, .94)
+      var(--surface),
+      #0c1016
     );
 
   border:
@@ -543,9 +546,6 @@ CARDS
   border-radius: 15px;
 
   overflow: hidden;
-
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
 }
 
 .live-card {
@@ -554,8 +554,9 @@ CARDS
   min-width: 0;
 }
 
+
 /* =========================
-DYNAMIC THUMBNAILS
+   DYNAMIC THUMBNAILS
 ========================= */
 
 .post-thumb {
@@ -663,8 +664,9 @@ DYNAMIC THUMBNAILS
   object-position: center;
 }
 
+
 /* =========================
-FOOTBALL
+   FOOTBALL
 ========================= */
 
 .match-top {
@@ -730,8 +732,9 @@ FOOTBALL
   min-height: 38px;
 }
 
+
 /* =========================
-BUTTONS
+   BUTTONS
 ========================= */
 
 .watch-btn,
@@ -769,8 +772,9 @@ BUTTONS
   background: var(--accent-2);
 }
 
+
 /* =========================
-LEGACY HIGHLIGHT
+   LEGACY HIGHLIGHT
 ========================= */
 
 .media-thumb {
@@ -860,8 +864,9 @@ LEGACY HIGHLIGHT
     14px;
 }
 
+
 /* =========================
-MOVIES
+   MOVIES
 ========================= */
 
 .movie-card {
@@ -988,8 +993,9 @@ MOVIES
   z-index: 3;
 }
 
+
 /* =========================
-MOVIE ACTIONS
+   MOVIE ACTIONS
 ========================= */
 
 .movie-actions {
@@ -1022,8 +1028,9 @@ MOVIE ACTIONS
   justify-content: center;
 }
 
+
 /* =========================
-MOVIE DOWNLOAD BUTTON
+   MOVIE DOWNLOAD BUTTON
 ========================= */
 
 .movie-download-btn {
@@ -1098,8 +1105,9 @@ MOVIE DOWNLOAD BUTTON
   outline-offset: 3px;
 }
 
+
 /* =========================
-FULL POSTS
+   FULL POSTS
 ========================= */
 
 .page-hero {
@@ -1111,13 +1119,13 @@ FULL POSTS
   background:
     radial-gradient(
       circle at 75% 30%,
-      rgba(255, 23, 68, .14),
+      rgba(255, 23, 68, .18),
       transparent 35%
     ),
     linear-gradient(
       120deg,
-      rgba(8, 11, 17, .70),
-      rgba(16, 20, 29, .72)
+      #080b11,
+      #10141d
     );
 
   border-bottom:
@@ -1184,8 +1192,9 @@ FULL POSTS
   padding: 14px;
 }
 
+
 /* =========================
-DATE / STATES
+   DATE / STATES
 ========================= */
 
 .post-date {
@@ -1222,8 +1231,9 @@ DATE / STATES
   grid-column: 1 / -1;
 }
 
+
 /* =========================
-VIDEO MODAL
+   VIDEO MODAL
 ========================= */
 
 .modal {
@@ -1342,8 +1352,9 @@ VIDEO MODAL
   background: var(--accent);
 }
 
+
 /* =========================
-VIDEO
+   VIDEO
 ========================= */
 
 .embed-area {
@@ -1378,8 +1389,9 @@ VIDEO
   border: 0;
 }
 
+
 /* =========================
-VIDEO CONTROLS
+   VIDEO CONTROLS
 ========================= */
 
 .video-controls {
@@ -1398,8 +1410,9 @@ VIDEO CONTROLS
   padding: 0;
 }
 
+
 /* =========================
-ALT / MAIN SCREEN BUTTON
+   ALT / MAIN SCREEN BUTTON
 ========================= */
 
 .screen-switch-btn {
@@ -1461,8 +1474,9 @@ ALT / MAIN SCREEN BUTTON
   outline-offset: 2px;
 }
 
+
 /* =========================
-FULLSCREEN BUTTON
+   FULLSCREEN BUTTON
 ========================= */
 
 .fullscreen-btn {
@@ -1513,8 +1527,9 @@ FULLSCREEN BUTTON
   transform: scale(.97);
 }
 
+
 /* =========================
-FULLSCREEN
+   FULLSCREEN
 ========================= */
 
 .modal-box:fullscreen {
@@ -1604,8 +1619,9 @@ FULLSCREEN
   justify-content: center;
 }
 
+
 /* =========================
-PLACEHOLDER
+   PLACEHOLDER
 ========================= */
 
 .embed-placeholder {
@@ -1634,8 +1650,9 @@ code {
   color: #ff8ba0;
 }
 
+
 /* =========================
-NO RESULTS
+   NO RESULTS
 ========================= */
 
 .no-results {
@@ -1663,8 +1680,9 @@ NO RESULTS
   color: #d7dde6;
 }
 
+
 /* =========================
-FOOTER
+   FOOTER
 ========================= */
 
 .footer {
@@ -1675,8 +1693,6 @@ FOOTER
   padding: 30px 0;
 
   color: var(--muted);
-
-  background: rgba(7, 9, 13, .45);
 }
 
 .footer-wrap {
@@ -1722,8 +1738,9 @@ FOOTER
     var(--line);
 }
 
+
 /* =========================
-ACCESSIBILITY
+   ACCESSIBILITY
 ========================= */
 
 .sr-only {
@@ -1745,8 +1762,9 @@ ACCESSIBILITY
   border: 0;
 }
 
+
 /* =========================
-ABOUT
+   ABOUT
 ========================= */
 
 .about {
@@ -1786,8 +1804,9 @@ ABOUT
   line-height: 1.65;
 }
 
+
 /* =========================
-TABLET
+   TABLET
 ========================= */
 
 @media (max-width: 900px) {
@@ -1804,7 +1823,7 @@ TABLET
 
     padding: 16px;
 
-    background: rgba(11, 15, 21, .94);
+    background: #0b0f15;
 
     border:
       1px solid
@@ -1849,24 +1868,17 @@ TABLET
   }
 }
 
+
 /* =========================
-MOBILE
+   MOBILE
 ========================= */
 
 @media (max-width: 600px) {
 
   body {
-    background:
-      linear-gradient(
-        rgba(7, 9, 13, .74),
-        rgba(7, 9, 13, .88)
-      ),
-      url("icons/360_F_1318466852_n2HhQ2V5bfdKCuazzq9MYE723cGUeOnH.jpg");
+    background-attachment: scroll;
 
-    background-size: cover;
     background-position: center top;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
   }
 
   .container {
@@ -1916,12 +1928,7 @@ MOBILE
   .hero {
     min-height: 500px;
 
-    background:
-      linear-gradient(
-        90deg,
-        rgba(7, 9, 13, .38),
-        rgba(7, 9, 13, .25)
-      );
+    background-position: center;
   }
 
   .hero-content {
@@ -2009,7 +2016,10 @@ MOBILE
     min-height: 280px;
   }
 
-  /* ABOUT */
+
+  /* =====================
+     ABOUT
+  ===================== */
 
   .about {
     grid-template-columns: 1fr;
@@ -2050,7 +2060,10 @@ MOBILE
     overflow-wrap: break-word;
   }
 
-  /* MOVIE ACTIONS */
+
+  /* =====================
+     MOVIE ACTIONS
+  ===================== */
 
   .movie-actions {
     gap: 8px;
@@ -2067,7 +2080,10 @@ MOBILE
     height: 54px;
   }
 
-  /* ALL POSTS */
+
+  /* =====================
+     ALL POSTS
+  ===================== */
 
   .all-posts-grid {
     grid-template-columns: 1fr;
@@ -2081,7 +2097,10 @@ MOBILE
     min-height: 0;
   }
 
-  /* PAGE HERO */
+
+  /* =====================
+     PAGE HERO
+  ===================== */
 
   .page-hero {
     padding:
@@ -2099,7 +2118,10 @@ MOBILE
       );
   }
 
-  /* FOOTER */
+
+  /* =====================
+     FOOTER
+  ===================== */
 
   .footer-wrap {
     grid-template-columns: 1fr;
@@ -2117,7 +2139,10 @@ MOBILE
     grid-column: auto;
   }
 
-  /* MOBILE MODAL */
+
+  /* =====================
+     MOBILE MODAL
+  ===================== */
 
   .modal {
     align-items: center;
@@ -2250,7 +2275,10 @@ MOBILE
     flex-shrink: 0;
   }
 
-  /* ALT SCREEN */
+
+  /* =====================
+     ALT SCREEN
+  ===================== */
 
   .screen-switch-btn {
     padding:
@@ -2262,7 +2290,10 @@ MOBILE
     font-size: 10px;
   }
 
-  /* LANDSCAPE FULLSCREEN */
+
+  /* =====================
+     LANDSCAPE FULLSCREEN
+  ===================== */
 
   .fullscreen-btn {
     padding:
@@ -2284,6 +2315,11 @@ MOBILE
   .screen-switch-btn:active {
     transform: scale(.97);
   }
+
+
+  /* =====================
+     FULLSCREEN MODAL
+  ===================== */
 
   .modal-box:fullscreen,
   .modal-box:-webkit-full-screen {
@@ -2351,8 +2387,9 @@ MOBILE
   }
 }
 
+
 /* =========================
-VERY SMALL PHONES
+   VERY SMALL PHONES
 ========================= */
 
 @media (max-width: 380px) {
@@ -2427,7 +2464,10 @@ VERY SMALL PHONES
     gap: 7px;
   }
 
-  /* BOTH VIDEO BUTTONS */
+
+  /* =====================
+     BOTH VIDEO BUTTONS
+  ===================== */
 
   .fullscreen-btn,
   .screen-switch-btn {
