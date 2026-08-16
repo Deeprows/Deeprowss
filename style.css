@@ -32,18 +32,7 @@ body {
   max-width: 100%;
   overflow-x: hidden;
 
-  background:
-    linear-gradient(
-      rgba(7, 9, 13, .68),
-      rgba(7, 9, 13, .68)
-    ),
-    url("icons/istockphoto-477331105-612x612.jpg");
-
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-
+  background: var(--bg);
   color: var(--text);
 
   font-family:
@@ -258,8 +247,8 @@ HERO
 
   background:
     linear-gradient(
-      rgba(7, 9, 13, .48),
-      rgba(7, 9, 13, .48)
+      rgba(7, 9, 13, .62),
+      rgba(7, 9, 13, .62)
     ),
     url("icons/istockphoto-477331105-612x612.jpg");
 
@@ -268,19 +257,31 @@ HERO
   background-repeat: no-repeat;
 }
 
+/* =========================
+HERO OVERLAY
+========================= */
+
 .hero-overlay {
   position: absolute;
+
   inset: 0;
 
   background:
     linear-gradient(
       90deg,
+      rgba(7, 9, 13, .72),
       rgba(7, 9, 13, .38),
-      rgba(7, 9, 13, .08)
+      rgba(7, 9, 13, .58)
     );
 
   pointer-events: none;
+
+  z-index: 1;
 }
+
+/* =========================
+HERO DECORATIVE EFFECT
+========================= */
 
 .hero:after {
   content: "";
@@ -301,10 +302,13 @@ HERO
     rgba(255, 255, 255, .025);
 
   pointer-events: none;
+
+  z-index: 1;
 }
 
 .hero-content {
   position: relative;
+
   z-index: 2;
 
   padding: 80px 0;
@@ -525,8 +529,8 @@ CARDS
   background:
     linear-gradient(
       145deg,
-      rgba(16, 20, 27, .96),
-      rgba(12, 16, 22, .96)
+      var(--surface),
+      #0c1016
     );
 
   border:
@@ -1099,15 +1103,16 @@ FULL POSTS
     60px;
 
   background:
-    linear-gradient(
-      rgba(7, 9, 13, .55),
-      rgba(7, 9, 13, .55)
+    radial-gradient(
+      circle at 75% 30%,
+      rgba(255, 23, 68, .18),
+      transparent 35%
     ),
-    url("icons/istockphoto-477331105-612x612.jpg");
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    linear-gradient(
+      120deg,
+      #080b11,
+      #10141d
+    );
 
   border-bottom:
     1px solid
@@ -1664,9 +1669,6 @@ FOOTER
   padding: 30px 0;
 
   color: var(--muted);
-
-  background:
-    rgba(7, 9, 13, .45);
 }
 
 .footer-wrap {
@@ -1845,12 +1847,6 @@ MOBILE
 
 @media (max-width: 600px) {
 
-  body {
-    background-attachment: scroll;
-
-    background-position: center top;
-  }
-
   .container {
     width:
       calc(100% - 24px);
@@ -1986,7 +1982,9 @@ MOBILE
     min-height: 280px;
   }
 
-  /* ABOUT */
+  /* =========================
+  ABOUT
+  ========================= */
 
   .about {
     grid-template-columns: 1fr;
@@ -2027,7 +2025,9 @@ MOBILE
     overflow-wrap: break-word;
   }
 
-  /* MOVIE ACTIONS */
+  /* =========================
+  MOVIE ACTIONS
+  ========================= */
 
   .movie-actions {
     gap: 8px;
@@ -2044,7 +2044,9 @@ MOBILE
     height: 54px;
   }
 
-  /* ALL POSTS */
+  /* =========================
+  ALL POSTS
+  ========================= */
 
   .all-posts-grid {
     grid-template-columns: 1fr;
@@ -2058,15 +2060,15 @@ MOBILE
     min-height: 0;
   }
 
-  /* PAGE HERO */
+  /* =========================
+  PAGE HERO
+  ========================= */
 
   .page-hero {
     padding:
       60px
       0
       45px;
-
-    background-position: center;
   }
 
   .page-hero h1 {
@@ -2078,7 +2080,9 @@ MOBILE
       );
   }
 
-  /* FOOTER */
+  /* =========================
+  FOOTER
+  ========================= */
 
   .footer-wrap {
     grid-template-columns: 1fr;
@@ -2096,7 +2100,9 @@ MOBILE
     grid-column: auto;
   }
 
-  /* MOBILE MODAL */
+  /* =========================
+  MOBILE MODAL
+  ========================= */
 
   .modal {
     align-items: center;
@@ -2229,7 +2235,9 @@ MOBILE
     flex-shrink: 0;
   }
 
-  /* ALT SCREEN */
+  /* =========================
+  ALT SCREEN
+  ========================= */
 
   .screen-switch-btn {
     padding:
@@ -2241,7 +2249,9 @@ MOBILE
     font-size: 10px;
   }
 
-  /* LANDSCAPE FULLSCREEN */
+  /* =========================
+  LANDSCAPE FULLSCREEN
+  ========================= */
 
   .fullscreen-btn {
     padding:
@@ -2360,6 +2370,12 @@ VERY SMALL PHONES
     right: 9px;
   }
 
+  .hero {
+    min-height: 500px;
+
+    background-position: center;
+  }
+
   .hero h1 {
     font-size: 39px;
   }
@@ -2406,7 +2422,9 @@ VERY SMALL PHONES
     gap: 7px;
   }
 
-  /* BOTH VIDEO BUTTONS */
+  /* =========================
+  BOTH VIDEO BUTTONS
+  ========================= */
 
   .fullscreen-btn,
   .screen-switch-btn {
