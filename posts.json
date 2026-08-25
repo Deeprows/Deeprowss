@@ -1,29 +1,29 @@
 [
   {
      "type": "live",
-  "title": "Arsenal vs Manchester City",
-  "home": "Arsenal",
-  "away": "Manchester City",
+  "title": "Al Ettifaq vs Al Nassr",
+  "home": "Al Ettifaq",
+  "away": "Al Nassr",
   "status": "UPCOMING",
-  "category": "Community Shield",
-  "description": "Arsenal vs Manchester City football coverage.",
-  "matchTime": "2026-08-16T14:00:00Z",
-  "thumbnail": "https://www.mancity.com/meta/media/mv1fcweb/arsenal-a-wide.jpeg?width=1024&height=576&mode=crop",
-  "embedUrl": "https://streamtp-golden1.click/global1.php?stream=tnt_1_gb",
-  "alternativeEmbedUrl": "https://streamtp-golden1.click/global1.php?stream=espndeportes"
+  "category": "Saudi Pro League",
+  "description": "Al Ettifaq vs Al Nassr.",
+  "matchTime": "2026-08-25T19:00:00Z",
+  "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWEnq9iXY2rOGGtkpFyQ1j52lPvfkYsJWK16BciFHixg&s=10",
+  "embedUrl": "https://streamtp-golden1.click/global1.php?stream=fox_deportes_usa",
+  "alternativeEmbedUrl": "https://bharadwajpro.github.io/m3u8-player/player/#https://7nyaler.streamhostingcdn.top/stream/43/index.m3u8"
   },
   {
      "type": "live",
-  "title": "Lens vs PSG",
-  "home": "Lens",
-  "away": "PSG",
+  "title": "Valencia vs Real Betis",
+  "home": "Valencia",
+  "away": "Real Betis",
   "status": "UPCOMING",
-  "category": "Trophee des Champions",
-  "description": "Lens vs PSG | Trophee des Champions coverage.",
-  "matchTime": "2026-08-16T18:45:00Z",
-  "thumbnail": "https://en.parisfans.fr/wp-content/uploads/2026/03/LensPSG-1-0cAUDS-860x484.jpg",
-  "embedUrl": "https://streamtp-golden1.click/global1.php?stream=espn",
-  "alternativeEmbedUrl": "https://streamtp-golden1.click/global1.php?stream=fanatiz6"
+  "category": "La Liga",
+  "description": "La Liga.",
+  "matchTime": "2026-08-25T119:00:00Z",
+  "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR9s-dRkQPk7joG7y9FI17wyJ4U5uIpicL1MR1VoHt3g&s=10",
+  "embedUrl": "https://streamtp-golden1.click/global1.php?stream=espnplus1",
+  "alternativeEmbedUrl": "https://streamtp-golden1.click/global1.php?stream=espndeportes"
   },
   {
     
