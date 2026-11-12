@@ -1,7 +1,7 @@
 {
-  "name": "Deeprowss",
-  "short_name": "Deeprowss",
-  "description": "Deeprowss - Football live updates, scores, highlights, movies and more.",
+  "name": "Footbolive",
+  "short_name": "Footbolive",
+  "description": "Footbolive - Football live updates, scores, highlights, movies and more.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
