@@ -1,4 +1,4 @@
-const CACHE_NAME = "deeprowss-v1";
+const CACHE_NAME = "Footbolive-v1";
 
 const ASSETS_TO_CACHE = [
   "/",
