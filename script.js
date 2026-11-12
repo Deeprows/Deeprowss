@@ -465,7 +465,7 @@ document.addEventListener("DOMContentLoaded", function () {
           '<div class="thumbnail-placeholder">' +
 
             '<span>' +
-              'DEE<span>PROWSS</span>' +
+              'FOOT<span>BOLIVE</span>' +
             '</span>' +
 
           '</div>' +
