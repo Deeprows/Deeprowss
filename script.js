@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  console.log("Deeprowss script loaded");
+  console.log("Footbolive script loaded");
 
 
   /* =====================================
-     DEEPROWSS POPUNDER AD
+     Footbolive POPUNDER AD
   ===================================== */
 
   var popunderScript =
@@ -608,7 +608,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function loadPosts() {
 
     console.log(
-      "Deeprowss: requesting fresh posts.json..."
+      "Footbolive: requesting fresh posts.json..."
     );
 
 
@@ -705,7 +705,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         console.log(
-          "Deeprowss fresh posts loaded:",
+          "Footbolive fresh posts loaded:",
           posts.length,
           "posts"
         );
@@ -797,7 +797,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       console.log(
-        "Deeprowss: page visible again. Refreshing content..."
+        "Footbolive: page visible again. Refreshing content..."
       );
 
 
