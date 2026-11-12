@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-  console.log("Deeprowss all-posts.js loaded");
+  console.log("Footbolive all-posts.js loaded");
 
 
   /* =====================================
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
           console.log(
-            "Deeprowss all posts loaded:",
+            "Footbolive all posts loaded:",
             posts
           );
 
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
 
           console.error(
-            "Deeprowss: Could not read posts.json:",
+            "Footbolive: Could not read posts.json:",
             error
           );
 
@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
 
         console.error(
-          "Deeprowss: Could not load posts.json. Status:",
+          "Footbolive: Could not load posts.json. Status:",
           xhr.status
         );
 
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function () {
 
       console.error(
-        "Deeprowss: Network error loading posts.json."
+        "Footbolive: Network error loading posts.json."
       );
 
       showError();
@@ -639,7 +639,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function attachVideoButtons() {
 
     if (
-      window.deeprowssAllPostsHandler
+      window.FootboliveAllPostsHandler
     ) {
 
       return;
@@ -647,7 +647,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    window.deeprowssAllPostsHandler =
+    window.FootboliveAllPostsHandler =
       true;
 
 
@@ -684,7 +684,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!url) {
 
           console.error(
-            "Deeprowss: Watch button has no video URL."
+            "Footbolive: Watch button has no video URL."
           );
 
           return;
@@ -1128,7 +1128,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } catch (error) {
 
         console.error(
-          "Deeprowss fullscreen error:",
+          "Footbolive fullscreen error:",
           error
         );
 
