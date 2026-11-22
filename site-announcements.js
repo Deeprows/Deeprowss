@@ -24,7 +24,7 @@
       .dr-site-notice-card h2{margin:0 34px 12px 0;font-size:22px;line-height:1.2}
       .dr-site-notice-message{margin:0;color:#c5ceda;font-size:14px;line-height:1.65;white-space:pre-wrap}
       .dr-site-notice-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:22px}
-      .dr-site-notice-actions a,.dr-site-notice-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 16px;border:0;border-radius:9px;background:#ff1744;color:white;font:700 13px inherit;text-decoration:none;cursor:pointer}
+      .dr-site-notice-actions a,.dr-site-notice-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 16px;border:0;border-radius:9px;background:#ff1744;color:white;font:inherit;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer}
       .dr-site-notice-actions button{background:#252d3a}
       .dr-site-notice-close{position:absolute;top:12px;right:13px;width:32px;height:32px;border:0;border-radius:50%;background:#252d3a;color:#fff;font-size:21px;cursor:pointer}
       @media(min-width:900px){.dr-site-ticker-row{display:block}}
