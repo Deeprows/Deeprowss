@@ -48,7 +48,7 @@
       row = document.createElement("div");
       row.id = TICKER_ID;
       row.className = "dr-site-ticker-row";
-      row.innerHTML = '<div class="dr-site-ticker-track"><span class="dr-site-ticker-label">DEEProWSS</span><div class="dr-site-ticker-window"><span class="dr-site-ticker-text"></span></div></div>';
+      row.innerHTML = '<div class="dr-site-ticker-track"><span class="dr-site-ticker-label">DEEPROWSS</span><div class="dr-site-ticker-window"><span class="dr-site-ticker-text"></span></div></div>';
       navWrap.insertAdjacentElement("afterend", row);
     }
     const items = Array.isArray(config.items) ? config.items.filter(Boolean) : [];
